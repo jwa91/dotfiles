@@ -1,0 +1,21 @@
+# ----------------------------------------
+# Brewfile - Homebrew dependencies for zsh configuration
+# Install with: brew bundle --file=Brewfile
+# ----------------------------------------
+
+# Taps
+tap "oven-sh/bun"
+
+# Core CLI tools
+brew "starship"          # Cross-shell prompt
+brew "fzf"               # Fuzzy finder (used in plugins.zsh)
+brew "git"               # Ensure latest git
+
+# GUI Apps
+cask "ghostty"           # Terminal Emulator
+cask "font-jetbrains-mono-nerd-font" # Required for Ghostty config
+
+# Languages & Runtimes (Unified via Homebrew)
+brew "bun"               # JavaScript runtime
+brew "pnpm"              # Fast, disk space efficient package manager
+brew "uv"                # Python package manager

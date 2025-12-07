@@ -1,0 +1,184 @@
+{
+  // Editor settings
+  "editor.fontFamily": "JetBrainsMono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 13,
+  "editor.fontWeight": "300",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit",
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.ruff": "explicit",
+    "source.organizeImports.ruff": "explicit"
+  },
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 120,
+  "editor.minimap.enabled": false,
+  "pasteAndIndent.selectAfter": true,
+  "editor.stickyScroll.enabled": false,
+  "editor.unicodeHighlight.ambiguousCharacters": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+
+  // Workbench settings
+  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.settings.applyToAllProfiles": [],
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.sideBar.location": "right",
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.ico": "luna.editor",
+    "*.jpeg": "default"
+  },
+
+  // Git settings
+  "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "never",
+  "git.confirmSync": false,
+  "git.autofetch": true,
+
+  // Security settings
+  "security.workspace.trust.untrustedFiles": "open",
+
+  // Explorer settings
+  "explorer.confirmDragAndDrop": true,
+  "explorer.fileNesting.enabled": true,
+
+  // Terminal settings
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontWeight": "310",
+  "terminal.integrated.letterSpacing": 0,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorWidth": 1,
+  "terminal.integrated.cursorBlinking": true,
+
+  // CSS/SCSS settings
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+
+  // Tailwind CSS settings
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "tailwind.config.ts",
+
+  // TypeScript settings
+  "typescript.updateImportsOnFileMove.enabled": "always",
+
+  // File associations
+  "files.associations": {
+    "*.scss": "postcss",
+    "*.css": "postcss",
+    "*.toml": "toml"
+  },
+
+  // Extensions settings
+  "extensions.ignoreRecommendations": true,
+
+  // Project Manager settings
+  "projectManager.any.baseFolders": ["~/developer"],
+  "projectManager.any.maxDepthRecursion": 1,
+
+  // Python settings
+  "python.terminal.activateEnvironment": false,
+  "python.createEnvironment.trigger": "off",
+  "python.analysis.exclude": ["**/node_modules", "**/__pycache__", "**/.*", "**/*.jinja"],
+
+  // Svelte settings
+  "svelte.enable-ts-plugin": true,
+
+  // Language-specific editor settings
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.quickSuggestions": {
+      "other": "on",
+      "comments": "on",
+      "strings": "on"
+    },
+    "editor.suggest.insertMode": "replace"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[plaintext]": {
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false
+  },
+  "[postcss]": {},
+  "amp.mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest", "--headless", "--isolated"]
+    }
+  },
+  "amp.commands.allowlist": ["uv", "sed"],
+  "amp.terminal.commands.hide": false,
+  "editor.accessibilitySupport": "off",
+  "[mdx]": {
+    "editor.defaultFormatter": "unifiedjs.vscode-mdx"
+  },
+  "github.copilot.nextEditSuggestions.enabled": false,
+  "github.copilot.enable": {
+    "*": false
+  },
+  "amp.tab.enabled": true,
+  "amp.permissions": [
+    {
+      "tool": "Bash",
+      "action": "ask",
+      "matches": {
+        "cmd": ["*rm*-rf*", "*rm*-r*--force*", "*rm*--force*-r*"]
+      }
+    },
+    {
+      "tool": "Bash",
+      "action": "ask",
+      "matches": {
+        "cmd": ["*find*-exec*", "*find*-delete*"]
+      }
+    },
+    {
+      "tool": "Bash",
+      "action": "ask",
+      "matches": {
+        "cmd": ["*git*push*--force*", "*git*push*-f*"]
+      }
+    },
+    {
+      "tool": "Bash",
+      "action": "ask",
+      "matches": {
+        "cmd": ["sudo*", "su*", "*chmod*777*", "*chown*root*"]
+      }
+    },
+    {
+      "tool": "*",
+      "action": "allow",
+      "matches": {}
+    }
+  ],
+  "chat.mcp.gallery.enabled": true,
+  "scm.repositories.selectionMode": "single",
+  "amp.tryOpus": true
+}

@@ -1,0 +1,30 @@
+# --- Git Commit Template ---
+
+# Subject Line: <type>: <short, imperative summary>
+# Keep the subject line concise (ideally under 50 characters).
+<type>: 
+
+# REQUIRED: Empty line between subject and body.
+
+
+# Optional body: provide context, motivation, or consequences.
+# Wrap lines at 72 characters for readability in CLI tools.
+# Explain *why* the change is made, not just *what* changed.
+
+
+# Optional: Use '+dependency: <name>' when adding new external libraries.
+# Example: +dependency: react-query
+# +dependency: 
+
+# --------------------------------------------------------------------
+# Accepted <type> values:
+#   feat     = New feature
+#   fix      = Bug fix
+#   refactor = Code restructure or cleanup
+#   docs     = Documentation change only
+#   ci       = CI-related config or script updates
+# --------------------------------------------------------------------
+
+# Enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# --------------------------------------------------------------------

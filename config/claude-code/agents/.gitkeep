@@ -1,0 +1,5 @@
+# Custom Claude Code agents
+# Each .md file in this directory becomes an @agent
+# Files should have YAML frontmatter with: name, description, tools, model
+# Example: code-reviewer.md becomes @code-reviewer
+

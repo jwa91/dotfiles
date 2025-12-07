@@ -1,0 +1,161 @@
+{
+  "editor.fontFamily": "JetBrainsMono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 13,
+  "editor.fontWeight": "300",
+  "editor.fontLigatures": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.wordWrapColumn": 120,
+  "editor.minimap.enabled": false,
+  "editor.accessibilitySupport": "off",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": "explicit",
+    "source.fixAll.ruff": "explicit",
+    "source.organizeImports.ruff": "explicit"
+  },
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.sideBar.location": "right",
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "workbench.settings.applyToAllProfiles": [],
+
+  // ============================================================================
+  // Git
+  // ============================================================================
+  "git.enableSmartCommit": true,
+  "git.openRepositoryInParentFolders": "never",
+  "git.confirmSync": false,
+  "git.autofetch": true,
+
+  // ============================================================================
+  // Terminal
+  // ============================================================================
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontWeight": "310",
+  "terminal.integrated.letterSpacing": 0,
+  "terminal.integrated.cursorStyle": "line",
+  "terminal.integrated.cursorWidth": 1,
+  "terminal.integrated.cursorBlinking": true,
+
+  // ============================================================================
+  // File Associations
+  // ============================================================================
+  "files.associations": {
+    "*.scss": "postcss",
+    "*.css": "postcss",
+    "*.toml": "toml"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.venv/**": true,
+    "**/venv/**": true,
+    "**/__pycache__/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.venv": true,
+    "**/venv": true,
+    "**/__pycache__": true,
+    "**/.git": true,
+    "**/dist": true,
+    "**/build": true
+  },
+
+  // ============================================================================
+  // Language-Specific Settings
+  // ============================================================================
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[plaintext]": {
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": true
+  },
+
+  // ============================================================================
+  // TypeScript & JavaScript
+  // ============================================================================
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // ============================================================================
+  // CSS & Styling
+  // ============================================================================
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  "stylelint.validate": ["css", "scss"],
+
+  // ============================================================================
+  // Tailwind CSS
+  // ============================================================================
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "tailwind.config.ts",
+
+  // ============================================================================
+  // Prettier
+  // ============================================================================
+  "prettier.ignorePath": ".prettierignore",
+  "prettier.printWidth": 120,
+
+  // ============================================================================
+  // Python
+  // ============================================================================
+  "python.terminal.activateEnvironment": false,
+  "python.createEnvironment.trigger": "off",
+
+  // ============================================================================
+  // Cursor-Specific
+  // ============================================================================
+  "cursor.composer.shouldChimeAfterChatFinishes": true,
+  "cursor.composer.textSizeScale": 1.15,
+
+  // ============================================================================
+  // Extensions & Tools
+  // ============================================================================
+  "extensions.ignoreRecommendations": true,
+  "projectManager.any.baseFolders": ["~/developer"],
+  "projectManager.any.maxDepthRecursion": 1,
+  "json.schemaDownload.enable": true,
+
+  // ============================================================================
+  // Security & Other
+  // ============================================================================
+  "security.workspace.trust.untrustedFiles": "open",
+  "explorer.confirmDragAndDrop": true,
+  "update.releaseTrack": "prerelease",
+  "workbench.colorTheme": "Default Dark Modern"
+}

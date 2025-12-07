@@ -1,0 +1,27 @@
+# Development & IDEs
+cask "cursor"
+cask "visual-studio-code"
+
+# AI & LLM Tools
+cask "claude"
+cask "claude-code"
+cask "codex"
+cask "ollama"
+
+# Productivity & Utilities
+cask "raycast"
+cask "hiddenbar"
+
+# Browsers & Communication
+cask "brave-browser"
+cask "whatsapp"
+cask "telegram"
+
+# Media
+cask "spotify"
+
+# CLI Tools
+brew "gh"
+brew "tree"
+brew "curl"
+brew "cheat"
