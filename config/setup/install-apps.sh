@@ -4,7 +4,7 @@
 # Description: Installs GUI applications and extra tools via Homebrew.
 # ----------------------------------------
 
-set -e
+set -eo pipefail
 
 # Colors
 RED='\033[0;31m'
@@ -30,10 +30,17 @@ BREWFILE="$SCRIPT_DIR/Brewfile-apps"
 
 echo -e "\n${BLUE}━━━ Installing Applications ━━━${NC}"
 
+# Ensure Homebrew exists
+if ! command -v brew &> /dev/null; then
+    echo -e "${RED}Error: Homebrew not found.${NC}"
+    echo "Please install Homebrew (see setup guide) before running this script."
+    exit 1
+fi
+
 if [[ -f "$BREWFILE" ]]; then
     if $DRY_RUN; then
         echo -e "${YELLOW}○ WOULD:${NC} Install applications from Brewfile-apps:"
-        grep -E "^(brew|cask)" "$BREWFILE" | sed 's/^/    /'
+        grep -E "^(tap|brew|cask|mas)\b" "$BREWFILE" | sed 's/^/    /'
     else
         log_action "Running brew bundle..."
         brew bundle --file="$BREWFILE"

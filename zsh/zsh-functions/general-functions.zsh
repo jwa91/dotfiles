@@ -12,8 +12,13 @@
 # Usage: load_key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
 # --------------------------------------------------
 function load_key() {
+  local secret
   for key in "$@"; do
-    export "$key"=$(op read "op://Personal/$key/credential")
+    if ! secret=$(op read "op://Personal/$key/credential"); then
+      echo "✗ $key (op read failed)" >&2
+      return 1
+    fi
+    export "$key=$secret"
     echo "✓ $key"
   done
 }

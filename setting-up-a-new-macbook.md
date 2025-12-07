@@ -1,5 +1,3 @@
-# Setting Up a New MacBook
-
 This is my personal migration guide for setting up a fresh MacBook. It's opinionated and assumes a specific toolchain:
 
 - **Password Manager / SSH Agent**: 1Password
@@ -7,8 +5,8 @@ This is my personal migration guide for setting up a fresh MacBook. It's opinion
 - **Shell**: Zsh with Starship prompt
 - **Terminal**: Ghostty
 - **JavaScript**: Bun + pnpm
-- **Python**: uv (no pyenv, no conda)
-- **Editors**: Cursor, VS Code
+- **Python**: uv (Ruff as main)
+- **Editors**: Cursor, (VS Code backup)
 
 The guide follows a deliberate order — each phase builds on the previous:
 
@@ -19,9 +17,7 @@ The guide follows a deliberate order — each phase builds on the previous:
 | 3. Identity & SSH | 1Password, SSH keys, authentication |
 | 4. Git            | Clone dotfiles, configure Git       |
 | 5. Shell & Tools  | Zsh, terminal, dev runtimes         |
-| 6. Applications   | GUI apps, editor configs            |
-
----
+| 6. Applications   | GUI apps, editor & AI configs       |
 
 ## Phase 1: The Foundation (System & Accounts)
 
@@ -235,9 +231,7 @@ _Expected output: “Hi [username]! You’ve succesfully authenticated”_
 
 _Configure Git identity and preferences from dotfiles._
 
-### 4.1 Clone your dotfiles
-
-Now that SSH is configured, clone your dotfiles repository:
+### 4.1 Clone the dotfiles repo
 
 ```bash
 git clone git@github.com:jwa91/dotfiles.git ~/dotfiles
@@ -250,7 +244,7 @@ cd ~/dotfiles/git
 ./setup.sh
 ```
 
-This creates a symlink: `~/.gitconfig` → `~/dotfiles/git/config`
+This creates the symlink.
 
 ### 4.3 Verify
 
@@ -258,23 +252,21 @@ This creates a symlink: `~/.gitconfig` → `~/dotfiles/git/config`
 git config --global --list
 ```
 
-You should see your name, email, aliases, and other preferences.
-
 **What the dotfiles `git/` folder contains:**
 
-| File                  | Purpose                             |
+| 📂 File               | 🎯 Purpose                          |
 | --------------------- | ----------------------------------- |
-| `config`              | Global git configuration            |
+| `config`              | Global Git configuration            |
 | `commit_template.txt` | Template shown when writing commits |
 | `setup.sh`            | Symlinks config to `~/.gitconfig`   |
 
-## Phase 5: Shell, Terminal & Tools
+## Phase 5: Shell, Terminal & Prompt
 
 _Bootstrap the shell environment and install the developer ecosystem._
 
-### 5.1 Install Zsh Configuration (The Foundation)
+### 5.1 Install Zsh Configuration
 
-Run the first setup script. This focuses **only** on making your terminal look correct and behave smartly. It installs core shell dependencies (`starship`, `fzf`), sets up your plugins, and symlinks your config files (including Ghostty and Starship).
+Run the first setup script. This focuses \***\*only\*\*** on making your terminal look correct and behave smartly. It installs core shell dependencies (`starship`, `fzf`), sets up your plugins, and symlinks your config files (including Ghostty and Starship).
 
 ```bash
 cd ~/dotfiles/zsh/setup
@@ -284,13 +276,17 @@ cd ~/dotfiles/zsh/setup
 **What this does:**
 
 - Installs Starship (prompt) & FZF (search)
-- Symlinks `.zshrc`, `.zshenv`, etc.
+- Symlinks `.zshrc`, `.zshenv`, etc.
 - Sets up Ghostty config
-- Creates `~/Developer` and other base directories
+- Creates `~/Developer` and other base directories
 
 _Restart your terminal (or open a new tab) after this step to see the new prompt._
 
-### 5.2 Install Developer Tools (The Ecosystem)
+![I really like the look of it!](attachment:50bbc6ec-11dc-46f3-aa86-c01cdfce502f:Screenshot_2025-12-05_at_23.06.02.png)
+
+I really like the look of it!
+
+### 5.2 Install Developer Tools
 
 Now that the shell is ready, install your actual work tools. This script uses Homebrew Bundle to install everything defined in `Brewfile` (Node, Python/uv, Bun, Ghostty App, Fonts, etc.).
 
@@ -300,21 +296,12 @@ Now that the shell is ready, install your actual work tools. This script uses Ho
 
 **What this does:**
 
-- Installs **Language Runtimes**: `bun`, `pnpm`, `uv`
-- Installs **GUI Apps**: `ghostty`
-- Installs **Fonts**: `JetBrainsMono Nerd Font`
-- Clones **Templates**: Fetches your Python templates to `~/Developer/templates`
+- Installs **Language Runtimes**: `bun`, `pnpm`, `uv`
+- Installs **GUI Apps**: `ghostty`
+- Installs **Fonts**: `JetBrainsMono Nerd Font`
+- Clones **Templates**: Fetches your Python templates to `~/Developer/templates`
 
-### 5.3 Python Setup (Optional Verification)
-
-Your Python setup is now decoupled. To start a new project, you simply use the built-in command which pulls directly from your template repo.
-
-```bash
-# Verify it works
-mkpyproject test-project
-cd ..
-rm -rf test-project
-```
+To learn more about that last thing, see the dedicated [Git repository](https://github.com/jwa91/python-template).
 
 ## Phase 6: Applications & Config
 
@@ -322,22 +309,46 @@ _Install GUI apps and symlink their configurations._
 
 ### 6.1 Install Applications
 
-This script uses Homebrew Bundle to install GUI applications (Cursor, VS Code, Claude, Raycast, etc.) and additional CLI tools.
+With the shell script..
 
 ```bash
 cd ~/dotfiles/config/setup
 ./install-apps.sh
 ```
 
-**What this does:**
+..the following Brewfile will get installed:
 
-- Installs **IDEs**: Cursor, VS Code
-- Installs **AI Tools**: Claude, Claude Code, Codex, Ollama
-- Installs **Utilities**: Raycast, HiddenBar
-- Installs **Browsers & Comms**: Brave, WhatsApp, Telegram
-- Installs **CLI Tools**: `gh`, `tree`, `curl`, `cheat`
+```bash
+# Development & IDEs
+cask "cursor"
+cask "visual-studio-code"
 
-### 6.2 Link Application Configs
+# AI & LLM Tools
+cask "claude"
+cask "claude-code"
+cask "codex"
+cask "ollama"
+
+# Productivity & Utilities
+cask "raycast"
+cask "hiddenbar"
+
+# Browsers & Communication
+cask "brave-browser"
+cask "whatsapp"
+cask "telegram"
+
+# Media
+cask "spotify"
+
+# CLI Tools
+brew "gh"
+brew "tree"
+brew "curl"
+brew "cheat"
+```
+
+### 6.2 **Link Application Configs**
 
 Symlink all application settings to your dotfiles:
 
@@ -347,20 +358,10 @@ Symlink all application settings to your dotfiles:
 
 **What this does:**
 
-- Links **Cursor** settings, keybindings, snippets, and MCP config
-- Links **VS Code** settings, keybindings, snippets
-- Links **Claude Desktop** config
-- Links **Claude Code** settings, commands, and agents
-- Links **Codex** config and instructions
-- Links **GitHub CLI** config
-- Links **Cheat** config and personal cheatsheets
-
-### 6.3 Verify
-
-Run the built-in diagnostic to check everything is wired up correctly:
-
-```bash
-zsh-doctor
-```
-
-All checks should pass. If something fails, the output will tell you what to fix.
+- Links **Cursor** settings, keybindings, snippets, and MCP config
+- Links **VS Code** settings, keybindings, snippets
+- Links **Claude Desktop** config
+- Links **Claude Code** settings, commands, and agents
+- Links **Codex** config and instructions
+- Links **GitHub CLI** config
+- Links **Cheat** config and personal cheatsheets
