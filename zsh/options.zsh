@@ -1,8 +1,6 @@
 # ----------------------------------------
 # File: options.zsh
 # Description: ZSH shell options
-# Author: Jan Willem Altink
-# Last Modified: 2024-09-28
 # ----------------------------------------
 
 # ----------------------------------------

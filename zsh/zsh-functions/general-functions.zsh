@@ -66,11 +66,11 @@ function rwe() {
 # --------------------------------------------------
 function cdd() {
     if [[ -z "$DEV_DIR" ]]; then
-        echo "cdd: Fout - DEV_DIR env variable not set." >&2
+        echo "cdd: Error - DEV_DIR env variable not set." >&2
         return 1
     fi
     if [[ ! -d "$DEV_DIR" ]]; then
-        echo "cdd: Fout - Developer directory does not exist: $DEV_DIR" >&2
+        echo "cdd: Error - Developer directory does not exist: $DEV_DIR" >&2
         return 1
     fi
 
