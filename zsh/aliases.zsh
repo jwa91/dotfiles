@@ -1,8 +1,6 @@
 # ----------------------------------------
 # File: aliases.zsh
 # Description: Custom aliases for zsh
-# Author: Jan Willem Altink
-# Last Modified: 2024-09-29
 # ----------------------------------------
 
 # ZSH configuration aliases

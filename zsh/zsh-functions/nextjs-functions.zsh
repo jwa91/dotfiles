@@ -1,8 +1,6 @@
 # ----------------------------------------
 # File: nextjs-functions.zsh
 # Description: Next.js functions
-# Author: Jan Willem Altink
-# Last Modified: 2025-03-30
 # ----------------------------------------
 
 # mkroute
