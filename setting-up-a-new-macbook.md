@@ -1,12 +1,22 @@
-This is my personal migration guide for setting up a fresh MacBook. It's opinionated and assumes a specific toolchain:
+## Introduction
+
+### For who is this guide?
+
+This is my personal migration guide for setting up a fresh MacBook. It's opinionated and assumes a very specific toolchain:
 
 - **Password Manager / SSH Agent**: 1Password
 - **Package Manager**: Homebrew (everything goes through Brew)
 - **Shell**: Zsh with Starship prompt
 - **Terminal**: Ghostty
-- **JavaScript**: Bun + pnpm
+- **JavaScript/Typescript**: pnpm
 - **Python**: uv (Ruff as main)
-- **Editors**: Cursor, (VS Code backup)
+- **Editors**: Cursor (VS Code backup)
+- **Browser:** Brave
+- **Application Launcher:** Raycast
+
+It describes detailed configuration steps for very specific situations (like setting up a 1Password SSH agent connection with a Hetzner VPS). I've still chosen to post it here, though; the overall steps or structure of the dotfiles repository might be helpful for anyone reading.
+
+### Phases
 
 The guide follows a deliberate order — each phase builds on the previous:
 
@@ -18,6 +28,18 @@ The guide follows a deliberate order — each phase builds on the previous:
 | 4. Git            | Clone dotfiles, configure Git       |
 | 5. Shell & Tools  | Zsh, terminal, dev runtimes         |
 | 6. Applications   | GUI apps, editor & AI configs       |
+
+### Dotfiles
+
+If possible, I try to use dotfiles to configure the settings of my applications. This allows me to use Git version manager. Not all applications offer this type of configuration though.
+
+_The repository can be found here:_
+
+https://github.com/jwa91/dotfiles
+
+_To streamline and standardize Python development, this repo is also needed:_
+
+https://github.com/jwa91/python-template
 
 ## Phase 1: The Foundation (System & Accounts)
 
@@ -114,16 +136,14 @@ op signin
 op whoami
 ```
 
-<aside>
-ℹ️
-
 ### Before we continue
 
 It helps to briefly explain the general set up. We will maintain one SSH key per security domain, in my case i start with 2:
 
 - GitHub key → Git operations only
 - Hetzner key → VPS access only
-</aside>
+
+The second one will most likely not be that use-full for most people.
 
 ### 3.4 Generate the SSH key’s in the 1Password app
 
@@ -226,6 +246,8 @@ ssh -T git@github.com
 ```
 
 _Expected output: “Hi [username]! You’ve succesfully authenticated”_
+
+_Quick note about steps 4-6 below.. In theory they could also be executed with just one single script. The reason I have chosen to split it up, is that it helps me to keep an overview_
 
 ## Phase 4: Git
 
