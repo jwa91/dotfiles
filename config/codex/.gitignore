@@ -1,0 +1,7 @@
+# Runtime files - never commit these
+auth.json
+version.json
+log/
+sessions/
+*.log
+

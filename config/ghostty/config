@@ -1,0 +1,5 @@
+theme = Gruvbox Dark Hard
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14.5
+font-thicken = true
+font-thicken-strength = 100

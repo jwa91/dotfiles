@@ -1,0 +1,56 @@
+---
+syntax: bash
+tags: [ ffmpeg, video, audio, conversion, editing, streaming, recording, thumbnail, gif, compression, remove_audio ]
+---
+# Video Conversion
+# Convert video to MP4
+ffmpeg -i input.avi output.mp4
+
+# Convert video to GIF
+ffmpeg -i input.mp4 -vf "fps=10,scale=320:-1:flags=lanczos" output.gif
+
+# Video Editing
+# Trim video (start at 00:00:30, duration 10 seconds)
+ffmpeg -i input.mp4 -ss 00:00:30 -t 00:00:10 output.mp4
+
+# Change video speed (2x faster)
+ffmpeg -i input.mp4 -filter:v "setpts=0.5*PTS" -filter:a "atempo=2.0" output.mp4
+
+# Rotate video 90 degrees clockwise
+ffmpeg -i input.mp4 -vf "transpose=1" output.mp4
+
+# Remove audio from video
+ffmpeg -i input.mp4 -c copy -an output_no_audio.mp4
+
+# Audio Editing
+# Extract audio from video
+ffmpeg -i input.mp4 -vn output.mp3
+
+# Convert audio format
+ffmpeg -i input.wav output.mp3
+
+# Adjust volume (increase by 50%)
+ffmpeg -i input.mp3 -filter:a "volume=1.5" output.mp3
+
+# Combine Video and Audio
+# Add audio to video
+ffmpeg -i video.mp4 -i audio.mp3 -c:v copy -c:a aac output.mp4
+
+# Screen Recording (macOS)
+ffmpeg -f avfoundation -i "1:0" output.mp4
+
+# Media Information
+# Show detailed information about media file
+ffmpeg -i input.mp4 -hide_banner
+
+# Thumbnails
+# Generate thumbnail from video at 5 seconds
+ffmpeg -i input.mp4 -ss 00:00:05 -vframes 1 thumbnail.jpg
+
+# Compression
+# Compress video
+ffmpeg -i input.mp4 -vcodec libx264 -crf 23 output.mp4
+
+# Streaming
+# Create HLS stream
+ffmpeg -i input.mp4 -profile:v baseline -level 3.0 -s 720x480 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls index.m3u8

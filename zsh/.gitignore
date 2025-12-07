@@ -1,0 +1,37 @@
+# Secrets and private configuration
+secrets.zsh
+*.secret
+*.private
+!secrets.example.zsh
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Backup files
+*.bak
+*.swp
+*.swo
+*~
+*.tmp
+*.orig
+
+# Editor directories
+.vscode/
+.idea/
+*.sublime-*
+
+# Zsh cache and temporary files
+*.zwc
+.zcompdump*
+.zsh_history
+.zsh_sessions/
+
+# Log files
+*.log
+
+# OS-specific
+Thumbs.db
+desktop.ini

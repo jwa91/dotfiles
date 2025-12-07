@@ -1,0 +1,15 @@
+{
+	"mcpServers": {
+		"Context7": {
+			"command": "npx",
+			"args": ["-y", "@upstash/context7-mcp"]
+		},
+		"anytype": {
+			"command": "npx",
+			"args": ["-y", "@anyproto/anytype-mcp"],
+			"env": {
+				"OPENAPI_MCP_HEADERS": "{\"Authorization\":\"Bearer B1YWeHZNNGFSvY3kQ4w+X0Gmq7xFEd8jz9TXSVNc5Dw=\", \"Anytype-Version\":\"2025-05-20\"}"
+			}
+		}
+	}
+}

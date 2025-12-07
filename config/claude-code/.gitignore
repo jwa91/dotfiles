@@ -1,0 +1,3 @@
+# Never commit runtime/state files
+# These are created by Claude Code at runtime
+

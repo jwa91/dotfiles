@@ -1,0 +1,31 @@
+# -----------------------------------------------------------------------------
+# Git Global Configuration (~/.gitconfig -> ~/dotfiles/git/config)
+# -----------------------------------------------------------------------------
+
+[user]
+    name = jwa91
+    email = 122170013+jwa91@users.noreply.github.com
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = vim
+    # --- Optional: Global .gitignore file ---
+    # excludesfile = /Users/jw/dotfiles/git/ignore 
+
+[commit]
+    template = ~/dotfiles/git/commit_template.txt
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[alias]
+    st = status -sb
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+[pull]
+    rebase = true
