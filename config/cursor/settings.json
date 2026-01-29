@@ -13,6 +13,8 @@
   "editor.minimap.enabled": false,
   "editor.accessibilitySupport": "off",
   "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit",
     "source.fixAll.stylelint": "explicit",
     "source.fixAll.ruff": "explicit",
     "source.organizeImports.ruff": "explicit"
@@ -88,8 +90,20 @@
       "strings": true
     },
     "editor.suggest.insertMode": "replace",
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "biomejs.biome"
   },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+
+  "[postcss]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+
   "[plaintext]": {
     "editor.unicodeHighlight.ambiguousCharacters": false,
     "editor.unicodeHighlight.invisibleCharacters": false
@@ -150,6 +164,8 @@
   "projectManager.any.baseFolders": ["~/developer"],
   "projectManager.any.maxDepthRecursion": 1,
   "json.schemaDownload.enable": true,
+  "biome.lsp.bin": "./node_modules/.bin/biome",
+  "biome.enabled": true,
 
   // ============================================================================
   // Security & Other
@@ -157,5 +173,10 @@
   "security.workspace.trust.untrustedFiles": "open",
   "explorer.confirmDragAndDrop": true,
   "update.releaseTrack": "prerelease",
-  "workbench.colorTheme": "Default Dark Modern"
+  "workbench.colorTheme": "Default Dark Modern",
+  "claudeCode.preferredLocation": "panel",
+  "claudeCode.useTerminal": true,
+  "amp.tab.enabled": false,
+  "amp.url": "https://ampcode.com/",
+  "workbench.statusBar.visible": false
 }

@@ -5,7 +5,18 @@
     },
     "shadcn": {
       "command": "npx",
-      "args": ["shadcn@latest", "mcp"]
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "docs-langchain": {
+      "url": "https://docs.langchain.com/mcp"
+    },
+    "n8n-docs": {
+      "type": "http",
+      "url": "https://n8n.mcp.kapa.ai/",
+      "headers": {}
     }
   }
 }

@@ -27,7 +27,7 @@ export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
 # ----------------------------------------
 # Machine-specific paths (override in secrets.zsh)
 # ----------------------------------------
-export VAULT_PATH="${VAULT_PATH:-}"  # Knowledge base path, used by 'vault' alias
+export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Obsidian"
 
 # ----------------------------------------
 # PATH modifications
@@ -42,13 +42,13 @@ export PNPM_HOME="$HOME/Library/pnpm"
 typeset -U -x path
 path=(
     "$HOME/.local/bin" 
+    /opt/homebrew/opt/node@24/bin  # Node 24 LTS
     /opt/homebrew/bin
     /opt/homebrew/sbin
     /usr/local/bin
     "$HOME/.npm-global/bin"
-    "$BUN_INSTALL/bin" # Now BUN_INSTALL is defined
-    "$HOME/.antigravity/antigravity/bin" # Added by Antigravity (Google IDE)
-    # "$SCRIPTS_DIR" # Uncomment if needed
+    "$BUN_INSTALL/bin"
+    "$HOME/.antigravity/antigravity/bin"
     $path
 )
 if [[ -d "$PNPM_HOME" && "${path[(i)$PNPM_HOME]}" -gt "${#path}" ]]; then

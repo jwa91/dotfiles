@@ -9,10 +9,10 @@ alias reloadenv='source ~/.zshenv'
 alias edit_zsh='cursor $ZSH_DIR'
 alias edit_dotfiles='cursor $DOTFILES_DIR'
 
-# Vault alias - requires VAULT_PATH to be set in secrets.zsh
-if [[ -n "$VAULT_PATH" ]]; then
-    alias vault='cursor "$VAULT_PATH"'
-fi
+# Notes/Vault aliases (functions required for iCloud path with spaces)
+unalias vault edit_notes 2>/dev/null
+vault() { open -a "Cursor" "$VAULT_PATH" }
+edit_notes() { open -a "Cursor" "$VAULT_PATH" }
 
 
 # Utility shell scripts
