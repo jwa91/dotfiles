@@ -31,6 +31,10 @@ misc/.netrc
 .env
 .env.*
 *.local
+# Local runtime configs (can contain machine-specific tokens/secrets)
+config/claude/claude_desktop_config.json
+config/cursor/mcp.json
+config/gh/hosts.yml
 # Allow example files to be committed
 !*.example
 !*.local.example
@@ -65,7 +69,7 @@ build/
 dist/
 .cache/
 
-
+# Local helper binary
 file2md
 
 # --- XDG Auto-generated (if XDG_CONFIG_HOME ever points here) ---

@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "Context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    },
+    "anytype": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@anyproto/anytype-mcp"
+      ],
+      "env": {
+        "OPENAPI_MCP_HEADERS": "{\"Authorization\":\"REPLACE_WITH_LOCAL_AUTH_HEADER\", \"Anytype-Version\":\"2025-05-20\"}"
+      }
+    }
+  },
+  "preferences": {
+    "coworkScheduledTasksEnabled": false,
+    "sidebarMode": "task"
+  }
+}

@@ -27,6 +27,10 @@ cd ~/dotfiles/zsh/setup
 cd ~/dotfiles/config/setup
 ./install-apps.sh
 ./link-apps.sh
+
+# 4. Enable local secret scanning before commits
+cd ~/dotfiles
+pre-commit install
 ```
 
 ## What's Included
@@ -61,6 +65,15 @@ dotfiles/
 - **Modular**: Each component is independent
 - **Secure**: with 1Password for SSH
 - **Modern tooling**: uv, Bun, Starship, Ghostty
+
+## Secret-Safe Config Model
+
+- Live, machine-specific app configs live outside git in `~/.config/dotfiles-local`.
+- Tracked config templates live in this repo as `*.example.*` files.
+- `config/setup/link-apps.sh` bootstraps missing local runtime files from examples.
+- Local commit protection is enabled with `pre-commit` + `gitleaks`:
+  - `pre-commit install`
+  - `pre-commit run --all-files`
 
 ## TODO
 

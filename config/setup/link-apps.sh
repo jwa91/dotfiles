@@ -31,13 +31,15 @@ run_cmd() { if ! $DRY_RUN; then "$@"; fi; }
 # Determine dotfiles location
 DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 CONFIG_DIR="$DOTFILES_DIR/config"
+DOTFILES_LOCAL_CONFIG_DIR="${DOTFILES_LOCAL_CONFIG_DIR:-$HOME/.config/dotfiles-local}"
 
 create_symlink() {
     local target="$1"
     local source="$2"
+    local parent_dir
     
     # Check if parent directory exists
-    local parent_dir=$(dirname "$target")
+    parent_dir=$(dirname "$target")
     if [[ ! -d "$parent_dir" ]]; then
         if $DRY_RUN; then
              echo -e "${YELLOW}○ WOULD:${NC} Create directory $parent_dir"
@@ -66,6 +68,30 @@ create_symlink() {
     fi
 }
 
+ensure_local_runtime_file() {
+    local runtime_file="$1"
+    local example_file="$2"
+    local runtime_dir
+    runtime_dir="$(dirname "$runtime_file")"
+
+    if [[ ! -d "$runtime_dir" ]]; then
+        log_action "Create $runtime_dir"
+        run_cmd mkdir -p "$runtime_dir"
+    fi
+
+    if [[ ! -f "$runtime_file" ]]; then
+        if [[ -f "$example_file" ]]; then
+            log_action "Initialize $runtime_file from $example_file"
+            run_cmd cp "$example_file" "$runtime_file"
+            echo -e "${YELLOW}⚠ NOTE:${NC} Review $runtime_file and fill in local values where needed."
+        else
+            log_action "Create empty runtime config $runtime_file"
+            run_cmd touch "$runtime_file"
+            echo -e "${YELLOW}⚠ NOTE:${NC} Populate $runtime_file before using the app."
+        fi
+    fi
+}
+
 echo -e "\n${BLUE}━━━ Linking Configurations ━━━${NC}"
 
 # --- 1. Cursor ---
@@ -82,7 +108,10 @@ if [[ ! -d "$CURSOR_GLOBAL_DIR" ]]; then
     log_action "Create $CURSOR_GLOBAL_DIR"
     run_cmd mkdir -p "$CURSOR_GLOBAL_DIR"
 fi
-create_symlink "$CURSOR_GLOBAL_DIR/mcp.json" "$CONFIG_DIR/cursor/mcp.json"
+CURSOR_MCP_RUNTIME_FILE="$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json"
+CURSOR_MCP_EXAMPLE_FILE="$CONFIG_DIR/cursor/mcp.example.json"
+ensure_local_runtime_file "$CURSOR_MCP_RUNTIME_FILE" "$CURSOR_MCP_EXAMPLE_FILE"
+create_symlink "$CURSOR_GLOBAL_DIR/mcp.json" "$CURSOR_MCP_RUNTIME_FILE"
 
 
 # --- 2. VS Code ---
@@ -95,7 +124,10 @@ create_symlink "$VSCODE_USER_DIR/snippets" "$CONFIG_DIR/vscode/snippets"
 # --- 3. Claude Desktop ---
 # Path: ~/Library/Application Support/Claude/claude_desktop_config.json
 CLAUDE_DIR="$HOME/Library/Application Support/Claude"
-create_symlink "$CLAUDE_DIR/claude_desktop_config.json" "$CONFIG_DIR/claude/claude_desktop_config.json"
+CLAUDE_RUNTIME_FILE="$DOTFILES_LOCAL_CONFIG_DIR/claude/claude_desktop_config.json"
+CLAUDE_EXAMPLE_FILE="$CONFIG_DIR/claude/claude_desktop_config.example.json"
+ensure_local_runtime_file "$CLAUDE_RUNTIME_FILE" "$CLAUDE_EXAMPLE_FILE"
+create_symlink "$CLAUDE_DIR/claude_desktop_config.json" "$CLAUDE_RUNTIME_FILE"
 # Optional: Developer settings if present
 if [[ -f "$CONFIG_DIR/claude/developer_settings.json" ]]; then
     create_symlink "$CLAUDE_DIR/developer_settings.json" "$CONFIG_DIR/claude/developer_settings.json"
@@ -126,10 +158,16 @@ create_symlink "$GH_DIR/config.yml" "$CONFIG_DIR/gh/config.yml"
 CHEAT_DIR="$HOME/.config/cheat"
 create_symlink "$CHEAT_DIR/conf.yml" "$CONFIG_DIR/cheat/conf.yml"
 # Ensure cheatsheets dir exists
-mkdir -p "$CHEAT_DIR/cheatsheets"
+if [[ ! -d "$CHEAT_DIR/cheatsheets" ]]; then
+    log_action "Create $CHEAT_DIR/cheatsheets"
+    run_cmd mkdir -p "$CHEAT_DIR/cheatsheets"
+fi
 create_symlink "$CHEAT_DIR/cheatsheets/personal" "$CONFIG_DIR/cheat/cheatsheets"
 
 
 
-echo -e "\n${GREEN}✓ Configuration linking complete!${NC}"
+# --- 7. tmux ---
+# Path: ~/.tmux.conf
+create_symlink "$HOME/.tmux.conf" "$CONFIG_DIR/tmux/tmux.conf"
 
+echo -e "\n${GREEN}✓ Configuration linking complete!${NC}"
