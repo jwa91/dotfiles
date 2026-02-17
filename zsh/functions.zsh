@@ -11,6 +11,9 @@ source "$FUNCTIONS_DIR/general-functions.zsh"
 # Next.js functions
 source "$FUNCTIONS_DIR/nextjs-functions.zsh"
 
+# Agent skills functions
+source "$FUNCTIONS_DIR/agentskills-functions.zsh"
+
 # Python functions (external from templates repo)
 if [[ -f "$HOME/Developer/templates/python/python-functions.sh" ]]; then
     source "$HOME/Developer/templates/python/python-functions.sh"

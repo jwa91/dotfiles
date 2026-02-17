@@ -8,6 +8,9 @@ cask "claude-code"
 cask "codex"
 cask "ollama"
 
+# Networking
+cask "tailscale"
+
 # Productivity & Utilities
 cask "raycast"
 cask "hiddenbar"

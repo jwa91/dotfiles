@@ -177,6 +177,5 @@
   "claudeCode.preferredLocation": "panel",
   "claudeCode.useTerminal": true,
   "amp.tab.enabled": false,
-  "amp.url": "https://ampcode.com/",
-  "workbench.statusBar.visible": false
+  "amp.url": "https://ampcode.com/"
 }

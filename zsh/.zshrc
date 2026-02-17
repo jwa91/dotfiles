@@ -23,6 +23,3 @@ source "$ZSH_DIR/plugins.zsh"
 
 # Load prompt configuration
 source "$ZSH_DIR/prompt.zsh"
-
-# Added by Antigravity
-export PATH="/Users/jw/.antigravity/antigravity/bin:$PATH"
