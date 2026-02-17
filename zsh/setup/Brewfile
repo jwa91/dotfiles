@@ -10,6 +10,9 @@ tap "oven-sh/bun"
 brew "starship"          # Cross-shell prompt
 brew "fzf"               # Fuzzy finder (used in plugins.zsh)
 brew "git"               # Ensure latest git
+brew "tmux"              # Terminal multiplexer
+brew "pre-commit"        # Local pre-commit hook manager
+brew "gitleaks"          # Secret scanner for git commits
 
 # GUI Apps
 cask "ghostty"           # Terminal Emulator

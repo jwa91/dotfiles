@@ -22,8 +22,11 @@ edit_notes() { open -a "Cursor" "$VAULT_PATH" }
 # File system aliases
 alias ls='ls -FaG'
 
+# tmux aliases
+alias tmain='tmux new-session -A -s main'
+alias tls='tmux list-sessions'
+
 # Python environment aliases
 alias clean_pycache='find . -name "__pycache__" -type d -exec rm -rf {} +'
 
 alias pass="openssl rand -hex 32 | pbcopy && echo '✅ Password copied to clipboard'"
-
