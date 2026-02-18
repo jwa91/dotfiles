@@ -1,24 +1,24 @@
 ---
 name: understand-dotfiles
-description: Analyze this dotfiles repository and explain setup flow, symlink behavior, package sources, and likely failure points. Use when asked to understand, audit, debug, or summarize how these dotfiles work.
+description: Analyze this dotfiles repository and explain setup flow, symlink behavior, package sources, and failure points. Use when auditing behavior, debugging setup/linking issues, planning refactors, or comparing machine state against repository intent.
 ---
 
 # Understand Dotfiles
 
-## Use This Skill When
-- The user asks how setup works end-to-end.
-- The user asks why a linked config is not applied.
-- The user asks for a high-level or file-by-file architecture overview.
-- The user asks for risk/impact before changing dotfiles.
-
 ## Workflow
 1. Read `README.md`, `CHANGELOG.md`, `Brewfile`, and `setup/bootstrap.sh` first.
-2. Map config ownership across `zsh/`, `git/`, and `config/`.
-3. Identify secret-bearing runtime paths versus tracked templates.
-4. Summarize behavior, then list concrete checks/commands.
+2. Map ownership across `setup/`, `zsh/`, `git/`, and `config/`.
+3. Check package intent vs machine state (`brew bundle list --all --file Brewfile`, `brew leaves`, `brew list --cask`).
+4. Identify secret-bearing runtime paths versus tracked templates.
+5. Summarize behavior and list concrete verification/fix commands.
 
-## Output Format
-- Current setup model
+## Output Contract
+- Setup model summary (bootstrap order and conflict behavior)
 - Key files and responsibilities
-- Risk points and conflict paths
-- Recommended next checks
+- Drift and risk points
+- Recommended next checks and actions
+
+## Guardrails
+- Never recommend storing secrets in tracked files.
+- Prefer deterministic checks and explicit commands.
+- If Python tooling is needed, use `uv run --with ...` instead of global `pip install`.

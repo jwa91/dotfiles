@@ -1,3 +1,4 @@
 interface:
   display_name: "Modify Dotfiles Zsh"
   short_description: "Edit zsh config safely with syntax and behavior checks"
+  default_prompt: "Use $modify-dotfiles-zsh to update zsh behavior safely and run syntax validation before summarizing changes."
