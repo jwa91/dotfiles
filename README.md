@@ -10,7 +10,7 @@ This is **v1** — expect frequent updates as I refine the workflow.
 
 ## Quick Start
 
-**Full setup guide:** See [`setting-up-a-new-macbook.md`](setting-up-a-new-macbook.md)
+**Full setup guide:** [janwillemaltink.com/writings/new-macbook-guide](https://janwillemaltink.com/writings/new-macbook-guide/)
 
 **TL;DR:**
 
@@ -46,17 +46,40 @@ pre-commit install
 
 ```
 dotfiles/
-├── zsh/                    # Shell configuration
-│   ├── setup/              # Installation scripts
-│   └── zsh-functions/      # Custom functions
+├── README.md
 ├── git/                    # Git configuration
-├── config/                 # Application configs
-│   ├── cursor/             # Cursor IDE
-│   ├── claude/             # Claude Desktop
-│   ├── claude-code/        # Claude Code CLI
-│   ├── codex/              # Codex CLI
-│   └── ...
-└── setting-up-a-new-macbook.md
+│   ├── config
+│   ├── commit_template.txt
+│   └── setup.sh
+├── zsh/                    # Shell configuration
+│   ├── .zshenv
+│   ├── .zshrc
+│   ├── .zprofile
+│   ├── aliases.zsh
+│   ├── completions.zsh
+│   ├── functions.zsh
+│   ├── options.zsh
+│   ├── plugins.zsh
+│   ├── prompt.zsh
+│   ├── setup/              # Installation scripts
+│   │   ├── Brewfile
+│   │   ├── install-zsh.sh
+│   │   ├── install-tools.sh
+│   │   └── secrets.example.zsh
+│   └── zsh-functions/      # Custom functions
+│       ├── general-functions.zsh
+│       ├── nextjs-functions.zsh
+│       └── agentskills-functions.zsh
+└── config/                 # Application configs
+    ├── setup/
+    ├── tmux/
+    ├── cursor/
+    ├── vscode/
+    ├── claude/
+    ├── claude-code/
+    ├── codex/
+    ├── gh/
+    └── ...
 ```
 
 ## Philosophy
