@@ -1,0 +1,3 @@
+interface:
+  display_name: "Understand Dotfiles"
+  short_description: "Explain setup flow, linking, and dotfiles behavior"

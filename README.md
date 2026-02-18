@@ -6,7 +6,7 @@ My personal macOS configuration and setup automation.
 
 A complete, reproducible system for setting up a new MacBook from scratch. Created primarily to eliminate the pain of manual configuration when migrating machines.
 
-This is **v1** — expect frequent updates as I refine the workflow.
+Current major release: **v2**.
 
 ## Quick Start
 
@@ -18,19 +18,17 @@ This is **v1** — expect frequent updates as I refine the workflow.
 # 1. Clone this repo
 git clone git@github.com:jwa91/dotfiles.git ~/dotfiles
 
-# 2. Set up shell environment
-cd ~/dotfiles/zsh/setup
-./install-zsh.sh
-./install-tools.sh
-
-# 3. Set up applications
-cd ~/dotfiles/config/setup
-./install-apps.sh
-./link-apps.sh
-
-# 4. Enable local secret scanning before commits
+# 2. Run one bootstrap command
 cd ~/dotfiles
-pre-commit install
+./setup/bootstrap.sh
+```
+
+Bootstrap flags:
+
+```bash
+./setup/bootstrap.sh --dry-run
+./setup/bootstrap.sh --no-brew
+./setup/bootstrap.sh --no-link
 ```
 
 ## What's Included
@@ -46,7 +44,15 @@ pre-commit install
 
 ```
 dotfiles/
+├── Brewfile
+├── CHANGELOG.md
 ├── README.md
+├── setup/
+│   └── bootstrap.sh
+├── .agents/
+│   └── skills/
+├── .claude/
+│   └── skills/             # Repo-local symlinks to .agents/skills
 ├── git/                    # Git configuration
 │   ├── config
 │   ├── commit_template.txt
@@ -61,17 +67,13 @@ dotfiles/
 │   ├── options.zsh
 │   ├── plugins.zsh
 │   ├── prompt.zsh
-│   ├── setup/              # Installation scripts
-│   │   ├── Brewfile
-│   │   ├── install-zsh.sh
-│   │   ├── install-tools.sh
+│   ├── setup/
 │   │   └── secrets.example.zsh
 │   └── zsh-functions/      # Custom functions
 │       ├── general-functions.zsh
 │       ├── nextjs-functions.zsh
 │       └── agentskills-functions.zsh
 └── config/                 # Application configs
-    ├── setup/
     ├── tmux/
     ├── cursor/
     ├── vscode/
@@ -93,17 +95,22 @@ dotfiles/
 
 - Live, machine-specific app configs live outside git in `~/.config/dotfiles-local`.
 - Tracked config templates live in this repo as `*.example.*` files.
-- `config/setup/link-apps.sh` bootstraps missing local runtime files from examples.
+- `setup/bootstrap.sh` bootstraps missing local runtime files from examples and links app paths.
 - Local commit protection is enabled with `pre-commit` + `gitleaks`:
   - `pre-commit install`
   - `pre-commit run --all-files`
+
+## Versioning
+
+- Baseline snapshot is tagged `v1.0.0`.
+- Major setup refactor is tagged `v2.0.0`.
+- New releases follow semantic versioning and are recorded in `CHANGELOG.md`.
 
 ## TODO
 
 - [ ] Add backup strategy for existing configs
 - [ ] Health check utilities
 - [ ] Unified MCP server management
-- [ ] More granular Brewfile splitting
 - [ ] Visual architecture documentation
 
 ## License

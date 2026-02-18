@@ -1,0 +1,3 @@
+interface:
+  display_name: "Modify Dotfiles Config"
+  short_description: "Edit app config and linking logic with safety checks"

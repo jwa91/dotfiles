@@ -17,7 +17,7 @@ edit_notes() { open -a "Cursor" "$VAULT_PATH" }
 
 # Utility shell scripts
 # Active scripts - Managed via external tools/path
-# See install-tools.sh for setup instructions
+# See setup/bootstrap.sh for setup instructions
 
 # File system aliases
 alias ls='ls -FaG'
@@ -25,6 +25,9 @@ alias ls='ls -FaG'
 # tmux aliases
 alias tmain='tmux new-session -A -s main'
 alias tls='tmux list-sessions'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
 # Python environment aliases
 alias clean_pycache='find . -name "__pycache__" -type d -exec rm -rf {} +'

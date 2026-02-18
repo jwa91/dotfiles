@@ -1,0 +1,3 @@
+interface:
+  display_name: "Modify Dotfiles Zsh"
+  short_description: "Edit zsh config safely with syntax and behavior checks"
