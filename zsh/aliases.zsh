@@ -6,6 +6,7 @@
 # ZSH configuration aliases
 alias reload='source ~/.zshrc'
 alias reloadenv='source ~/.zshenv'
+unalias edit_zsh edit_dotfiles 2>/dev/null
 open_in_editor() {
   local target="$1"
 
