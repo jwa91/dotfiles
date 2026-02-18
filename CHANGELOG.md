@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
+## [Unreleased]
+### Added
+- Manual install checklist output in `setup/bootstrap.sh`, sourced from `setup/manual-installs.txt`.
+- Editor fallback helper in `zsh/aliases.zsh` (`cursor` -> Cursor app -> `code` -> VS Code app -> `open`).
+
+### Changed
+- Cursor config linking in `setup/bootstrap.sh` is now conditional on Cursor being installed; bootstrap continues cleanly when Cursor is absent.
+- README quick-start now includes the manual install review and rerun step (`./setup/bootstrap.sh --no-brew`) after manual app installs.
+- Cursor entry in `setup/manual-installs.txt` now documents the post-install relink step.
+
 ## [2.0.0] - 2026-02-18
 ### Added
 - Canonical root `Brewfile` for one-go future machine setup.

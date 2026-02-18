@@ -66,6 +66,7 @@ DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 ZSH_DIR="$DOTFILES_DIR/zsh"
 CONFIG_DIR="$DOTFILES_DIR/config"
 BREWFILE="$DOTFILES_DIR/Brewfile"
+MANUAL_INSTALLS_FILE="$DOTFILES_DIR/setup/manual-installs.txt"
 DOTFILES_LOCAL_CONFIG_DIR="${DOTFILES_LOCAL_CONFIG_DIR:-$HOME/.config/dotfiles-local}"
 
 ensure_dir() {
@@ -147,6 +148,36 @@ ensure_local_runtime_file() {
     else
         log_skip "$runtime_file"
     fi
+}
+
+is_cursor_installed() {
+    if command -v cursor >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if [[ -d "/Applications/Cursor.app" || -d "$HOME/Applications/Cursor.app" ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
+print_manual_install_checklist() {
+    log_section "Manual Install Checklist"
+
+    if [[ ! -f "$MANUAL_INSTALLS_FILE" ]]; then
+        log_skip "No manual install checklist found at $MANUAL_INSTALLS_FILE"
+        return
+    fi
+
+    log_warn "The following tools are managed outside Homebrew:"
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^-[[:space:]]+(.+) ]]; then
+            echo "  - ${BASH_REMATCH[1]}"
+        fi
+    done < "$MANUAL_INSTALLS_FILE"
+
+    echo "  -> Details: $MANUAL_INSTALLS_FILE"
 }
 
 preflight() {
@@ -272,14 +303,19 @@ link_configs() {
     ensure_symlink "$HOME/.config/ghostty/config" "$CONFIG_DIR/ghostty/config"
     ensure_symlink "$HOME/.config/starship.toml" "$CONFIG_DIR/starship.toml"
 
-    # Cursor
-    ensure_symlink "$HOME/Library/Application Support/Cursor/User/settings.json" "$CONFIG_DIR/cursor/settings.json"
-    ensure_symlink "$HOME/Library/Application Support/Cursor/User/keybindings.json" "$CONFIG_DIR/cursor/keybindings.json"
-    ensure_symlink "$HOME/Library/Application Support/Cursor/User/snippets" "$CONFIG_DIR/cursor/snippets"
+    # Cursor (manual install in v2)
+    if is_cursor_installed; then
+        ensure_symlink "$HOME/Library/Application Support/Cursor/User/settings.json" "$CONFIG_DIR/cursor/settings.json"
+        ensure_symlink "$HOME/Library/Application Support/Cursor/User/keybindings.json" "$CONFIG_DIR/cursor/keybindings.json"
+        ensure_symlink "$HOME/Library/Application Support/Cursor/User/snippets" "$CONFIG_DIR/cursor/snippets"
 
-    local cursor_runtime="$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json"
-    ensure_local_runtime_file "$cursor_runtime" "$CONFIG_DIR/cursor/mcp.example.json"
-    ensure_symlink "$HOME/.cursor/mcp.json" "$cursor_runtime"
+        local cursor_runtime="$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json"
+        ensure_local_runtime_file "$cursor_runtime" "$CONFIG_DIR/cursor/mcp.example.json"
+        ensure_symlink "$HOME/.cursor/mcp.json" "$cursor_runtime"
+    else
+        log_warn "Cursor not detected; skipping Cursor config links for now"
+        log_warn "Install Cursor manually, then rerun: ./setup/bootstrap.sh --no-brew"
+    fi
 
     # VS Code
     ensure_symlink "$HOME/Library/Application Support/Code/User/settings.json" "$CONFIG_DIR/vscode/settings.json"
@@ -323,6 +359,7 @@ main() {
     ensure_homebrew_and_git
     install_brew_bundle
     setup_zsh_environment
+    print_manual_install_checklist
     link_configs
 
     log_section "Complete"

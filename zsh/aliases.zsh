@@ -6,13 +6,29 @@
 # ZSH configuration aliases
 alias reload='source ~/.zshrc'
 alias reloadenv='source ~/.zshenv'
-alias edit_zsh='cursor $ZSH_DIR'
-alias edit_dotfiles='cursor $DOTFILES_DIR'
+open_in_editor() {
+  local target="$1"
+
+  if command -v cursor >/dev/null 2>&1; then
+    cursor "$target"
+  elif [[ -d "/Applications/Cursor.app" || -d "$HOME/Applications/Cursor.app" ]]; then
+    open -a "Cursor" "$target"
+  elif command -v code >/dev/null 2>&1; then
+    code "$target"
+  elif [[ -d "/Applications/Visual Studio Code.app" ]]; then
+    open -a "Visual Studio Code" "$target"
+  else
+    open "$target"
+  fi
+}
+
+edit_zsh() { open_in_editor "$ZSH_DIR"; }
+edit_dotfiles() { open_in_editor "$DOTFILES_DIR"; }
 
 # Notes/Vault aliases (functions required for iCloud path with spaces)
 unalias vault edit_notes 2>/dev/null
-vault() { open -a "Cursor" "$VAULT_PATH" }
-edit_notes() { open -a "Cursor" "$VAULT_PATH" }
+vault() { open_in_editor "$VAULT_PATH"; }
+edit_notes() { open_in_editor "$VAULT_PATH"; }
 
 
 # Utility shell scripts

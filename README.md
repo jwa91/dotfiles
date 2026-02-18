@@ -18,9 +18,15 @@ Current major release: **v2**.
 # 1. Clone this repo
 git clone git@github.com:jwa91/dotfiles.git ~/dotfiles
 
-# 2. Run one bootstrap command
+# 2. Review manual installs (outside Homebrew)
 cd ~/dotfiles
+cat ./setup/manual-installs.txt
+
+# 3. Run one bootstrap command
 ./setup/bootstrap.sh
+
+# 4. After installing manual apps later, relink app configs
+./setup/bootstrap.sh --no-brew
 ```
 
 Bootstrap flags:
@@ -31,6 +37,9 @@ Bootstrap flags:
 ./setup/bootstrap.sh --no-link
 ```
 
+Manual-install checklist: `setup/manual-installs.txt`  
+Bootstrap will warn about items in this list and skip Cursor linking until Cursor is installed.
+
 ## What's Included
 
 - **Shell**: Zsh with Starship prompt, FZF, curated plugins
@@ -38,6 +47,7 @@ Bootstrap flags:
 - **Terminal**: Ghostty configuration
 - **Python**: Integration with [python-template](https://github.com/jwa91/python-template) for project scaffolding
 - **Apps**: Configurations for Cursor, VS Code, Claude, Codex, and more
+- **Manual app installs**: Checklist for tools intentionally managed outside Homebrew
 - **Security**: 1Password-based SSH agent setup
 
 ## Structure

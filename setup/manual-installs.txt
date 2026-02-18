@@ -1,0 +1,13 @@
+Manual installs (preferred outside Homebrew)
+
+- tailscale
+  website: https://tailscale.com/download
+  reason: macOS network extension approval flow is interactive and more reliable via the official installer/app flow.
+
+- cursor
+  website: https://www.cursor.com/
+  reason: app-managed CLI shim/symlink behavior can conflict with Homebrew-managed expectations; install directly from the app download, then rerun ./setup/bootstrap.sh --no-brew to apply links.
+
+- helium
+  website: https://helium.computer/
+  reason: preferred manual install target for the Helium browser you use (not the deprecated Homebrew cask named "helium").
