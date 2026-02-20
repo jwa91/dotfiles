@@ -290,6 +290,7 @@ link_configs() {
     ensure_symlink "$HOME/.zprofile" "$ZSH_DIR/.zprofile"
     ensure_symlink "$HOME/.config/ghostty/config" "$CONFIG_DIR/ghostty/config"
     ensure_symlink "$HOME/.config/starship.toml" "$CONFIG_DIR/starship.toml"
+    ensure_symlink "$HOME/.config/fresh/config.json" "$CONFIG_DIR/fresh/config.json"
 
     # Cursor (manual install in v2)
     if is_cursor_installed; then

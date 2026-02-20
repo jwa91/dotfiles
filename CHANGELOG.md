@@ -6,6 +6,12 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.3.0] - 2026-02-21
+### Added
+- Fresh editor config managed via dotfiles symlink (`config/fresh/config.json`).
+- `$EDITOR` set per terminal: `cursor --wait` in vscode, `fresh` in ghostty, `micro` elsewhere.
+- Bootstrap links fresh config to `~/.config/fresh/config.json`.
+
 ## [2.2.0] - 2026-02-21
 ### Added
 - Stripped-down `config/starship-mobile.toml` for non-desktop terminals (no nerdfonts, no language detection, no time — safe for mosh).

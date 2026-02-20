@@ -20,13 +20,22 @@ export DEV_DIR="${DEV_DIR:-$HOME/Developer}"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 # ----------------------------------------
-# Specific Configurations
+# Terminal-aware configurations
 # ----------------------------------------
-if [[ "$TERM_PROGRAM" == "ghostty" || "$TERM_PROGRAM" == "vscode" ]]; then
-    export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-else
-    export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
-fi
+case "$TERM_PROGRAM" in
+    vscode)
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+        export EDITOR="cursor --wait"
+        ;;
+    ghostty)
+        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+        export EDITOR="fresh"
+        ;;
+    *)
+        export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
+        export EDITOR="micro"
+        ;;
+esac
 
 # ----------------------------------------
 # Machine-specific paths
