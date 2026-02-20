@@ -274,18 +274,6 @@ setup_zsh_environment() {
         fi
     done
 
-    local secrets_file="$ZSH_DIR/secrets.zsh"
-    local secrets_example="$ZSH_DIR/setup/secrets.example.zsh"
-
-    if [[ -f "$secrets_file" ]]; then
-        log_skip "$secrets_file"
-    elif [[ -f "$secrets_example" ]]; then
-        log_action "Copy $secrets_example to $secrets_file"
-        run_cmd cp "$secrets_example" "$secrets_file"
-    else
-        log_action "Create empty $secrets_file"
-        run_cmd touch "$secrets_file"
-    fi
 }
 
 link_configs() {

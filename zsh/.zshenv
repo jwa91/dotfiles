@@ -25,7 +25,7 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
 
 # ----------------------------------------
-# Machine-specific paths (override in secrets.zsh)
+# Machine-specific paths
 # ----------------------------------------
 export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Obsidian"
 

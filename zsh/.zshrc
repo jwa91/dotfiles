@@ -3,9 +3,6 @@
 # Description: Main ZSH configuration file
 # ----------------------------------------
 
-# Load machine-specific secrets (if exists)
-[[ -f "$ZSH_DIR/secrets.zsh" ]] && source "$ZSH_DIR/secrets.zsh"
-
 # Load ZSH completions
 source "$ZSH_DIR/completions.zsh"
 
