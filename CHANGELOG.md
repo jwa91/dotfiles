@@ -6,6 +6,11 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-02-20
+### Added
+- Conventional commit enforcement via `conventional-pre-commit` hook (commit-msg stage).
+- Pre-push guard requiring a version tag and matching changelog entry when pushing to main (`setup/hooks/pre-push-main-guard.sh`).
+
 ## [2.0.1] - 2026-02-20
 ### Removed
 - `secrets.zsh` mechanism — unused shell-level secrets file, example template, bootstrap logic, and `.zshrc` source line. API keys are handled by `load_key` (1Password) and machine-local app configs live in `~/.config/dotfiles-local/`.
