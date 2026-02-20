@@ -11,8 +11,7 @@
 
 [core]
     editor = vim
-    # --- Optional: Global .gitignore file ---
-    # excludesfile = /Users/jw/dotfiles/git/ignore 
+    excludesfile = ~/dotfiles/git/ignore
 
 [commit]
     template = ~/dotfiles/git/commit_template.txt

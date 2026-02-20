@@ -8,6 +8,8 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 ### Added
 - Manual install checklist output in `setup/bootstrap.sh`, sourced from `setup/manual-installs.txt`.
 - Editor fallback helper in `zsh/aliases.zsh` (`cursor` -> Cursor app -> `code` -> VS Code app -> `open`).
+- `cw` command suite for Claude Code worktree+tmux workflow (`cw`, `cw-ls`, `cw-rm`, `cw-prune`, `cw-send`).
+- Global gitignore (`git/ignore`) with `.worktrees/` entry, wired via `core.excludesfile`.
 
 ### Changed
 - Cursor config linking in `setup/bootstrap.sh` is now conditional on Cursor being installed; bootstrap continues cleanly when Cursor is absent.
