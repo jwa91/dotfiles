@@ -22,7 +22,11 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 # ----------------------------------------
 # Specific Configurations
 # ----------------------------------------
-export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+if [[ "$TERM_PROGRAM" == "ghostty" || "$TERM_PROGRAM" == "vscode" ]]; then
+    export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+else
+    export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
+fi
 
 # ----------------------------------------
 # Machine-specific paths

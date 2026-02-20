@@ -10,17 +10,11 @@ unalias edit_zsh edit_dotfiles 2>/dev/null
 open_in_editor() {
   local target="$1"
 
-  if command -v cursor >/dev/null 2>&1; then
-    cursor "$target"
-  elif [[ -d "/Applications/Cursor.app" || -d "$HOME/Applications/Cursor.app" ]]; then
-    open -a "Cursor" "$target"
-  elif command -v code >/dev/null 2>&1; then
-    code "$target"
-  elif [[ -d "/Applications/Visual Studio Code.app" ]]; then
-    open -a "Visual Studio Code" "$target"
-  else
-    open "$target"
-  fi
+  case "$TERM_PROGRAM" in
+    vscode)   cursor "$target" ;;
+    ghostty)  fresh "$target" ;;
+    *)        micro "$target" ;;
+  esac
 }
 
 edit_zsh() { open_in_editor "$ZSH_DIR"; }

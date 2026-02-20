@@ -33,8 +33,13 @@ brew "opencode"
 # Fonts
 cask "font-jetbrains-mono-nerd-font"
 
+# Taps — editors
+tap "sinelaw/fresh"
+
 # Terminals & editors
 cask "ghostty"
+brew "micro"
+brew "fresh-editor"
 
 # AI tools
 cask "claude"

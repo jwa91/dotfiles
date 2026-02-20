@@ -6,6 +6,15 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.2.0] - 2026-02-21
+### Added
+- Stripped-down `config/starship-mobile.toml` for non-desktop terminals (no nerdfonts, no language detection, no time — safe for mosh).
+- `TERM_PROGRAM`-based detection in `.zshenv`: ghostty and vscode get full starship config, everything else gets the mobile variant.
+- `micro` and `fresh-editor` added to Brewfile as terminal-based editors.
+
+### Changed
+- `open_in_editor` now routes by terminal: Cursor when inside vscode, fresh in ghostty, micro everywhere else.
+
 ## [2.1.0] - 2026-02-20
 ### Added
 - Conventional commit enforcement via `conventional-pre-commit` hook (commit-msg stage).
