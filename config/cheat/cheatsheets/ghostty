@@ -1,0 +1,53 @@
+---
+syntax: bash
+tags: [ ghostty, terminal, emulator, keybindings, personal ]
+---
+# Windows
+Cmd+N                     # New window
+Cmd+Shift+W               # Close window
+Cmd+Enter                 # Toggle fullscreen
+Cmd+Q                     # Quit
+
+# Tabs
+Cmd+T                     # New tab
+Cmd+W                     # Close tab (or split)
+Cmd+Shift+]               # Next tab
+Cmd+Shift+[               # Previous tab
+Cmd+1-8                   # Jump to tab by number
+Cmd+9                     # Jump to last tab
+
+# Splits (panes)
+Cmd+D                     # Split right (vertical)
+Cmd+Shift+D               # Split down (horizontal)
+Cmd+W                     # Close split
+Cmd+]                     # Focus next split
+Cmd+[                     # Focus previous split
+Cmd+Opt+Up/Down/Left/Right    # Focus split by direction
+Cmd+Shift+Enter           # Toggle split zoom (fullscreen)
+Cmd+Ctrl+Up/Down/Left/Right   # Resize split
+Cmd+Ctrl+=                # Equalize splits
+
+# Copy & Paste
+Cmd+C                     # Copy
+Cmd+V                     # Paste
+
+# Scrolling & Navigation
+Cmd+Up                    # Jump to previous prompt
+Cmd+Down                  # Jump to next prompt
+Cmd+Home                  # Scroll to top
+Cmd+End                   # Scroll to bottom
+Cmd+PageUp                # Scroll page up
+Cmd+PageDown              # Scroll page down
+Cmd+K                     # Clear screen
+
+# Font Size
+Cmd++                     # Increase font size
+Cmd+-                     # Decrease font size
+Cmd+0                     # Reset font size
+
+# Config & Debug
+Cmd+,                     # Open config file
+Cmd+Shift+,               # Reload config
+Cmd+Opt+I                 # Toggle inspector
+Cmd+Shift+J               # Write scrollback to file (paste)
+Cmd+Shift+Opt+J           # Write scrollback to file (open)

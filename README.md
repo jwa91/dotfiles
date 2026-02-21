@@ -45,6 +45,7 @@ Bootstrap will warn about items in this list and skip Cursor linking until Curso
 - **Shell**: Zsh with Starship prompt, FZF, curated plugins
 - **Git**: Global config with commit templates
 - **Terminal**: Ghostty configuration
+- **Tmux**: Session bookmarks and interactive picker for desktop/mobile
 - **Python**: Integration with [python-template](https://github.com/jwa91/python-template) for project scaffolding
 - **Apps**: Configurations for Cursor, VS Code, Claude, Codex, and more
 - **Manual app installs**: Checklist for tools intentionally managed outside Homebrew
@@ -77,14 +78,15 @@ dotfiles/
 │   ├── options.zsh
 │   ├── plugins.zsh
 │   ├── prompt.zsh
-│   ├── setup/
-│   │   └── secrets.example.zsh
-│   └── zsh-functions/      # Custom functions
+│   └── zsh-functions/
 │       ├── general-functions.zsh
+│       ├── claude-functions.zsh
 │       ├── nextjs-functions.zsh
 │       └── agentskills-functions.zsh
 └── config/                 # Application configs
     ├── tmux/
+    │   ├── tmux.conf
+    │   └── tmux-bookmarks.zsh
     ├── cursor/
     ├── vscode/
     ├── claude/
@@ -93,6 +95,22 @@ dotfiles/
     ├── gh/
     └── ...
 ```
+
+## Naming Conventions
+
+All aliases and functions follow: **action prefix + shortest target, mashed together** (no hyphens or underscores). Private helpers start with `_`.
+
+| Prefix | Action | Examples |
+|--------|--------|----------|
+| `mk` | make/create/generate | `mkpass`, `mkroute`, `mkskill` |
+| `e` | edit/open in editor | `ezsh`, `edots`, `evault`, `edev` |
+| `cd` | navigate to directory | `cdd`, `cdzsh`, `cddots`, `cdvault` |
+| `t` | tmux operation | `tmain`, `tls`, `tpick` |
+| `cw` | claude worktree | `cw`, `cwls`, `cwrm`, `cwprune` |
+| `py` | python | `pyclean` |
+| — | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
+
+When adding new commands: pick the action prefix first, then the shortest unambiguous target. If an `e` variant exists, add a matching `cd` variant.
 
 ## Philosophy
 

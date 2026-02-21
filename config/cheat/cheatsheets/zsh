@@ -1,0 +1,51 @@
+---
+syntax: bash
+tags: [ zsh, aliases, functions, dotfiles, personal ]
+---
+# Shell
+reload                    # Re-source ~/.zshrc
+reloadenv                 # Re-source ~/.zshenv
+
+# Edit (e + target) — opens in terminal-aware editor
+ezsh                      # Open zsh dotfiles dir
+edots                     # Open dotfiles dir
+evault                    # Open vault
+edev                      # Open developer dir
+
+# Navigate (cd + target)
+cdzsh                     # cd to zsh dotfiles dir
+cddots                    # cd to dotfiles dir
+cdvault                   # cd to vault
+cdd [subdir]              # cd to DEV_DIR (or subdir within it)
+
+# Navigation
+ls                        # ls -FaG (colorized, all, classify)
+...                       # cd ../..
+....                      # cd ../../..
+.....                     # cd ../../../..
+
+# Tmux (t + action)
+tmain                     # Attach or create 'main' tmux session
+tls                       # List tmux sessions
+tpick [--mobile]          # Interactive tmux session picker (fzf)
+
+# Claude Worktree (cw + action)
+cw [task description]     # New worktree + branch + tmux + claude
+cw -d [task]              # Same but detached (background)
+cw                        # Pick existing worktree (fzf)
+cwls                      # List worktrees with status
+cwrm <slug>               # Remove worktree, branch, and tmux session
+cwprune                   # Clean up worktrees merged into main
+
+# Make (mk + thing)
+mkpass                    # Generate random password -> clipboard
+mkroute <path>            # Create Next.js App Router route structure
+mkskill [name]            # Install agent skill (or list available)
+
+# Python
+pyclean                   # Remove __pycache__ dirs recursively
+
+# Utilities
+key NAME [NAME ...]       # Load API keys from 1Password
+rwe                       # Retry last command with escaped arguments
+zshdoctor                 # Validate zsh config, deps, and paths

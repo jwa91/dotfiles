@@ -5,18 +5,18 @@
 # ----------------------------------------
 
 # --------------------------------------------------
-# Function: addskill
+# Function: mkskill
 # Description: Installs agent skills into the current project directory.
 #              Without arguments, lists all available skills.
 #              With a skill name, installs that skill into the current directory.
-# Usage: addskill [skill-name]
+# Usage: mkskill [skill-name]
 # --------------------------------------------------
-function addskill() {
+function mkskill() {
     local AGENTSKILLS_REPO="$DEV_DIR/agentskills"
     local skills_dir="$AGENTSKILLS_REPO/skills"
 
     if [[ ! -d "$skills_dir" ]]; then
-        echo "addskill: Error - skills directory not found: $skills_dir" >&2
+        echo "mkskill: Error - skills directory not found: $skills_dir" >&2
         return 1
     fi
 
@@ -32,7 +32,7 @@ function addskill() {
     fi
 
     if ! command -v agentskills &> /dev/null; then
-        echo "addskill: Error - agentskills CLI not found. Run 'uv sync' in $AGENTSKILLS_REPO" >&2
+        echo "mkskill: Error - agentskills CLI not found. Run 'uv sync' in $AGENTSKILLS_REPO" >&2
         return 1
     fi
 

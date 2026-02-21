@@ -14,6 +14,12 @@ source "$FUNCTIONS_DIR/nextjs-functions.zsh"
 # Agent skills functions
 source "$FUNCTIONS_DIR/agentskills-functions.zsh"
 
+# Tmux session bookmarks and picker (tpick)
+source "$CONFIG_DIR/tmux/tmux-bookmarks.zsh"
+
+# Tmux project layout (tproject)
+source "$CONFIG_DIR/tmux/tmux-project.zsh"
+
 # Claude Code workflow functions
 source "$FUNCTIONS_DIR/claude-functions.zsh"
 

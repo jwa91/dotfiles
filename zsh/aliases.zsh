@@ -1,46 +1,42 @@
 # ----------------------------------------
 # File: aliases.zsh
 # Description: Custom aliases for zsh
+# Naming: action prefix + shortest target, mashed (ezsh, mkpass, tls)
 # ----------------------------------------
 
-# ZSH configuration aliases
+# Shell
 alias reload='source ~/.zshrc'
 alias reloadenv='source ~/.zshenv'
-unalias edit_zsh edit_dotfiles 2>/dev/null
-open_in_editor() {
-  local target="$1"
 
+# Edit (e + target) / Navigate (cd + target)
+_eopen() {
+  local target="$1"
   case "$TERM_PROGRAM" in
     vscode)   cursor "$target" ;;
     ghostty)  fresh "$target" ;;
     *)        micro "$target" ;;
   esac
 }
+ezsh()    { _eopen "$ZSH_DIR"; }
+edots()   { _eopen "$DOTFILES_DIR"; }
+evault()  { _eopen "$VAULT_PATH"; }
+edev()    { _eopen "$DEV_DIR"; }
+cdzsh()   { builtin cd "$ZSH_DIR"; }
+cddots()  { builtin cd "$DOTFILES_DIR"; }
+cdvault() { builtin cd "$VAULT_PATH"; }
 
-edit_zsh() { open_in_editor "$ZSH_DIR"; }
-edit_dotfiles() { open_in_editor "$DOTFILES_DIR"; }
-
-# Notes/Vault aliases (functions required for iCloud path with spaces)
-unalias vault edit_notes 2>/dev/null
-vault() { open_in_editor "$VAULT_PATH"; }
-edit_notes() { open_in_editor "$VAULT_PATH"; }
-
-
-# Utility shell scripts
-# Active scripts - Managed via external tools/path
-# See setup/bootstrap.sh for setup instructions
-
-# File system aliases
+# Navigation
 alias ls='ls -FaG'
-
-# tmux aliases
-alias tmain='tmux new-session -A -s main'
-alias tls='tmux list-sessions'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 
-# Python environment aliases
-alias clean_pycache='find . -name "__pycache__" -type d -exec rm -rf {} +'
+# Tmux (t + action)
+alias tmain='tmux new-session -A -s main'
+alias tls='tmux list-sessions'
 
-alias pass="openssl rand -hex 32 | pbcopy && echo '✅ Password copied to clipboard'"
+# Make (mk + thing)
+alias mkpass="openssl rand -hex 32 | pbcopy && echo '✅ Password copied to clipboard'"
+
+# Python
+alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'

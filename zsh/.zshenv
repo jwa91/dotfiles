@@ -31,6 +31,18 @@ case "$TERM_PROGRAM" in
         export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
         export EDITOR="fresh"
         ;;
+    tmux)
+        # tmux overrides TERM_PROGRAM; check OUTER_TERM set by tmux.conf
+        _outer=$(tmux show-environment -g OUTER_TERM 2>/dev/null | sed 's/.*=//')
+        if [[ "$_outer" == "ghostty" ]]; then
+            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+            export EDITOR="fresh"
+        else
+            export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
+            export EDITOR="micro"
+        fi
+        unset _outer
+        ;;
     *)
         export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
         export EDITOR="micro"

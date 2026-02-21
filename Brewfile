@@ -21,6 +21,7 @@ brew "cheat"
 brew "jq"
 brew "httpie"
 brew "mosh"
+brew "watch"
 
 # Languages & runtimes
 brew "bun"

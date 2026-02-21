@@ -6,12 +6,12 @@
 # ----------------------------------------
 
 # --------------------------------------------------
-# Function: load_key
+# Function: key
 # Description: Loads API keys from 1Password by name.
 #              Keys in 1Password should match the env var name (e.g., OPENAI_API_KEY).
-# Usage: load_key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
+# Usage: key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
 # --------------------------------------------------
-function load_key() {
+function key() {
   local secret
   for key in "$@"; do
     if ! secret=$(op read "op://Personal/$key/credential"); then
@@ -89,12 +89,12 @@ function cdd() {
 }
 
 # --------------------------------------------------
-# Function: zsh-doctor
+# Function: zshdoctor
 # Description: Validates that all dependencies and paths are properly configured.
 #              Run this after setup to verify everything is working.
-# Usage: zsh-doctor
+# Usage: zshdoctor
 # --------------------------------------------------
-function zsh-doctor() {
+function zshdoctor() {
     local has_errors=0
     local RED='\033[0;31m'
     local GREEN='\033[0;32m'

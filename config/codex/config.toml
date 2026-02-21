@@ -1,6 +1,10 @@
 # Codex CLI Configuration
-model = "gpt-5.1-codex"
+model = "gpt-5.3-codex"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model_reasoning_effort = "medium"
+model_reasoning_effort = "xhigh"
+personality = "pragmatic"
 
+[features]
+shell_snapshot = true
+multi_agent = true

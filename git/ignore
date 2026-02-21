@@ -2,5 +2,5 @@
 # Global gitignore (~/.gitconfig core.excludesfile)
 # ----------------------------------------
 
-# Claude Code worktrees (created by cw command)
-.worktrees/
+# Claude Code worktrees
+.claude/worktrees/

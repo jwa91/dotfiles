@@ -77,6 +77,9 @@ file2md
 config/configstore/
 config/pnpm/
 
+# --- Personal Notes ---
+TODO.md
+
 # --- Other ---
 # Add any other specific files or directories you want to ignore below
 # For example, if you have large data files or temporary directories:

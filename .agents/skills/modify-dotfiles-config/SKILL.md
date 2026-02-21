@@ -6,7 +6,7 @@ description: Safely modify app config and setup/linking behavior in this reposit
 # Modify Dotfiles Config
 
 ## Scope
-- `config/**`
+- `config/**` (includes `config/cheat/cheatsheets/` for personal cheat sheets)
 - `Brewfile`
 - `setup/bootstrap.sh` for app-linking and runtime config behavior
 
