@@ -31,6 +31,7 @@ misc/.netrc
 .env
 .env.*
 *.local
+settings.local.json
 # Local runtime configs (can contain machine-specific tokens/secrets)
 config/claude/claude_desktop_config.json
 config/cursor/mcp.json
