@@ -10,7 +10,7 @@ Current major release: **v2**.
 
 ## Quick Start
 
-**Full setup guide:** [janwillemaltink.com/writings/new-macbook-guide](https://janwillemaltink.com/writings/new-macbook-guide/)
+**Full setup guide for v1:** [janwillemaltink.com/writings/new-macbook-guide](https://janwillemaltink.com/writings/new-macbook-guide/)
 
 **New Mac setup:**
 
@@ -50,7 +50,7 @@ Bootstrap will print a checklist of manual installs and skip Cursor config linki
 - **Git**: Global config with commit templates and conventional commit enforcement
 - **Terminal**: Ghostty configuration with terminal-aware editor routing
 - **Tmux**: Session bookmarks, project layouts, and interactive picker
-- **AI tools**: Configurations for Claude Desktop, Claude Code, Codex, Amp
+- **AI tools**: Settings for Claude Code and Codex (config files only — agent resources live elsewhere)
 - **Apps**: Cursor, VS Code, and more with symlinked settings
 - **Manual installs**: Checklist for tools outside Homebrew (1Password, Cursor, Docker, Xcode, etc.)
 - **Security**: 1Password-based SSH agent and secret-safe config model
@@ -80,34 +80,34 @@ dotfiles/
 │   ├── plugins.zsh
 │   ├── prompt.zsh
 │   └── zsh-functions/
-└── config/                     # Application configs
-    ├── ghostty/
-    ├── tmux/
-    ├── starship.toml
-    ├── starship-mobile.toml
-    ├── fresh/
-    ├── cursor/
-    ├── vscode/
-    ├── claude/
-    ├── claude-code/
-    ├── codex/
-    ├── cheat/
-    └── gh/
+├── config/                     # Application configs
+│   ├── ghostty/
+│   ├── tmux/
+│   ├── starship.toml
+│   ├── starship-mobile.toml
+│   ├── fresh/
+│   ├── cursor/
+│   ├── vscode/
+│   ├── claude-code/            # settings.json only
+│   ├── codex/                  # config.toml only
+│   ├── cheat/
+│   └── gh/
+└── docs/                       # Reference documentation
 ```
 
 ## Naming Conventions
 
 All aliases and functions follow: **action prefix + shortest target, mashed together** (no hyphens or underscores). Private helpers start with `_`.
 
-| Prefix | Action | Examples |
-|--------|--------|----------|
-| `mk` | make/create/generate | `mkpass`, `mkroute`, `mkskill` |
-| `e` | edit/open in editor | `ezsh`, `edots`, `evault`, `edev` |
-| `cd` | navigate to directory | `cdd`, `cdzsh`, `cddots`, `cdvault` |
-| `t` | tmux operation | `tmain`, `tls`, `tpick` |
-| `cw` | claude worktree | `cw`, `cwls`, `cwrm`, `cwprune` |
-| `py` | python | `pyclean` |
-| — | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
+| Prefix | Action                    | Examples                                         |
+| ------ | ------------------------- | ------------------------------------------------ |
+| `mk`   | make/create/generate      | `mkpass`, `mkroute`, `mkskill`                   |
+| `e`    | edit/open in editor       | `ezsh`, `edots`, `evault`, `edev`                |
+| `cd`   | navigate to directory     | `cdd`, `cdzsh`, `cddots`, `cdvault`              |
+| `t`    | tmux operation            | `tmain`, `tls`, `tpick`                          |
+| `cw`   | claude worktree           | `cw`, `cwls`, `cwrm`, `cwprune`                  |
+| `py`   | python                    | `pyclean`                                        |
+| —      | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
 
 When adding new commands: pick the action prefix first, then the shortest unambiguous target. If an `e` variant exists, add a matching `cd` variant.
 
@@ -118,26 +118,21 @@ When adding new commands: pick the action prefix first, then the shortest unambi
 - **Secure**: with 1Password for SSH
 - **Modern tooling**: uv, Bun, Starship, Ghostty
 
-## Secret-Safe Config Model
+## Config Boundary
 
-- Live, machine-specific app configs live outside git in `~/.config/dotfiles-local`.
-- Tracked config templates live in this repo as `*.example.*` files.
-- `setup/bootstrap.sh` bootstraps missing local runtime files from examples and links app paths.
-- Local commit protection is enabled with `pre-commit` + `gitleaks`:
-  - `pre-commit install`
-  - `pre-commit run --all-files`
+This repo manages **classic config files only** — settings, preferences, keybindings. Things like agent skills, instructions (AGENTS.md, CLAUDE.md), commands, and rules are agent resources and belong in a dedicated AI repo, not here.
+
+Auth tokens and secrets stay in their default home directory locations (e.g. `~/.codex/auth.json`, `~/.claude.json`) and are never symlinked or tracked. See `docs/macos-config-locations.md` for a reference of where macOS apps store config.
+
+Local commit protection is enabled with `pre-commit` + `gitleaks`:
+- `pre-commit install`
+- `pre-commit run --all-files`
 
 ## Versioning
 
 - Baseline snapshot is tagged `v1.0.0`.
 - Major setup refactor is tagged `v2.0.0`.
 - New releases follow semantic versioning and are recorded in `CHANGELOG.md`.
-
-## TODO
-
-- [ ] Add backup strategy for existing configs
-- [ ] Unified MCP server management
-- [ ] Visual architecture documentation
 
 ## License
 
