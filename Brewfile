@@ -5,6 +5,9 @@
 
 # Taps
 tap "oven-sh/bun"
+tap "1password/tap"
+tap "ngrok/ngrok"
+tap "steipete/tap"
 
 # Core CLI tools
 brew "git"
@@ -16,20 +19,20 @@ brew "pre-commit"
 brew "gitleaks"
 brew "gh"
 brew "tree"
-brew "curl"
 brew "cheat"
 brew "jq"
 brew "httpie"
 brew "mosh"
 brew "watch"
+brew "ripgrep"
+brew "coreutils"
 
 # Languages & runtimes
 brew "bun"
-brew "node"
+brew "node@24"
 brew "pnpm"
 brew "uv"
 brew "ollama"
-brew "opencode"
 
 # Fonts
 cask "font-jetbrains-mono-nerd-font"
@@ -46,11 +49,20 @@ brew "fresh-editor"
 cask "claude"
 cask "claude-code"
 cask "codex"
+cask "codexbar"
 
 # Productivity & communication
-cask "1password"
+cask "1password-cli"
 cask "raycast"
 cask "hiddenbar"
+cask "antigravity"
 cask "brave-browser"
-cask "spotify"
+cask "cleanmymac"
+cask "google-chrome@dev"
+cask "helium-browser"
+cask "ngrok"
 cask "obsidian"
+cask "spotify"
+cask "stats"
+cask "telegram"
+cask "whatsapp"

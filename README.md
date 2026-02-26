@@ -12,64 +12,65 @@ Current major release: **v2**.
 
 **Full setup guide:** [janwillemaltink.com/writings/new-macbook-guide](https://janwillemaltink.com/writings/new-macbook-guide/)
 
-**TL;DR:**
+**New Mac setup:**
 
 ```bash
-# 1. Clone this repo
-git clone git@github.com:jwa91/dotfiles.git ~/dotfiles
+# 1. Install Xcode CLI tools (required before anything else)
+xcode-select --install
 
-# 2. Review manual installs (outside Homebrew)
+# 2. Clone this repo (uses HTTPS — SSH keys aren't set up yet)
+git clone https://github.com/jwa91/dotfiles.git ~/dotfiles
+
+# 3. Run bootstrap (installs Homebrew, all packages, links configs)
 cd ~/dotfiles
-cat ./setup/manual-installs.txt
-
-# 3. Run one bootstrap command
 ./setup/bootstrap.sh
 
-# 4. After installing manual apps later, relink app configs
+# 4. Install manual apps (see list printed by bootstrap, or:)
+cat ./setup/manual-installs.txt
+
+# 5. After installing manual apps, relink their configs
 ./setup/bootstrap.sh --no-brew
 ```
 
 Bootstrap flags:
 
 ```bash
-./setup/bootstrap.sh --dry-run
-./setup/bootstrap.sh --no-brew
-./setup/bootstrap.sh --no-link
+./setup/bootstrap.sh              # Full setup
+./setup/bootstrap.sh --dry-run    # Preview without changes
+./setup/bootstrap.sh --no-brew    # Skip Homebrew (relink only)
+./setup/bootstrap.sh --no-link    # Skip symlinks (brew only)
 ```
 
-Manual-install checklist: `setup/manual-installs.txt`  
-Bootstrap will warn about items in this list and skip Cursor linking until Cursor is installed.
+Bootstrap will print a checklist of manual installs and skip Cursor config linking until Cursor is detected.
 
 ## What's Included
 
+- **Brewfile**: Canonical package manifest — CLI tools, runtimes, casks, fonts
 - **Shell**: Zsh with Starship prompt, FZF, curated plugins
-- **Git**: Global config with commit templates
-- **Terminal**: Ghostty configuration
-- **Tmux**: Session bookmarks and interactive picker for desktop/mobile
-- **Python**: Integration with [python-template](https://github.com/jwa91/python-template) for project scaffolding
-- **Apps**: Configurations for Cursor, VS Code, Claude, Codex, and more
-- **Manual app installs**: Checklist for tools intentionally managed outside Homebrew
-- **Security**: 1Password-based SSH agent setup
+- **Git**: Global config with commit templates and conventional commit enforcement
+- **Terminal**: Ghostty configuration with terminal-aware editor routing
+- **Tmux**: Session bookmarks, project layouts, and interactive picker
+- **AI tools**: Configurations for Claude Desktop, Claude Code, Codex, Amp
+- **Apps**: Cursor, VS Code, and more with symlinked settings
+- **Manual installs**: Checklist for tools outside Homebrew (1Password, Cursor, Docker, Xcode, etc.)
+- **Security**: 1Password-based SSH agent and secret-safe config model
 
 ## Structure
 
 ```
 dotfiles/
-├── Brewfile
+├── Brewfile                    # Canonical package manifest
 ├── CHANGELOG.md
 ├── README.md
 ├── setup/
-│   └── bootstrap.sh
-├── .agents/
-│   └── skills/
-├── .claude/
-│   └── skills/             # Repo-local symlinks to .agents/skills
-├── git/                    # Git configuration
+│   ├── bootstrap.sh            # Main setup entrypoint
+│   └── manual-installs.txt     # Tools outside Homebrew
+├── git/                        # Git configuration
 │   ├── config
 │   ├── commit_template.txt
-│   └── setup.sh
-├── zsh/                    # Shell configuration
-│   ├── .zshenv
+│   └── ignore
+├── zsh/                        # Shell configuration
+│   ├── .zshenv                 # PATH, env vars, terminal detection
 │   ├── .zshrc
 │   ├── .zprofile
 │   ├── aliases.zsh
@@ -79,21 +80,19 @@ dotfiles/
 │   ├── plugins.zsh
 │   ├── prompt.zsh
 │   └── zsh-functions/
-│       ├── general-functions.zsh
-│       ├── claude-functions.zsh
-│       ├── nextjs-functions.zsh
-│       └── agentskills-functions.zsh
-└── config/                 # Application configs
+└── config/                     # Application configs
+    ├── ghostty/
     ├── tmux/
-    │   ├── tmux.conf
-    │   └── tmux-bookmarks.zsh
+    ├── starship.toml
+    ├── starship-mobile.toml
+    ├── fresh/
     ├── cursor/
     ├── vscode/
     ├── claude/
     ├── claude-code/
     ├── codex/
-    ├── gh/
-    └── ...
+    ├── cheat/
+    └── gh/
 ```
 
 ## Naming Conventions
@@ -137,7 +136,6 @@ When adding new commands: pick the action prefix first, then the shortest unambi
 ## TODO
 
 - [ ] Add backup strategy for existing configs
-- [ ] Health check utilities
 - [ ] Unified MCP server management
 - [ ] Visual architecture documentation
 

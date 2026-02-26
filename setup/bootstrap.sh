@@ -246,6 +246,30 @@ install_brew_bundle() {
     run_cmd brew bundle --file="$BREWFILE"
 }
 
+install_standalone_tools() {
+    log_section "Standalone Tools (non-Homebrew)"
+
+    if $SKIP_BREW; then
+        log_skip "standalone tools step (--no-brew)"
+        return
+    fi
+
+    # Amp (Sourcegraph) — https://ampcode.com
+    if command -v amp >/dev/null 2>&1; then
+        log_skip "amp (already installed)"
+    else
+        local amp_url="https://ampcode.com/install.sh"
+        log_action "Install amp via $amp_url"
+        if ! $DRY_RUN; then
+            if curl -fsSL --head "$amp_url" >/dev/null 2>&1; then
+                curl -fsSL "$amp_url" | bash
+            else
+                log_warn "amp install script unreachable at $amp_url — install manually: https://ampcode.com"
+            fi
+        fi
+    fi
+}
+
 setup_zsh_environment() {
     log_section "Zsh Environment"
 
@@ -347,6 +371,7 @@ main() {
     preflight
     ensure_homebrew_and_git
     install_brew_bundle
+    install_standalone_tools
     setup_zsh_environment
     print_manual_install_checklist
     link_configs

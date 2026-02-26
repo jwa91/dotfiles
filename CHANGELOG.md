@@ -6,6 +6,22 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.4.0] - 2026-02-26
+### Added
+- Brewfile: `ripgrep`, `coreutils`, `1password-cli`, `antigravity`, `google-chrome@dev`, `ngrok`, `stats`, `telegram`, `whatsapp`, `cleanmymac`, `helium-browser`, `codexbar`.
+- Brewfile: taps for `1password/tap`, `ngrok/ngrok`, `steipete/tap`.
+- `install_standalone_tools()` step in bootstrap for non-Homebrew tools (Amp via official install script with fail-safe URL check).
+- `manual-installs.txt`: 1Password, Xcode, Docker, Google Drive, Amp with install reasons.
+
+### Changed
+- Brewfile: `node` replaced with `node@24` to match PATH configuration.
+- Brewfile: `font-jetbrains-mono-nerd-font` now installed via Homebrew (was manually placed).
+- Helium moved from `manual-installs.txt` to Brewfile (`helium-browser` cask).
+- Brewfile is now the canonical source of truth — fully aligned with system state.
+
+### Removed
+- Brewfile: `curl` (system curl sufficient), `opencode` (unused), `1password` GUI cask (standalone installer preferred for biometrics/browser integration).
+
 ## [2.3.0] - 2026-02-21
 ### Added
 - Fresh editor config managed via dotfiles symlink (`config/fresh/config.json`).

@@ -8,6 +8,23 @@ Manual installs (preferred outside Homebrew)
   website: https://www.cursor.com/
   reason: app-managed CLI shim/symlink behavior can conflict with Homebrew-managed expectations; install directly from the app download, then rerun ./setup/bootstrap.sh --no-brew to apply links.
 
-- helium
-  website: https://helium.computer/
-  reason: preferred manual install target for the Helium browser you use (not the deprecated Homebrew cask named "helium").
+- 1password
+  website: https://1password.com/downloads
+  reason: standalone installer has tighter macOS integration for biometrics and browser extension pairing; brew cask version can disrupt these.
+
+- xcode
+  website: Mac App Store
+  reason: full Xcode (not just CLI tools) is required; CLI tools are installed via xcode-select --install in bootstrap, but the full IDE must come from the App Store.
+
+- docker
+  website: https://www.docker.com/products/docker-desktop/
+  reason: brew cask requires sudo for symlinks into /usr/local/bin which breaks non-interactive brew bundle installs; direct installer handles this seamlessly.
+
+- google drive
+  website: https://www.google.com/drive/download/
+  reason: brew cask has chronic version-tracking issues and upgrade failures; direct installer is more reliable.
+
+- amp (Sourcegraph)
+  install: curl -fsSL https://ampcode.com/install.sh | bash
+  website: https://ampcode.com
+  reason: official install script is the canonical method; bootstrap.sh runs this automatically.
