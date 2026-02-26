@@ -335,22 +335,11 @@ link_configs() {
     ensure_symlink "$HOME/Library/Application Support/Code/User/keybindings.json" "$CONFIG_DIR/vscode/keybindings.json"
     ensure_symlink "$HOME/Library/Application Support/Code/User/snippets" "$CONFIG_DIR/vscode/snippets"
 
-    # Claude Desktop
-    local claude_runtime="$DOTFILES_LOCAL_CONFIG_DIR/claude/claude_desktop_config.json"
-    ensure_local_runtime_file "$claude_runtime" "$CONFIG_DIR/claude/claude_desktop_config.example.json"
-    ensure_symlink "$HOME/Library/Application Support/Claude/claude_desktop_config.json" "$claude_runtime"
-    if [[ -f "$CONFIG_DIR/claude/developer_settings.json" ]]; then
-        ensure_symlink "$HOME/Library/Application Support/Claude/developer_settings.json" "$CONFIG_DIR/claude/developer_settings.json"
-    fi
-
     # Claude Code
     ensure_symlink "$HOME/.claude/settings.json" "$CONFIG_DIR/claude-code/settings.json"
-    ensure_symlink "$HOME/.claude/commands" "$CONFIG_DIR/claude-code/commands"
-    ensure_symlink "$HOME/.claude/agents" "$CONFIG_DIR/claude-code/agents"
 
     # Codex
     ensure_symlink "$HOME/.codex/config.toml" "$CONFIG_DIR/codex/config.toml"
-    ensure_symlink "$HOME/.codex/instructions.md" "$CONFIG_DIR/codex/instructions.md"
 
     # GH
     ensure_symlink "$HOME/.config/gh/config.yml" "$CONFIG_DIR/gh/config.yml"

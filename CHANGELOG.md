@@ -6,6 +6,20 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.5.0] - 2026-02-27
+### Added
+- Suffix aliases for editor file types (md, json, yaml, toml, py, js, ts, etc.) — type a filename to open in `_eopen`.
+- Suffix aliases for viewer file types (html, pdf, png, jpg, svg, gif, mp4, csv) — type a filename to open in default app.
+
+### Removed
+- `config/claude/` — Claude Desktop config dir (example template, developer_settings). App manages its own config at default location.
+- `config/claude-code/commands/`, `agents/`, README, .gitignore — agent resources don't belong in dotfiles config. Only `settings.json` remains.
+- `config/codex/instructions.md`, README, .gitignore — agent instruction file, not config. Only `config.toml` remains.
+- Bootstrap symlinks for Claude Desktop (6 lines), claude-code commands/agents (2 lines), codex instructions.md (1 line).
+
+### Changed
+- Config boundary clarified: this repo only manages classic config files, not agent resources (skills, instructions, commands). Agent resources belong in a dedicated AI repo.
+
 ## [2.4.0] - 2026-02-26
 ### Added
 - Brewfile: `ripgrep`, `coreutils`, `1password-cli`, `antigravity`, `google-chrome@dev`, `ngrok`, `stats`, `telegram`, `whatsapp`, `cleanmymac`, `helium-browser`, `codexbar`.
