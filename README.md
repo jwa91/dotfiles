@@ -92,8 +92,15 @@ dotfiles/
 │   ├── codex/                  # config.toml only
 │   ├── cheat/
 │   └── gh/
-└── docs/                       # Reference documentation
+├── docs/                       # Reference documentation
+└── .agents/skills/             # Agent skills for working on this repo
+    ├── understand-dotfiles/
+    ├── modify-dotfiles-config/
+    ├── modify-dotfiles-zsh/
+    └── install-software/
 ```
+
+Skills are stored in `.agents/skills/` and symlinked into `.claude/skills/` so Claude Code picks them up. They teach agents how this repo works — setup flow, symlink behavior, naming conventions, and package management rules.
 
 ## Naming Conventions
 
