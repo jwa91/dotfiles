@@ -43,19 +43,7 @@ Add to `install_standalone_tools()` in `setup/bootstrap.sh`. Must be:
 - Also documented in `setup/manual-installs.txt`.
 
 ### Exceptions (manual installs)
-Some apps are intentionally outside Homebrew. These are listed in `setup/manual-installs.txt` with reasons. Current exceptions:
-
-| App | Reason |
-|-----|--------|
-| 1Password | Biometrics/browser extension integration breaks with brew cask |
-| Cursor | App-managed CLI shim conflicts with brew symlinks |
-| Docker | Brew cask needs sudo for /usr/local/bin, breaks non-interactive installs |
-| Google Drive | Brew cask has chronic version-tracking failures |
-| Tailscale | Network extension approval needs official installer |
-| Xcode | Mac App Store only |
-| Amp | Official install script is canonical method |
-
-Do not add new exceptions without a clear reason.
+Some apps are intentionally outside Homebrew. See `setup/manual-installs.txt` for the current list with reasons. Do not add new exceptions without a clear reason.
 
 ## After Any Install
 
