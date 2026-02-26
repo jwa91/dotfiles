@@ -38,5 +38,29 @@ alias tls='tmux list-sessions'
 # Make (mk + thing)
 alias mkpass="openssl rand -hex 32 | pbcopy && echo '✅ Password copied to clipboard'"
 
+# Suffix: edit (type filename to open in $EDITOR)
+alias -s md='_eopen'
+alias -s json='_eopen'
+alias -s yaml='_eopen'
+alias -s yml='_eopen'
+alias -s toml='_eopen'
+alias -s txt='_eopen'
+alias -s zsh='_eopen'
+alias -s sh='_eopen'
+alias -s py='_eopen'
+alias -s js='_eopen'
+alias -s ts='_eopen'
+
+# Suffix: view (type filename to open in default app)
+alias -s html='open'
+alias -s pdf='open'
+alias -s png='open'
+alias -s jpg='open'
+alias -s jpeg='open'
+alias -s svg='open'
+alias -s gif='open'
+alias -s mp4='open'
+alias -s csv='open'
+
 # Python
 alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'
