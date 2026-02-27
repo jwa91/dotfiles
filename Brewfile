@@ -26,6 +26,7 @@ brew "mosh"
 brew "watch"
 brew "ripgrep"
 brew "coreutils"
+brew "yazi"
 
 # Languages & runtimes
 brew "bun"

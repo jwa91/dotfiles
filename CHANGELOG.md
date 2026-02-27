@@ -6,6 +6,16 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.6.0] - 2026-02-27
+### Added
+- Brewfile: `yazi` terminal file manager.
+- Yazi config (`config/yazi/yazi.toml`) with bootstrap symlink.
+
+### Removed
+- `tproject` tmux 3-pane layout function, completions, and cheat sheet entry.
+- `cw`/`cwls`/`cwrm`/`cwprune` Claude Code worktree functions (`claude-functions.zsh`).
+- `docker-desktop` brew cask (manual install preferred, documented in `manual-installs.txt`).
+
 ## [2.5.0] - 2026-02-27
 ### Added
 - Suffix aliases for editor file types (md, json, yaml, toml, py, js, ts, etc.) — type a filename to open in `_eopen`.

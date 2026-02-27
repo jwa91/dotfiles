@@ -24,7 +24,6 @@ All aliases and functions use: **action prefix + shortest target, mashed** (no h
 | `e` | edit/open | `ezsh`, `edots`, `evault`, `edev` |
 | `cd` | navigate | `cdd`, `cdzsh`, `cddots`, `cdvault` |
 | `t` | tmux | `tmain`, `tls`, `tpick` |
-| `cw` | claude worktree | `cw`, `cwls`, `cwrm`, `cwprune` |
 | `py` | python | `pyclean` |
 
 When `e` and `cd` target the same directory, both variants must exist. Standalone names (no prefix) are allowed when the name is already unambiguous (`reload`, `key`, `rwe`).

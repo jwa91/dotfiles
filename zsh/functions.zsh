@@ -17,12 +17,6 @@ source "$FUNCTIONS_DIR/agentskills-functions.zsh"
 # Tmux session bookmarks and picker (tpick)
 source "$CONFIG_DIR/tmux/tmux-bookmarks.zsh"
 
-# Tmux project layout (tproject)
-source "$CONFIG_DIR/tmux/tmux-project.zsh"
-
-# Claude Code workflow functions
-source "$FUNCTIONS_DIR/claude-functions.zsh"
-
 # Python functions (external from templates repo)
 if [[ -f "$HOME/Developer/templates/python/python-functions.sh" ]]; then
     source "$HOME/Developer/templates/python/python-functions.sh"

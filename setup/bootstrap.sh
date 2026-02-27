@@ -348,6 +348,9 @@ link_configs() {
     ensure_symlink "$HOME/.config/cheat/conf.yml" "$CONFIG_DIR/cheat/conf.yml"
     ensure_symlink "$HOME/.config/cheat/cheatsheets/personal" "$CONFIG_DIR/cheat/cheatsheets"
 
+    # Yazi
+    ensure_symlink "$HOME/.config/yazi/yazi.toml" "$CONFIG_DIR/yazi/yazi.toml"
+
     # tmux
     ensure_symlink "$HOME/.tmux.conf" "$CONFIG_DIR/tmux/tmux.conf"
 }

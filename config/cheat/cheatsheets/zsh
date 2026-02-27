@@ -29,14 +29,6 @@ tmain                     # Attach or create 'main' tmux session
 tls                       # List tmux sessions
 tpick [--mobile]          # Interactive tmux session picker (fzf)
 
-# Claude Worktree (cw + action)
-cw [task description]     # New worktree + branch + tmux + claude
-cw -d [task]              # Same but detached (background)
-cw                        # Pick existing worktree (fzf)
-cwls                      # List worktrees with status
-cwrm <slug>               # Remove worktree, branch, and tmux session
-cwprune                   # Clean up worktrees merged into main
-
 # Make (mk + thing)
 mkpass                    # Generate random password -> clipboard
 mkroute <path>            # Create Next.js App Router route structure

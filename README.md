@@ -112,7 +112,6 @@ All aliases and functions follow: **action prefix + shortest target, mashed toge
 | `e`    | edit/open in editor       | `ezsh`, `edots`, `evault`, `edev`                |
 | `cd`   | navigate to directory     | `cdd`, `cdzsh`, `cddots`, `cdvault`              |
 | `t`    | tmux operation            | `tmain`, `tls`, `tpick`                          |
-| `cw`   | claude worktree           | `cw`, `cwls`, `cwrm`, `cwprune`                  |
 | `py`   | python                    | `pyclean`                                        |
 | —      | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
 

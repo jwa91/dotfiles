@@ -24,19 +24,4 @@ _cdd() {
 
 compdef _cdd cdd
 
-# Completion function for 'tproject'
-_tproject() {
-    local -a aliases
-    aliases=(dots zsh vault)
-    if [[ -n "$DEV_DIR" && -d "$DEV_DIR" ]]; then
-        _alternative \
-            "aliases:project alias:(${aliases[*]})" \
-            "projects:DEV_DIR project:_path_files -W '$DEV_DIR' -/"
-    else
-        _describe 'project alias' aliases
-    fi
-}
-
-compdef _tproject tproject
-
 # --- End Custom Completions ---
