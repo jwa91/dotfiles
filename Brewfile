@@ -27,6 +27,7 @@ brew "watch"
 brew "ripgrep"
 brew "coreutils"
 brew "yazi"
+brew "zoxide"
 
 # Languages & runtimes
 brew "bun"

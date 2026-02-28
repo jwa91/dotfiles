@@ -1,10 +1,4 @@
 # ----------------------------------------
 # File: yazi.toml
-# Description: Yazi file manager configuration
+# Description: Yazi file manager — default config, gruvbox-material theme
 # ----------------------------------------
-
-[manager]
-ratio = [1, 4, 3]
-show_hidden = true
-sort_by = "natural"
-sort_dir_first = true

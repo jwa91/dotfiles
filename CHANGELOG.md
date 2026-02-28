@@ -15,8 +15,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [2.6.0] - 2026-02-27
 ### Added
-- Brewfile: `yazi` terminal file manager.
-- Yazi config (`config/yazi/yazi.toml`) with bootstrap symlink.
+- Brewfile: `yazi` terminal file manager, `zoxide` smart directory jumper.
+- Yazi config (`config/yazi/yazi.toml`) with gruvbox-material theme and bootstrap symlinks for `theme.toml` and `init.lua`.
+- Zoxide shell init in `plugins.zsh` with `z` and `zi` cheat sheet entries.
 
 ### Removed
 - `tproject` tmux 3-pane layout function, completions, and cheat sheet entry.

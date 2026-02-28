@@ -22,3 +22,8 @@ source $ZSH_PLUGINS_DIR/zsh-history-substring-search/zsh-history-substring-searc
 if command -v fzf &> /dev/null; then
     source <(fzf --zsh)
 fi
+
+# Load zoxide (smart cd with frecency tracking)
+if command -v zoxide &> /dev/null; then
+    eval "$(zoxide init zsh)"
+fi

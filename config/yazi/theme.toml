@@ -1,0 +1,7 @@
+# ----------------------------------------
+# File: theme.toml
+# Description: Yazi theme — gruvbox material to match starship/ghostty
+# ----------------------------------------
+
+[flavor]
+dark = "gruvbox-material"
