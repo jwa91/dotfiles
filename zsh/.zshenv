@@ -52,7 +52,7 @@ esac
 # ----------------------------------------
 # Machine-specific paths
 # ----------------------------------------
-export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Obsidian"
+export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/notes"
 
 # ----------------------------------------
 # PATH modifications

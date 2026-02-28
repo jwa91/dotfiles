@@ -179,14 +179,5 @@
     }
   ],
   "chat.mcp.gallery.enabled": true,
-  "scm.repositories.selectionMode": "single",
-  "amp.tryOpus": true,
-  "amp.guardedFiles.allowlist": [
-    "/Users/jw/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/Notes/20 Library/Soft Validator.md",
-    "/Users/jw/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/Notes/20 Library/Hard Validator.md",
-    "/Users/jw/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/Notes/20 Library/Homebrew.md",
-    "/Users/jw/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/Notes/20 Library/Starship.md",
-    "/Users/jw/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/Notes/20 Library/Macbook Migration Guide.md",
-    "/Users/jw/Library/Mobile Documents/com~apple~CloudDocs/Obsidian/Notes/20 Library/We Are Learning to Speak Machine.md"
-  ]
+  "scm.repositories.selectionMode": "single"
 }

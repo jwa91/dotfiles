@@ -6,6 +6,13 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.6.1] - 2026-02-28
+### Changed
+- `VAULT_PATH` updated to new Obsidian vault location (`notes`).
+
+### Removed
+- Amp VS Code settings (`amp.tryOpus`, `amp.guardedFiles.allowlist`) — plugin deprecated.
+
 ## [2.6.0] - 2026-02-27
 ### Added
 - Brewfile: `yazi` terminal file manager.
