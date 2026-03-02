@@ -130,9 +130,9 @@ This repo manages **classic config files only** — settings, preferences, keybi
 
 Auth tokens and secrets stay in their default home directory locations (e.g. `~/.codex/auth.json`, `~/.claude.json`) and are never symlinked or tracked. See `docs/macos-config-locations.md` for a reference of where macOS apps store config.
 
-Local commit protection is enabled with `pre-commit` + `gitleaks`:
-- `pre-commit install`
-- `pre-commit run --all-files`
+Local commit protection is enabled with `prek` + `gitleaks`:
+- `prek install`
+- `prek run --all-files`
 
 ## Versioning
 

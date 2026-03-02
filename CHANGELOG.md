@@ -6,6 +6,13 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.7.0] - 2026-03-02
+### Added
+- `brewsync` alias — runs `brew bundle --cleanup` against the dotfiles Brewfile.
+
+### Changed
+- Replaced `pre-commit` with `prek` (Rust-based drop-in replacement) in Brewfile and README.
+
 ## [2.6.1] - 2026-02-28
 ### Changed
 - `VAULT_PATH` updated to new Obsidian vault location (`notes`).

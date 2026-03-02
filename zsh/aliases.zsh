@@ -62,5 +62,8 @@ alias -s gif='open'
 alias -s mp4='open'
 alias -s csv='open'
 
+# Brew
+alias brewsync='brew bundle --file="$DOTFILES_DIR/Brewfile" --cleanup'
+
 # Python
 alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'

@@ -36,6 +36,9 @@ mkpass                    # Generate random password -> clipboard
 mkroute <path>            # Create Next.js App Router route structure
 mkskill [name]            # Install agent skill (or list available)
 
+# Brew
+brewsync                  # Install/remove/upgrade packages from Brewfile
+
 # Python
 pyclean                   # Remove __pycache__ dirs recursively
 
