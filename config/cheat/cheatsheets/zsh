@@ -22,6 +22,7 @@ cdd [subdir]              # cd to DEV_DIR (or subdir within it)
 z <query>                 # Jump to frecency-matched directory (zoxide)
 zi                        # Interactive directory picker (zoxide + fzf)
 ls                        # ls -FaG (colorized, all, classify)
+..                        # cd ..
 ...                       # cd ../..
 ....                      # cd ../../..
 .....                     # cd ../../../..

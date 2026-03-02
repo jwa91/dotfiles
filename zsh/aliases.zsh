@@ -27,6 +27,7 @@ cdvault() { builtin cd "$VAULT_PATH"; }
 
 # Navigation
 alias ls='ls -FaG'
+alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
