@@ -74,6 +74,7 @@ path=(
     "$HOME/.npm-global/bin"
     "$BUN_INSTALL/bin"
     "$HOME/.antigravity/antigravity/bin"
+    /Applications/Obsidian.app/Contents/MacOS
     $path
 )
 if [[ -d "$PNPM_HOME" && "${path[(i)$PNPM_HOME]}" -gt "${#path}" ]]; then
