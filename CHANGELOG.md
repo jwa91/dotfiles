@@ -6,6 +6,20 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.8.0] - 2026-03-11
+### Added
+- `..` alias for `cd ..`.
+- `getmd` shell function — fetches clean markdown from a URL via defuddle.md API, copies to clipboard by default.
+- Obsidian added to PATH in `.zprofile`.
+
+### Changed
+- Codex: model updated to `gpt-5.4`, root project trust level added.
+- Claude Code: `code-review` plugin enabled, effort level set to `high`.
+- Cursor: `alt+cmd+s` keybinding for unified sidebar toggle.
+
+### Fixed
+- `.zprofile` trailing newline.
+
 ## [2.7.0] - 2026-03-02
 ### Added
 - `brewsync` alias — runs `brew bundle --cleanup` against the dotfiles Brewfile.
