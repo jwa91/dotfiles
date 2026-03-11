@@ -46,4 +46,5 @@ pyclean                   # Remove __pycache__ dirs recursively
 # Utilities
 key NAME [NAME ...]       # Load API keys from 1Password
 rwe                       # Retry last command with escaped arguments
+getmd <url> [--no-copy]   # Fetch clean markdown from URL -> clipboard
 zshdoctor                 # Validate zsh config, deps, and paths

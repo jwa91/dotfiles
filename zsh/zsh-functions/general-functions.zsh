@@ -89,6 +89,38 @@ function cdd() {
 }
 
 # --------------------------------------------------
+# Function: getmd
+# Description: Fetches clean markdown from a URL via defuddle.md API.
+#              Copies to clipboard by default. Use --no-copy to print to stdout instead.
+# Usage: getmd <url> [--no-copy]
+# --------------------------------------------------
+function getmd() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: getmd <url> [--no-copy]" >&2
+    return 1
+  fi
+
+  local url="${1#https://}"
+  url="${url#http://}"
+  local no_copy=false
+  [[ "$2" == "--no-copy" ]] && no_copy=true
+
+  local content
+  content=$(curl -sf "defuddle.md/$url")
+  if [[ $? -ne 0 || -z "$content" ]]; then
+    echo "✗ Failed to fetch markdown for $url" >&2
+    return 1
+  fi
+
+  echo "$content"
+  if ! $no_copy; then
+    echo "$content" | pbcopy
+    local wc=$(echo "$content" | wc -w | tr -d ' ')
+    echo "✓ Copied ${wc} words to clipboard" >&2
+  fi
+}
+
+# --------------------------------------------------
 # Function: zshdoctor
 # Description: Validates that all dependencies and paths are properly configured.
 #              Run this after setup to verify everything is working.

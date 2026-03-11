@@ -1,5 +1,5 @@
 # Codex CLI Configuration
-model = "gpt-5.3-codex"
+model = "gpt-5.4"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
 model_reasoning_effort = "xhigh"
@@ -8,3 +8,6 @@ personality = "pragmatic"
 [features]
 shell_snapshot = true
 multi_agent = true
+
+[projects."/"]
+trust_level = "trusted"
