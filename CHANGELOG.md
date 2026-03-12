@@ -6,6 +6,12 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.9.0] - 2026-03-12
+### Added
+- Atuin shell history: Brewfile entry, config (`config/atuin/config.toml`), zsh plugin init, bootstrap symlink.
+- Atuin cheat sheet entries (ctrl-r, up-arrow, stats, import).
+- Zsh history options (`EXTENDED_HISTORY`, `HIST_IGNORE_ALL_DUPS`, `SHARE_HISTORY`, etc.) in `options.zsh`.
+
 ## [2.8.0] - 2026-03-11
 ### Added
 - `..` alias for `cd ..`.

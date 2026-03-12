@@ -1,0 +1,40 @@
+# ----------------------------------------
+# File: config.toml
+# Description: Atuin shell history configuration
+# ----------------------------------------
+
+# ----------------------------------------
+# Usage:
+# Atuin stores shell history in a local SQLite database with
+# context per command (exit code, CWD, duration, timestamp).
+# Sync is disabled — all data stays on this machine.
+# ----------------------------------------
+
+## Search
+search_mode = "fuzzy"
+filter_mode = "global"
+filter_mode_shell_up_key_binding = "host"
+search_mode_shell_up_key_binding = "prefix"
+
+## Display
+style = "compact"
+inline_height = 40
+show_preview = true
+show_help = false
+enter_accept = true
+exit_mode = "return-original"
+
+## History
+store_failed = true
+secrets_filter = true
+history_filter = [
+    "^export .*TOKEN",
+    "^export .*SECRET",
+    "^export .*KEY",
+    "^export .*PASSWORD",
+    "^op .*",
+]
+workspaces = true
+
+## Sync (disabled — fully local)
+auto_sync = false

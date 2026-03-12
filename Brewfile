@@ -28,6 +28,7 @@ brew "ripgrep"
 brew "coreutils"
 brew "yazi"
 brew "zoxide"
+brew "atuin"
 
 # Languages & runtimes
 brew "bun"

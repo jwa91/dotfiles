@@ -353,6 +353,9 @@ link_configs() {
     ensure_symlink "$HOME/.config/yazi/theme.toml" "$CONFIG_DIR/yazi/theme.toml"
     ensure_symlink "$HOME/.config/yazi/init.lua" "$CONFIG_DIR/yazi/init.lua"
 
+    # Atuin
+    ensure_symlink "$HOME/.config/atuin/config.toml" "$CONFIG_DIR/atuin/config.toml"
+
     # tmux
     ensure_symlink "$HOME/.tmux.conf" "$CONFIG_DIR/tmux/tmux.conf"
 }

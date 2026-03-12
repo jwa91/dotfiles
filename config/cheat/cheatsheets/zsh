@@ -48,3 +48,9 @@ key NAME [NAME ...]       # Load API keys from 1Password
 rwe                       # Retry last command with escaped arguments
 getmd <url> [--no-copy]   # Fetch clean markdown from URL -> clipboard
 zshdoctor                 # Validate zsh config, deps, and paths
+
+# Atuin (shell history)
+ctrl-r                    # Search all history (atuin fuzzy search)
+up-arrow                  # Search host history (prefix match)
+atuin stats               # Show history analytics
+atuin import auto         # Import existing .zsh_history
