@@ -126,14 +126,6 @@
     "editor.unicodeHighlight.invisibleCharacters": false
   },
   "[postcss]": {},
-  "amp.mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest", "--headless", "--isolated"]
-    }
-  },
-  "amp.commands.allowlist": ["uv", "sed"],
-  "amp.terminal.commands.hide": false,
   "editor.accessibilitySupport": "off",
   "[mdx]": {
     "editor.defaultFormatter": "unifiedjs.vscode-mdx"
@@ -142,42 +134,6 @@
   "github.copilot.enable": {
     "*": false
   },
-  "amp.tab.enabled": true,
-  "amp.permissions": [
-    {
-      "tool": "Bash",
-      "action": "ask",
-      "matches": {
-        "cmd": ["*rm*-rf*", "*rm*-r*--force*", "*rm*--force*-r*"]
-      }
-    },
-    {
-      "tool": "Bash",
-      "action": "ask",
-      "matches": {
-        "cmd": ["*find*-exec*", "*find*-delete*"]
-      }
-    },
-    {
-      "tool": "Bash",
-      "action": "ask",
-      "matches": {
-        "cmd": ["*git*push*--force*", "*git*push*-f*"]
-      }
-    },
-    {
-      "tool": "Bash",
-      "action": "ask",
-      "matches": {
-        "cmd": ["sudo*", "su*", "*chmod*777*", "*chown*root*"]
-      }
-    },
-    {
-      "tool": "*",
-      "action": "allow",
-      "matches": {}
-    }
-  ],
   "chat.mcp.gallery.enabled": true,
   "scm.repositories.selectionMode": "single"
 }
