@@ -6,6 +6,14 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.10.0] - 2026-03-13
+### Added
+- `biome` added to Brewfile as global fallback for IDE linting/formatting.
+
+### Removed
+- All `amp.*` settings from VS Code and Cursor configs — Amp VS Code plugin is deprecated.
+- Hardcoded `biome.lsp.bin` path from Cursor config — extension auto-detects project-local or global binary.
+
 ## [2.9.0] - 2026-03-12
 ### Added
 - Atuin shell history: Brewfile entry, config (`config/atuin/config.toml`), zsh plugin init, bootstrap symlink.

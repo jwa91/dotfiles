@@ -29,6 +29,7 @@ brew "coreutils"
 brew "yazi"
 brew "zoxide"
 brew "atuin"
+brew "biome"
 
 # Languages & runtimes
 brew "bun"
