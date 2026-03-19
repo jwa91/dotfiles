@@ -6,6 +6,10 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.11.0] - 2026-03-19
+### Changed
+- Brewfile: replaced keg-only `node@24` with mainline `node` formula to fix `libsimdjson.30.dylib` crash and ensure Homebrew keeps dependencies in sync on upgrades.
+
 ## [2.10.0] - 2026-03-13
 ### Added
 - `biome` added to Brewfile as global fallback for IDE linting/formatting.

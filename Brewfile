@@ -33,7 +33,7 @@ brew "biome"
 
 # Languages & runtimes
 brew "bun"
-brew "node@24"
+brew "node"
 brew "pnpm"
 brew "uv"
 brew "ollama"
