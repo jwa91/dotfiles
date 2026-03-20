@@ -6,6 +6,17 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.12.0] - 2026-03-21
+### Added
+- `ccbot` shell function — manages Claude Code sessions with Telegram channels via tmux. Tokens stored in 1Password, project directories resolved automatically (dotfiles, vault, VPS, and VPS services via wildcard fallback).
+- Tab completion for `ccbot` (actions, project names, running sessions).
+- Vite+ (`vp`) added to `install_standalone_tools` in bootstrap script.
+- Vite+ env sourcing in `.zshenv`.
+- Telegram and Discord plugins enabled in Claude Code settings.
+
+### Fixed
+- Claude Code MCP filesystem path corrected from `/Users/jw/projects` to `/Users/jw/Developer`.
+
 ## [2.11.0] - 2026-03-19
 ### Changed
 - Brewfile: replaced keg-only `node@24` with mainline `node` formula to fix `libsimdjson.30.dylib` crash and ensure Homebrew keeps dependencies in sync on upgrades.

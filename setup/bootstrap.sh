@@ -272,6 +272,21 @@ install_standalone_tools() {
             fi
         fi
     fi
+
+    # Vite+ (VoidZero) — https://vite.plus
+    if command -v vp >/dev/null 2>&1; then
+        log_skip "vp (already installed)"
+    else
+        local vp_url="https://vite.plus"
+        log_action "Install Vite+ via $vp_url"
+        if ! $DRY_RUN; then
+            if curl -fsSL --head "$vp_url" >/dev/null 2>&1; then
+                curl -fsSL "$vp_url" | bash
+            else
+                log_warn "Vite+ install script unreachable at $vp_url — install manually: https://viteplus.dev"
+            fi
+        fi
+    fi
 }
 
 setup_zsh_environment() {
