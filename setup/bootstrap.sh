@@ -16,6 +16,7 @@ NC='\033[0m'
 DRY_RUN=false
 SKIP_BREW=false
 SKIP_LINK=false
+RESET_LINKS=false
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -28,13 +29,16 @@ while [[ $# -gt 0 ]]; do
         --no-link)
             SKIP_LINK=true
             ;;
+        --reset)
+            RESET_LINKS=true
+            ;;
         -h|--help)
-            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link]"
+            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset]"
             exit 0
             ;;
         *)
             echo -e "${RED}Error:${NC} Unknown option '$1'"
-            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link]"
+            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset]"
             exit 1
             ;;
     esac
@@ -300,12 +304,54 @@ setup_zsh_environment() {
 
 }
 
+reset_symlinks() {
+    log_section "Reset Symlinks"
+
+    local targets=(
+        "$HOME/.zshrc"
+        "$HOME/.zshenv"
+        "$HOME/.zprofile"
+        "$HOME/.config/ghostty/config"
+        "$HOME/.config/starship.toml"
+        "$HOME/.config/fresh/config.json"
+        "$HOME/Library/Application Support/Cursor/User/settings.json"
+        "$HOME/Library/Application Support/Cursor/User/keybindings.json"
+        "$HOME/Library/Application Support/Cursor/User/snippets"
+        "$HOME/.cursor/mcp.json"
+        "$HOME/Library/Application Support/Code/User/settings.json"
+        "$HOME/Library/Application Support/Code/User/keybindings.json"
+        "$HOME/Library/Application Support/Code/User/snippets"
+        "$HOME/.claude/settings.json"
+        "$HOME/.codex/config.toml"
+        "$HOME/.config/gh/config.yml"
+        "$HOME/.config/cheat/conf.yml"
+        "$HOME/.config/cheat/cheatsheets/personal"
+        "$HOME/.config/yazi/yazi.toml"
+        "$HOME/.config/yazi/theme.toml"
+        "$HOME/.config/atuin/config.toml"
+        "$HOME/.tmux.conf"
+    )
+
+    for target in "${targets[@]}"; do
+        if [[ -L "$target" ]]; then
+            log_action "Remove symlink $target"
+            run_cmd rm "$target"
+        elif [[ -e "$target" ]]; then
+            log_skip "$target (not a symlink, leaving alone)"
+        fi
+    done
+}
+
 link_configs() {
     log_section "Link Dotfiles & App Configs"
 
     if $SKIP_LINK; then
         log_skip "linking step (--no-link)"
         return
+    fi
+
+    if $RESET_LINKS; then
+        reset_symlinks
     fi
 
     # Shell and terminal configs
@@ -351,7 +397,6 @@ link_configs() {
     # Yazi
     ensure_symlink "$HOME/.config/yazi/yazi.toml" "$CONFIG_DIR/yazi/yazi.toml"
     ensure_symlink "$HOME/.config/yazi/theme.toml" "$CONFIG_DIR/yazi/theme.toml"
-    ensure_symlink "$HOME/.config/yazi/init.lua" "$CONFIG_DIR/yazi/init.lua"
 
     # Atuin
     ensure_symlink "$HOME/.config/atuin/config.toml" "$CONFIG_DIR/atuin/config.toml"

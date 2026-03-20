@@ -9,7 +9,7 @@ tmux switch -t name       # Switch to session (from inside tmux)
 tmux kill-session -t name # Kill session
 tmux ls                   # List sessions
 
-# Prefix key: Ctrl-b (then press the command key)
+# Prefix key: Ctrl-Space (then press the command key)
 
 # Windows (tabs)
 c                         # New window
