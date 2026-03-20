@@ -67,7 +67,7 @@ export PNPM_HOME="$HOME/Library/pnpm"
 typeset -U -x path
 path=(
     "$HOME/.local/bin" 
-    /opt/homebrew/opt/node@24/bin  # Node 24 LTS
+    /opt/homebrew/opt/node/bin
     /opt/homebrew/bin
     /opt/homebrew/sbin
     /usr/local/bin
