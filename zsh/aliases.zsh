@@ -51,6 +51,13 @@ alias -s sh='_eopen'
 alias -s py='_eopen'
 alias -s js='_eopen'
 alias -s ts='_eopen'
+alias -s tsx='_eopen'
+alias -s jsx='_eopen'
+alias -s css='_eopen'
+alias -s swift='_eopen'
+alias -s rs='_eopen'
+alias -s go='_eopen'
+alias -s env='_eopen'
 
 # Suffix: view (type filename to open in default app)
 alias -s html='open'
@@ -62,6 +69,8 @@ alias -s svg='open'
 alias -s gif='open'
 alias -s mp4='open'
 alias -s csv='open'
+alias -s webp='open'
+alias -s mov='open'
 
 # Brew
 alias brewsync='brew bundle --file="$DOTFILES_DIR/Brewfile" --cleanup'

@@ -6,6 +6,15 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.13.0] - 2026-04-03
+### Added
+- Suffix aliases for `.swift`, `.tsx`, `.jsx`, `.css`, `.rs`, `.go`, `.env` (edit) and `.webp`, `.mov` (view).
+- Bootstrap `--update` flag to pull latest zsh plugin versions via `git pull --ff-only`.
+- Bootstrap now symlinks `~/.gitconfig` to `git/config` (previously required separate `git/setup.sh`).
+
+### Changed
+- `compinit` cached: full security check runs once per day, uses cached dump otherwise for faster shell startup.
+
 ## [2.12.2] - 2026-04-03
 ### Changed
 - Moved `mcpServers` from shared `settings.json` to machine-local `~/.claude.json` — paths and API keys no longer leak across machines.

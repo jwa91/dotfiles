@@ -3,9 +3,13 @@
 # Description: ZSH completion initialization and custom completions
 # ----------------------------------------
 
-# Initialize completion system
+# Initialize completion system (rebuild dump once per day, use cache otherwise)
 autoload -Uz compinit
-compinit
+if [[ -f ~/.zcompdump(#qN.mh+24) ]]; then
+    compinit
+else
+    compinit -C
+fi
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"

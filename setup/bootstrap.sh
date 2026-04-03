@@ -17,6 +17,7 @@ DRY_RUN=false
 SKIP_BREW=false
 SKIP_LINK=false
 RESET_LINKS=false
+UPDATE_PLUGINS=false
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -32,13 +33,16 @@ while [[ $# -gt 0 ]]; do
         --reset)
             RESET_LINKS=true
             ;;
+        --update)
+            UPDATE_PLUGINS=true
+            ;;
         -h|--help)
-            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset]"
+            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset] [--update]"
             exit 0
             ;;
         *)
             echo -e "${RED}Error:${NC} Unknown option '$1'"
-            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset]"
+            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset] [--update]"
             exit 1
             ;;
     esac
@@ -310,19 +314,24 @@ setup_zsh_environment() {
         local path="$HOME/.zsh_plugins/$name"
 
         if [[ -d "$path" ]]; then
-            log_skip "$path"
+            if $UPDATE_PLUGINS; then
+                log_action "Update $name"
+                run_cmd git -C "$path" pull --ff-only
+            else
+                log_skip "$path"
+            fi
         else
             log_action "Clone $name"
             run_cmd git clone --depth 1 "$url" "$path"
         fi
     done
-
 }
 
 reset_symlinks() {
     log_section "Reset Symlinks"
 
     local targets=(
+        "$HOME/.gitconfig"
         "$HOME/.zshrc"
         "$HOME/.zshenv"
         "$HOME/.zprofile"
@@ -368,6 +377,9 @@ link_configs() {
     if $RESET_LINKS; then
         reset_symlinks
     fi
+
+    # Git
+    ensure_symlink "$HOME/.gitconfig" "$DOTFILES_DIR/git/config"
 
     # Shell and terminal configs
     ensure_symlink "$HOME/.zshrc" "$ZSH_DIR/.zshrc"
