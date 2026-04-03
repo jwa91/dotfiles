@@ -10,6 +10,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 ### Fixed
 - Guard Vite+ env sourcing in `.zshenv` to prevent errors on machines where Vite+ is not installed.
 
+### Changed
+- Terminal detection in `.zshenv` now checks `$TERM` for `xterm-ghostty` before `$TERM_PROGRAM`, fixing prompt and editor detection over SSH.
+
 ## [2.12.0] - 2026-03-21
 ### Added
 - `ccbot` shell function — manages Claude Code sessions with Telegram channels via tmux. Tokens stored in 1Password, project directories resolved automatically (dotfiles, vault, VPS, and VPS services via wildcard fallback).

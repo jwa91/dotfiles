@@ -22,32 +22,39 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 # ----------------------------------------
 # Terminal-aware configurations
 # ----------------------------------------
-case "$TERM_PROGRAM" in
-    vscode)
-        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-        export EDITOR="cursor --wait"
-        ;;
-    ghostty)
-        export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-        export EDITOR="fresh"
-        ;;
-    tmux)
-        # tmux overrides TERM_PROGRAM; check OUTER_TERM set by tmux.conf
-        _outer=$(tmux show-environment -g OUTER_TERM 2>/dev/null | sed 's/.*=//')
-        if [[ "$_outer" == "ghostty" ]]; then
-            export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-            export EDITOR="fresh"
-        else
-            export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
-            export EDITOR="micro"
-        fi
-        unset _outer
-        ;;
-    *)
-        export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
-        export EDITOR="micro"
-        ;;
-esac
+# Detection order:
+#   1. $TERM — survives SSH, set by the terminal emulator (e.g. xterm-ghostty)
+#   2. $TERM_PROGRAM — local-only, used for vscode and tmux detection
+#   3. OUTER_TERM — tmux env var from tmux.conf to recover the launching terminal
+_set_desktop_terminal() {
+    export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+    export EDITOR="fresh"
+}
+_set_mobile_terminal() {
+    export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
+    export EDITOR="micro"
+}
+
+if [[ "$TERM" == "xterm-ghostty" ]]; then
+    # Ghostty — works locally and over SSH
+    _set_desktop_terminal
+elif [[ "$TERM_PROGRAM" == "vscode" ]]; then
+    export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
+    export EDITOR="cursor --wait"
+elif [[ "$TERM_PROGRAM" == "tmux" ]]; then
+    # tmux overrides both TERM and TERM_PROGRAM; check OUTER_TERM set by tmux.conf
+    _outer=$(tmux show-environment -g OUTER_TERM 2>/dev/null | sed 's/.*=//')
+    if [[ "$_outer" == "ghostty" ]]; then
+        _set_desktop_terminal
+    else
+        _set_mobile_terminal
+    fi
+    unset _outer
+else
+    _set_mobile_terminal
+fi
+
+unset -f _set_desktop_terminal _set_mobile_terminal
 
 # ----------------------------------------
 # Machine-specific paths
