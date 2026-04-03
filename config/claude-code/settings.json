@@ -1,13 +1,21 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm:*)",
-      "Bash(git:*)"
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "Agent"
     ],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)"
-    ]
+    ],
+    "defaultMode": "bypassPermissions"
   },
   "enabledPlugins": {
     "frontend-design@claude-plugins-official": true,
@@ -21,23 +29,7 @@
     "discord@claude-plugins-official": true,
     "telegram@claude-plugins-official": true
   },
+  "alwaysThinkingEnabled": true,
   "effortLevel": "high",
-  "skipDangerousModePermissionPrompt": true,
-  "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ]
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
-        "/Users/jw/Developer"
-      ]
-    }
-  }
+  "skipDangerousModePermissionPrompt": true
 }

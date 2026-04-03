@@ -6,6 +6,15 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.12.2] - 2026-04-03
+### Changed
+- Moved `mcpServers` from shared `settings.json` to machine-local `~/.claude.json` — paths and API keys no longer leak across machines.
+- Broadened Claude Code permissions to bypass mode with explicit tool allow list.
+- Added `alwaysThinkingEnabled` to shared Claude Code settings.
+
+### Added
+- `health` project mapping in ccbot.
+
 ## [2.12.1] - 2026-04-03
 ### Fixed
 - Guard Vite+ env sourcing in `.zshenv` to prevent errors on machines where Vite+ is not installed.

@@ -25,6 +25,7 @@ _ccbot_dir() {
         dotfiles) echo "$DOTFILES_DIR" ;;
         notes)    echo "$VAULT_PATH" ;;
         vps)      echo "$DEV_DIR/vps" ;;
+        health)   echo "$HOME/Documents/health" ;;
         *)        echo "$DEV_DIR/vps/services/$1" ;;
     esac
 }
