@@ -30,6 +30,7 @@ brew "yazi"
 brew "zoxide"
 brew "atuin"
 brew "biome"
+brew "marksman"
 
 # Languages & runtimes
 brew "bun"
