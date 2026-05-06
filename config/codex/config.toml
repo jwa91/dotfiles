@@ -1,4 +1,10 @@
-# Codex CLI Configuration
+# Codex CLI base configuration (versioned in dotfiles).
+#
+# This file holds only static user preferences. Codex rewrites
+# ~/.codex/config.toml at runtime with machine-local sections
+# ([projects."..."], [marketplaces.*], [plugins.*], etc.) — those are
+# preserved by setup/codex/sync.sh and excluded from drift detection.
+# See setup/hooks/codex-config-drift.sh.
 model = "gpt-5.5"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
@@ -11,43 +17,3 @@ multi_agent = true
 
 [projects."/"]
 trust_level = "trusted"
-
-[projects."/Users/jw/developer/vps/services/janwillemaltink-website"]
-trust_level = "trusted"
-
-[projects."/Users/jw/developer/trnscrb"]
-trust_level = "trusted"
-
-[projects."/Users/jw/developer/health"]
-trust_level = "trusted"
-
-[marketplaces.openai-bundled]
-last_updated = "2026-05-02T00:23:22Z"
-source_type = "local"
-source = "/Users/jw/.codex/.tmp/bundled-marketplaces/openai-bundled"
-
-[marketplaces.openai-primary-runtime]
-last_updated = "2026-05-02T01:00:48Z"
-source_type = "local"
-source = "/Users/jw/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
-
-[plugins."documents@openai-primary-runtime"]
-enabled = true
-
-[plugins."spreadsheets@openai-primary-runtime"]
-enabled = true
-
-[plugins."presentations@openai-primary-runtime"]
-enabled = true
-
-[plugins."browser-use@openai-bundled"]
-enabled = true
-
-[plugins."google-drive@openai-curated"]
-enabled = true
-
-[plugins."gmail@openai-curated"]
-enabled = true
-
-[plugins."google-calendar@openai-curated"]
-enabled = true

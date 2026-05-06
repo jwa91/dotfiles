@@ -6,6 +6,24 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.14.0] - 2026-05-06
+### Added
+- Codex config sync pattern: `setup/codex/sync.sh` writes `~/.codex/config.toml` from the dotfiles base while preserving machine-local sections that Codex rewrites at runtime.
+- `codex-config-drift` prek hook (pre-commit stage): fails commits when `~/.codex/config.toml` diverges from the dotfiles base, ignoring runtime sections (`[projects.*]`, `[marketplaces.*]`, `[plugins.*]`, `[notice.*]`, `tui.model_availability_nux.*`). Bypass with `SKIP=codex-config-drift`.
+- `marksman` markdown LSP in Brewfile.
+- Claude Code `preferredNotifChannel = "ghostty"`.
+
+### Changed
+- Codex config no longer symlinked into dotfiles — Codex rewrites it at runtime, so the live file is a real file synced from a slim base. Trust marks, plugin enables, and marketplace cache stay out of the repo.
+- Codex base: model bumped to `gpt-5.5`.
+- `ccbot health` points to `$DEV_DIR/health` (was `~/Documents/health`).
+
+### Fixed
+- Removed `.sh` suffix alias that caused executable scripts to open in the editor instead of executing.
+
+### Removed
+- Cursor `alt+cmd+s` sidebar toggle keybinding.
+
 ## [2.13.0] - 2026-04-03
 ### Added
 - Suffix aliases for `.swift`, `.tsx`, `.jsx`, `.css`, `.rs`, `.go`, `.env` (edit) and `.webp`, `.mov` (view).

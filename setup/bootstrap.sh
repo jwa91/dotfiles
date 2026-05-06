@@ -346,7 +346,6 @@ reset_symlinks() {
         "$HOME/Library/Application Support/Code/User/keybindings.json"
         "$HOME/Library/Application Support/Code/User/snippets"
         "$HOME/.claude/settings.json"
-        "$HOME/.codex/config.toml"
         "$HOME/.config/gh/config.yml"
         "$HOME/.config/cheat/conf.yml"
         "$HOME/.config/cheat/cheatsheets/personal"
@@ -411,8 +410,14 @@ link_configs() {
     # Claude Code
     ensure_symlink "$HOME/.claude/settings.json" "$CONFIG_DIR/claude-code/settings.json"
 
-    # Codex
-    ensure_symlink "$HOME/.codex/config.toml" "$CONFIG_DIR/codex/config.toml"
+    # Codex (sync, not symlink — Codex rewrites config.toml at runtime)
+    if $DRY_RUN; then
+        log_action "Sync ~/.codex/config.toml from base (dry-run)"
+        run_cmd "$SCRIPT_DIR/codex/sync.sh" --dry-run
+    else
+        log_action "Sync ~/.codex/config.toml from base"
+        "$SCRIPT_DIR/codex/sync.sh"
+    fi
 
     # GH
     ensure_symlink "$HOME/.config/gh/config.yml" "$CONFIG_DIR/gh/config.yml"
