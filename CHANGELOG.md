@@ -5,8 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+
+## [2.14.1] - 2026-05-10
+### Added
+- Claude Code voice mode (`voice.enabled = true`, `mode = "hold"`).
+
+### Changed
+- Cursor `git.openRepositoryInParentFolders` flipped from `never` to `always` so subfolder opens surface the parent repo.
+- Cursor `biome.requireConfiguration = true` so Biome only activates in projects that declare a config.
+
+### Fixed
+- `codex-config-drift` hook now matches bare runtime tables (e.g. `[tui.model_availability_nux]`), not just nested subkeys. Previously the dotted prefix `tui.model_availability_nux.` only matched `[tui.model_availability_nux.foo]`, so the bare table Codex actually writes counted as drift and blocked commits.
+
 ### Removed
 - Redundant `/Applications/Obsidian.app/Contents/MacOS` PATH entry in `.zshenv`. Obsidian 1.12.7 ships a dedicated `obsidian-cli` binary that the Homebrew cask now symlinks to `/opt/homebrew/bin/obsidian`, so the manual PATH entry (which previously pointed at the GUI binary and produced `FATAL: Unable to find helper app` errors via Electron's helper-app resolution) is no longer needed.
+- Stale `Last Modified` header in `zsh/zsh-functions/general-functions.zsh` — git already tracks edit time, and sibling files in `zsh-functions/` don't carry one.
 
 ## [2.14.0] - 2026-05-06
 ### Added
