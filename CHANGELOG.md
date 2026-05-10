@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+### Removed
+- Redundant `/Applications/Obsidian.app/Contents/MacOS` PATH entry in `.zshenv`. Obsidian 1.12.7 ships a dedicated `obsidian-cli` binary that the Homebrew cask now symlinks to `/opt/homebrew/bin/obsidian`, so the manual PATH entry (which previously pointed at the GUI binary and produced `FATAL: Unable to find helper app` errors via Electron's helper-app resolution) is no longer needed.
 
 ## [2.14.0] - 2026-05-06
 ### Added
