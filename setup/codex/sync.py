@@ -45,7 +45,10 @@ def is_runtime_header(name: str) -> bool:
         return False
     for prefix in RUNTIME_PREFIXES:
         if prefix.endswith("."):
-            if name.startswith(prefix):
+            # Match both subkeys (`prefix.subkey`) and the bare table (`prefix`
+            # without trailing dot) — Codex writes `[tui.model_availability_nux]`
+            # as a plain table, not under a subkey.
+            if name.startswith(prefix) or name == prefix[:-1]:
                 return True
         elif name == prefix:
             return True
