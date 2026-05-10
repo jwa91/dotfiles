@@ -2,7 +2,6 @@
 # File: general-functions.zsh
 # Description: General purpose functions for file and system management
 # Author: Jan Willem Altink
-# Last Modified: 2024-07-29
 # ----------------------------------------
 
 # --------------------------------------------------
