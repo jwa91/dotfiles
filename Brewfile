@@ -37,6 +37,7 @@ brew "bun"
 brew "node"
 brew "pnpm"
 brew "uv"
+brew "go"
 brew "ollama"
 
 # Fonts

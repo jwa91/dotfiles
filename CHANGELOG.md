@@ -6,6 +6,15 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.14.2] - 2026-05-11
+### Added
+- `go` to Brewfile (needed by an external project; Starship `[golang]` module and Fresh `gopls`/`gofmt` integration already in place).
+- Claude Code `skipAutoPermissionPrompt = true`.
+
+### Changed
+- Codex drift detection now treats `model_reasoning_effort` and `plan_mode_reasoning_effort` as runtime (machine-/project-local), not base. Removed `model_reasoning_effort` from `config/codex/config.toml` so reasoning effort is tuned per project, not unified at the dotfiles level.
+- `setup/codex/sync.py` now exposes a `compose <base> <live>` command (and `split_runtime` returns three buckets: base / runtime keys / runtime sections) so runtime top-level keys are spliced back into the pre-header region instead of dumped between sections. `setup/codex/sync.sh` switched from `extract-runtime` to `compose`.
+
 ## [2.14.1] - 2026-05-10
 ### Added
 - Claude Code voice mode (`voice.enabled = true`, `mode = "hold"`).

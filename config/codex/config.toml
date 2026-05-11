@@ -2,13 +2,13 @@
 #
 # This file holds only static user preferences. Codex rewrites
 # ~/.codex/config.toml at runtime with machine-local sections
-# ([projects."..."], [marketplaces.*], [plugins.*], etc.) — those are
-# preserved by setup/codex/sync.sh and excluded from drift detection.
-# See setup/hooks/codex-config-drift.sh.
+# ([projects."..."], [marketplaces.*], [plugins.*], etc.) and some
+# top-level keys (e.g. *_reasoning_effort, which is tuned per project).
+# Those are preserved by setup/codex/sync.sh and excluded from drift
+# detection. See setup/hooks/codex-config-drift.sh.
 model = "gpt-5.5"
 approval_policy = "on-request"
 sandbox_mode = "workspace-write"
-model_reasoning_effort = "xhigh"
 personality = "pragmatic"
 
 [features]

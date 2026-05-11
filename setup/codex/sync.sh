@@ -42,12 +42,15 @@ fi
 
 mkdir -p "$(dirname "$LIVE_FILE")"
 
-# Extract runtime sections from current live file (if any) BEFORE breaking
-# any legacy symlink — if the symlink points at the dotfiles base, removing
-# it would lose these sections.
-RUNTIME_BLOCK=""
+# Compose merged output (base + runtime keys/sections preserved from live)
+# BEFORE breaking any legacy symlink — if the symlink points at the dotfiles
+# base, removing it would lose these.
+TMP_FILE="$(mktemp)"
+trap 'rm -f "$TMP_FILE"' EXIT
 if [[ -e "$LIVE_FILE" ]]; then
-    RUNTIME_BLOCK="$("$PYTHON_BIN" "$SPLITTER" extract-runtime "$LIVE_FILE")"
+    "$PYTHON_BIN" "$SPLITTER" compose "$BASE_FILE" "$LIVE_FILE" >"$TMP_FILE"
+else
+    cat "$BASE_FILE" >"$TMP_FILE"
 fi
 
 # If live file is currently a symlink (legacy bootstrap), break it.
@@ -58,18 +61,9 @@ if [[ -L "$LIVE_FILE" ]]; then
     fi
 fi
 
-# Compose: base + blank line (if runtime present) + runtime.
-TMP_FILE="$(mktemp)"
-trap 'rm -f "$TMP_FILE"' EXIT
-cat "$BASE_FILE" >"$TMP_FILE"
-if [[ -n "$RUNTIME_BLOCK" ]]; then
-    # Ensure exactly one blank line between base and runtime.
-    if [[ -n "$(tail -c 1 "$TMP_FILE")" ]]; then
-        printf '\n' >>"$TMP_FILE"
-    fi
-    printf '\n' >>"$TMP_FILE"
-    printf '%s' "$RUNTIME_BLOCK" >>"$TMP_FILE"
-fi
+RUNTIME_SECTION_COUNT=$(grep -c '^\[' "$TMP_FILE" 2>/dev/null || true)
+BASE_SECTION_COUNT=$(grep -c '^\[' "$BASE_FILE" 2>/dev/null || true)
+RUNTIME_SECTIONS=$(( RUNTIME_SECTION_COUNT - BASE_SECTION_COUNT ))
 
 if [[ -f "$LIVE_FILE" ]] && cmp -s "$TMP_FILE" "$LIVE_FILE"; then
     echo "✓ $LIVE_FILE already in sync"
@@ -77,10 +71,10 @@ if [[ -f "$LIVE_FILE" ]] && cmp -s "$TMP_FILE" "$LIVE_FILE"; then
 fi
 
 if $DRY_RUN; then
-    echo "○ WOULD: write $LIVE_FILE (base + $(printf '%s' "$RUNTIME_BLOCK" | grep -c '^\[' || true) runtime sections)"
+    echo "○ WOULD: write $LIVE_FILE (base + ${RUNTIME_SECTIONS} runtime sections)"
     exit 0
 fi
 
 mv "$TMP_FILE" "$LIVE_FILE"
 trap - EXIT
-echo "→ Wrote $LIVE_FILE (base + $(printf '%s' "$RUNTIME_BLOCK" | grep -c '^\[' || true) preserved runtime sections)"
+echo "→ Wrote $LIVE_FILE (base + ${RUNTIME_SECTIONS} preserved runtime sections)"
