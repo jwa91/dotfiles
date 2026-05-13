@@ -21,8 +21,8 @@ else
 fi
 
 # Prefer a local agentskills checkout when present on this machine.
-if [[ -z "${AGENTSKILLS_REPO_PATH:-}" && -d "$DEV_DIR/ai-monorepo/agentskills/skills" ]]; then
-    export AGENTSKILLS_REPO_PATH="$DEV_DIR/ai-monorepo/agentskills"
+if [[ -z "${AGENTSKILLS_REPO_PATH:-}" && -d "$DEV_DIR/agentskills/skills" ]]; then
+    export AGENTSKILLS_REPO_PATH="$DEV_DIR/agentskills"
 fi
 
 # ----------------------------------------

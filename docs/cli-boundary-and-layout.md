@@ -34,12 +34,12 @@ Resolution:
 - `~/developer/homebrew-tap`
 - `~/developer/jwa-harden`
 - `~/developer/jwa-tobrew`
-- `~/developer/ai-monorepo/agentskills`
-- `~/developer/rsvg/prehandover`
+- `~/developer/agentskills`
+- `~/developer/prehandover`
 - `~/developer/vps` and `~/developer/vps/services/*`
 
 `mkskill` prefers the local `agentskills` checkout at
-`$DEV_DIR/ai-monorepo/agentskills`, then falls back to the public repo URL.
+`$DEV_DIR/agentskills`, then falls back to the public repo URL.
 
 ## Portability Rules
 

@@ -15,6 +15,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 - Python helper sourcing now follows `DEV_DIR` (no hardcoded `~/Developer` path).
 - Added `docs/cli-boundary-and-layout.md` to codify what stays in dotfiles vs
   what belongs in portable Go CLIs, plus the local `DEV_DIR` repo layout.
+- Local repo layout normalized under `~/developer`: `agentskills` moved to
+  `~/developer/agentskills` and `prehandover` to `~/developer/prehandover`;
+  `mkskill` and docs now point to the new canonical paths.
 
 ## [2.15.1] - 2026-05-13
 ### Changed

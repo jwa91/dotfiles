@@ -121,7 +121,7 @@ When adding new commands: pick the action prefix first, then the shortest unambi
 
 - `DEV_DIR` is the canonical root for local source checkouts.
 - Default resolution is `~/developer` when that directory exists, otherwise `~/Developer`.
-- `mkskill` prefers a local `agentskills` checkout at `$DEV_DIR/ai-monorepo/agentskills` and falls back to the public GitHub repo when no local checkout exists.
+- `mkskill` prefers a local `agentskills` checkout at `$DEV_DIR/agentskills` and falls back to the public GitHub repo when no local checkout exists.
 
 ## Philosophy
 

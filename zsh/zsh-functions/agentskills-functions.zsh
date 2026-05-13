@@ -17,7 +17,7 @@ function mkskill() {
         return 1
     fi
 
-    local repo_path="${AGENTSKILLS_REPO_PATH:-$DEV_DIR/ai-monorepo/agentskills}"
+    local repo_path="${AGENTSKILLS_REPO_PATH:-$DEV_DIR/agentskills}"
     local repo_args=()
     if [[ -n "$repo_path" && -d "$repo_path/skills" ]]; then
         repo_args=(--repo-path "$repo_path")
