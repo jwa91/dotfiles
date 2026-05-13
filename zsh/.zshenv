@@ -21,9 +21,13 @@ else
 fi
 
 # Prefer a local agentskills checkout when present on this machine.
-if [[ -z "${AGENTSKILLS_REPO_PATH:-}" && -d "$DEV_DIR/agentskills/skills" ]]; then
-    export AGENTSKILLS_REPO_PATH="$DEV_DIR/agentskills"
+_agentskills_local="$DEV_DIR/agentskills"
+if [[ -n "${AGENTSKILLS_REPO_PATH:-}" && ! -d "$AGENTSKILLS_REPO_PATH/skills" && -d "$_agentskills_local/skills" ]]; then
+    export AGENTSKILLS_REPO_PATH="$_agentskills_local"
+elif [[ -z "${AGENTSKILLS_REPO_PATH:-}" && -d "$_agentskills_local/skills" ]]; then
+    export AGENTSKILLS_REPO_PATH="$_agentskills_local"
 fi
+unset _agentskills_local
 
 # ----------------------------------------
 # XDG Base Directories
