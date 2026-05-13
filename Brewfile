@@ -14,7 +14,7 @@ tap "jwa91/tap"
 # uncomment after running `make bootstrap VERSION=0.1.0` in homebrew-tap)
 # brew "jwa-tobrew"
 # agentskills is bootstrap-only until first release; uncomment after the
-# `cli/v0.1.0` tag lands Formula/agentskills.rb in jwa91/homebrew-tap
+# `v0.1.0` tag lands Formula/agentskills.rb in jwa91/homebrew-tap
 # (ADR 0006).
 # brew "agentskills"
 
