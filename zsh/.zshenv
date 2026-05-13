@@ -10,7 +10,7 @@ export ZSH_PLUGINS_DIR="$HOME/.zsh_plugins"
 # ----------------------------------------
 # External Directories
 # ----------------------------------------
-if [[ -z "${DEV_DIR:-}" ]]; then
+if [[ -z "${DEV_DIR:-}" || ( "$DEV_DIR" == "$HOME/Developer" && -d "$HOME/developer" ) ]]; then
     if [[ -d "$HOME/developer" ]]; then
         export DEV_DIR="$HOME/developer"
     else
