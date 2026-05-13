@@ -6,6 +6,10 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.15.1] - 2026-05-13
+### Changed
+- **`agentskills` and `prehandover` switched from `brew` to `cask`** in Brewfile. Both completed their `brews:` → `homebrew_casks:` migration in their own repos (agentskills v0.1.1, prehandover v0.1.1) — now signed + notarized like the rest of the `jwa-*` family. Tracks tap v0.4.1.
+
 ## [2.15.0] - 2026-05-13
 ### Added
 - **`prehandover` formula** to Brewfile (already shipped at v0.1.0 from its own repo).
