@@ -32,6 +32,7 @@ RUNTIME_PREFIXES: tuple[str, ...] = (
     "marketplaces.",
     "plugins.",
     "tui.model_availability_nux.",
+    "hooks.state.",
 )
 
 # Top-level [projects."/"] is the universal trust mark, not a per-machine
@@ -92,7 +93,10 @@ def split_runtime(text: str) -> tuple[str, str, str]:
             base.append(line)
         else:
             (runtime_sections if in_runtime_section else base).append(line)
-    return "".join(base), "".join(runtime_keys), "".join(runtime_sections)
+    base_str = "".join(base)
+    while base_str.endswith("\n\n"):
+        base_str = base_str[:-1]
+    return base_str, "".join(runtime_keys), "".join(runtime_sections)
 
 
 def compose(base_text: str, live_text: str) -> str:
