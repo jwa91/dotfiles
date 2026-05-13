@@ -37,6 +37,7 @@
   },
   "skipDangerousModePermissionPrompt": true,
   "preferredNotifChannel": "ghostty",
+  "skipAutoPermissionPrompt": true,
   "voiceEnabled": true,
-  "skipAutoPermissionPrompt": true
+  "agentPushNotifEnabled": true
 }

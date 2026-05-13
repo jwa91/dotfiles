@@ -175,5 +175,6 @@
   "update.releaseTrack": "prerelease",
   "workbench.colorTheme": "Default Dark Modern",
   "claudeCode.preferredLocation": "panel",
-  "claudeCode.useTerminal": true
+  "claudeCode.useTerminal": true,
+  "window.autoDetectColorScheme": false
 }

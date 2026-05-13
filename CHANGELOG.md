@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+### Changed
+- Personal tap Casks in Brewfile now follow the intended bootstrap order:
+  `jwa-harden`, `agentskills`, `prehandover`, `jwa-tobrew`.
+- `mkskill` now uses the Brew-installed `agentskills` CLI by default
+  instead of assuming a local `~/Developer/agentskills` source checkout.
+- `DEV_DIR` now defaults to `~/developer` when present (fallback: `~/Developer`),
+  and bootstrap creates the same resolved path for consistent local repo layout.
+- Python helper sourcing now follows `DEV_DIR` (no hardcoded `~/Developer` path).
+- Added `docs/cli-boundary-and-layout.md` to codify what stays in dotfiles vs
+  what belongs in portable Go CLIs, plus the local `DEV_DIR` repo layout.
 
 ## [2.15.1] - 2026-05-13
 ### Changed

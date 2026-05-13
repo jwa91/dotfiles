@@ -10,7 +10,20 @@ export ZSH_PLUGINS_DIR="$HOME/.zsh_plugins"
 # ----------------------------------------
 # External Directories
 # ----------------------------------------
-export DEV_DIR="${DEV_DIR:-$HOME/Developer}"
+if [[ -z "${DEV_DIR:-}" ]]; then
+    if [[ -d "$HOME/developer" ]]; then
+        export DEV_DIR="$HOME/developer"
+    else
+        export DEV_DIR="$HOME/Developer"
+    fi
+else
+    export DEV_DIR
+fi
+
+# Prefer a local agentskills checkout when present on this machine.
+if [[ -z "${AGENTSKILLS_REPO_PATH:-}" && -d "$DEV_DIR/ai-monorepo/agentskills/skills" ]]; then
+    export AGENTSKILLS_REPO_PATH="$DEV_DIR/ai-monorepo/agentskills"
+fi
 
 # ----------------------------------------
 # XDG Base Directories
@@ -78,6 +91,7 @@ path=(
     /opt/homebrew/bin
     /opt/homebrew/sbin
     /usr/local/bin
+    "$HOME/go/bin"
     "$HOME/.npm-global/bin"
     "$BUN_INSTALL/bin"
     "$HOME/.antigravity/antigravity/bin"

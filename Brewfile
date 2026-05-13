@@ -10,13 +10,15 @@ tap "ngrok/ngrok"
 tap "steipete/tap"
 tap "jwa91/tap"
 
-# Personal tap binaries — all signed + notarized Casks as of tap v0.4.1
+# Personal tap binaries — installed in bootstrap order:
+# hardening wrapper, skill distribution, harness alignment, tap publisher.
+# All are signed + notarized Casks as of tap v0.4.1.
 # (ADR 0008 in jwa91/homebrew-tap: every Go CLI in the family ships as
 # a Homebrew Cask via goreleaser's homebrew_casks: block).
-cask "agentskills"
 cask "jwa-harden"
-cask "jwa-tobrew"
+cask "agentskills"
 cask "prehandover"
+cask "jwa-tobrew"
 
 # Core CLI tools
 brew "git"

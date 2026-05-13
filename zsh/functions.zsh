@@ -21,6 +21,6 @@ source "$FUNCTIONS_DIR/ccbot-functions.zsh"
 source "$CONFIG_DIR/tmux/tmux-bookmarks.zsh"
 
 # Python functions (external from templates repo)
-if [[ -f "$HOME/Developer/templates/python/python-functions.sh" ]]; then
-    source "$HOME/Developer/templates/python/python-functions.sh"
+if [[ -f "$DEV_DIR/templates/python/python-functions.sh" ]]; then
+    source "$DEV_DIR/templates/python/python-functions.sh"
 fi

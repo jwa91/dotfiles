@@ -117,6 +117,12 @@ All aliases and functions follow: **action prefix + shortest target, mashed toge
 
 When adding new commands: pick the action prefix first, then the shortest unambiguous target. If an `e` variant exists, add a matching `cd` variant.
 
+## Local Repo Layout
+
+- `DEV_DIR` is the canonical root for local source checkouts.
+- Default resolution is `~/developer` when that directory exists, otherwise `~/Developer`.
+- `mkskill` prefers a local `agentskills` checkout at `$DEV_DIR/ai-monorepo/agentskills` and falls back to the public GitHub repo when no local checkout exists.
+
 ## Philosophy
 
 - **Reproducible**: Complete automation from fresh macOS install
@@ -127,6 +133,9 @@ When adding new commands: pick the action prefix first, then the shortest unambi
 ## Config Boundary
 
 This repo manages **classic config files only** — settings, preferences, keybindings. Things like agent skills, instructions (AGENTS.md, CLAUDE.md), commands, and rules are agent resources and belong in a dedicated AI repo, not here.
+
+For CLI-family ownership and local repo layout conventions, see
+`docs/cli-boundary-and-layout.md`.
 
 Auth tokens and secrets stay in their default home directory locations (e.g. `~/.codex/auth.json`, `~/.claude.json`) and are never symlinked or tracked. See `docs/macos-config-locations.md` for a reference of where macOS apps store config.
 

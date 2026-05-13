@@ -295,9 +295,10 @@ install_standalone_tools() {
 
 setup_zsh_environment() {
     log_section "Zsh Environment"
+    local dev_dir="${DEV_DIR:-$HOME/developer}"
 
     ensure_dir "$HOME/.zsh_plugins"
-    ensure_dir "$HOME/Developer"
+    ensure_dir "$dev_dir"
     ensure_dir "$HOME/.local/bin"
     ensure_dir "$HOME/.npm-global/bin"
 
