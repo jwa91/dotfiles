@@ -6,6 +6,16 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.15.0] - 2026-05-13
+### Added
+- **`prehandover` formula** to Brewfile (already shipped at v0.1.0 from its own repo).
+- **`jwa-harden` cask** to Brewfile (jwa91/tap — new repo). Wraps a command with `op run` against the nearest `.env.template`; replaces the long-standing "(when that exists)" placeholder in `jwa-tobrew doctor` and various skills.
+- **`jwa-tobrew` cask** to Brewfile (previously `brew`, now `cask` because the binary moved to its own repo and ships as a Homebrew Cask via goreleaser's `homebrew_casks:` block per ADR 0008 in homebrew-tap).
+
+### Changed
+- **Personal-tap Brewfile section** restructured: formulae (`agentskills`, `prehandover`) above, casks (`jwa-harden`, `jwa-tobrew`) below. The bootstrap-only comment that gated `jwa-tobrew` install is gone — the publisher is now its own repo with its own release pipeline (jwa91/jwa-tobrew).
+- **All `jwa-*` casks ship codesigned + notarized** with Developer ID Application (TEAMID U3ST8HC98U, the same identity used by `trnscrb`). Releases happen locally via `make release VERSION=…`; CI workflows are `workflow_dispatch`-only in both repos until a `.p8` App Store Connect API key is added to GH secrets. The fine-grained tap-writer PAT (op://Personal/GitHub Homebrew-tap writer/credential) is used only for the Cask commit; `GITHUB_TOKEN` for release-creation on the source repo comes from `gh auth token` at release time.
+
 ## [2.14.2] - 2026-05-11
 ### Added
 - `go` to Brewfile (needed by an external project; Starship `[golang]` module and Fresh `gopls`/`gofmt` integration already in place).

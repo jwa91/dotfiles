@@ -10,10 +10,13 @@ tap "ngrok/ngrok"
 tap "steipete/tap"
 tap "jwa91/tap"
 
-# Personal tap binaries (jwa-tobrew is bootstrap-only until first release;
-# uncomment after running `make bootstrap VERSION=0.1.0` in homebrew-tap)
-# brew "jwa-tobrew"
+# Personal tap binaries
+# Formulae (older items still on goreleaser brews: — soft migration per ADR 0008)
 brew "agentskills"
+brew "prehandover"
+# Casks (jwa-* family — modern goreleaser homebrew_casks:)
+cask "jwa-harden"
+cask "jwa-tobrew"
 
 # Core CLI tools
 brew "git"
