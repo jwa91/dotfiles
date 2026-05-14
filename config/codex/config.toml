@@ -14,6 +14,7 @@ personality = "pragmatic"
 [features]
 shell_snapshot = true
 multi_agent = true
+goals = true
 
 [projects."/"]
 trust_level = "trusted"
