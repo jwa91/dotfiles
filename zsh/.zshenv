@@ -20,6 +20,13 @@ else
     export DEV_DIR
 fi
 
+# Workspace + schema/preference roots — referenced as $WORKSPACES_DIR,
+# $SCHEMAS_DIR, $PREFERENCES_DIR from workspaces and tools. See
+# go-brew-clis ADR-0008 and preferences/contracts/machine-to-workspace.yaml.
+export WORKSPACES_DIR="$DEV_DIR/workspaces"
+export SCHEMAS_DIR="$DEV_DIR/schemas"
+export PREFERENCES_DIR="$DEV_DIR/preferences"
+
 # Prefer a local agentskills checkout when present on this machine.
 _agentskills_local="$DEV_DIR/agentskills"
 if [[ -n "${AGENTSKILLS_REPO_PATH:-}" && ! -d "$AGENTSKILLS_REPO_PATH/skills" && -d "$_agentskills_local/skills" ]]; then
