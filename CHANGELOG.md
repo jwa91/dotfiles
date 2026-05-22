@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+### Added
+- **1Password SSH agent integration** in `zsh/.zshenv`: `SSH_AUTH_SOCK` routes
+  through `~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock`
+  when present, so `ssh`/`ssh-add` use keys stored in 1Password instead of
+  unencrypted private keys on disk.
+- `WORKSPACES_DIR`, `SCHEMAS_DIR`, `PREFERENCES_DIR` exports in `.zshenv` for
+  canonical project locations.
+- `goreleaser`, `forgejo-cli-plus`, and `odin` added to Brewfile.
+  `forgejo-cli-plus` comes from the `stalecontext/forgejo-cli-plus` Codeberg
+  tap.
+
 ### Changed
 - Personal tap Casks in Brewfile now follow the intended bootstrap order:
   `jwa-harden`, `agentskills`, `prehandover`, `jwa-tobrew`.
@@ -18,6 +29,22 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 - Local repo layout normalized under `~/developer`: `agentskills` moved to
   `~/developer/agentskills` and `prehandover` to `~/developer/prehandover`;
   `mkskill` and docs now point to the new canonical paths.
+- tmux `vps` bookmark SSH target switched from `hetzner` to `edge`.
+- Global gitignore (`git/ignore`) now ignores `.fresh/` workspace state.
+- Repo `.gitignore` now ignores `drafts/06-as-is-machine-analysis.md`.
+- **Pre-push main guard rewritten** to use HEAD + branch state instead of
+  reading refs from stdin. prek's `language: script` pre-push hooks do not
+  forward stdin, args, or `PRE_COMMIT_*` env vars, so the previous version
+  silently passed every push. The new guard checks `git symbolic-ref HEAD` and
+  `git tag --points-at HEAD`; bypass with `SKIP=require-tag-and-changelog git push`.
+
+### Removed
+- **Codex config sync and drift detection.** `config/codex/`,
+  `setup/codex/sync.{sh,py}`, `setup/hooks/codex-config-drift.sh`, the
+  `codex-config-drift` prek hook, and the bootstrap codex-sync step are gone.
+  Codex rewrites `~/.codex/config.toml` at runtime; keeping a dotfiles base in
+  sync churned more than it saved. Live config is now untracked.
+- `antigravity` cask removed from Brewfile.
 
 ## [2.15.1] - 2026-05-13
 ### Changed
