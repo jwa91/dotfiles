@@ -27,12 +27,3 @@ language = "script"
 always_run = true
 pass_filenames = false
 stages = ["pre-push"]
-
-[[repos.hooks]]
-id = "codex-config-drift"
-name = "Detect drift in ~/.codex/config.toml vs dotfiles base"
-entry = "setup/hooks/codex-config-drift.sh"
-language = "script"
-always_run = true
-pass_filenames = false
-stages = ["pre-commit"]

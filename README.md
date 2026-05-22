@@ -50,7 +50,7 @@ Bootstrap will print a checklist of manual installs and skip Cursor config linki
 - **Git**: Global config with commit templates and conventional commit enforcement
 - **Terminal**: Ghostty configuration with terminal-aware editor routing
 - **Tmux**: Session bookmarks, project layouts, and interactive picker
-- **AI tools**: Settings for Claude Code and Codex (config files only — agent resources live elsewhere)
+- **AI tools**: Settings for Claude Code (config files only — agent resources live elsewhere)
 - **Apps**: Cursor, VS Code, and more with symlinked settings
 - **Manual installs**: Checklist for tools outside Homebrew (1Password, Cursor, Docker, Xcode, etc.)
 - **Security**: 1Password-based SSH agent and secret-safe config model
@@ -89,7 +89,6 @@ dotfiles/
 │   ├── cursor/
 │   ├── vscode/
 │   ├── claude-code/            # settings.json only
-│   ├── codex/                  # config.toml only
 │   ├── cheat/
 │   └── gh/
 ├── docs/                       # Reference documentation

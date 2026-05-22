@@ -411,15 +411,6 @@ link_configs() {
     # Claude Code
     ensure_symlink "$HOME/.claude/settings.json" "$CONFIG_DIR/claude-code/settings.json"
 
-    # Codex (sync, not symlink — Codex rewrites config.toml at runtime)
-    if $DRY_RUN; then
-        log_action "Sync ~/.codex/config.toml from base (dry-run)"
-        run_cmd "$SCRIPT_DIR/codex/sync.sh" --dry-run
-    else
-        log_action "Sync ~/.codex/config.toml from base"
-        "$SCRIPT_DIR/codex/sync.sh"
-    fi
-
     # GH
     ensure_symlink "$HOME/.config/gh/config.yml" "$CONFIG_DIR/gh/config.yml"
 
