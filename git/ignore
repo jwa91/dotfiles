@@ -4,3 +4,6 @@
 
 # Claude Code worktrees
 .claude/worktrees/
+
+# Fresh window/workspace state
+.fresh/
