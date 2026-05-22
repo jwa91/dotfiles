@@ -79,6 +79,7 @@ config/pnpm/
 
 # --- Personal Notes ---
 TODO.md
+drafts/06-as-is-machine-analysis.md
 
 # --- Other ---
 # Add any other specific files or directories you want to ignore below
