@@ -86,6 +86,16 @@ unset -f _set_desktop_terminal _set_mobile_terminal
 export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/notes"
 
 # ----------------------------------------
+# 1Password SSH agent
+# Routes ssh-add / ssh's identity lookups through 1Password so private keys
+# never live unencrypted on disk. Requires 1Password.app running with the
+# SSH agent enabled in Settings → Developer.
+# ----------------------------------------
+if [[ -S "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" ]]; then
+    export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+fi
+
+# ----------------------------------------
 # PATH modifications
 # Define tool-specific homes/paths BEFORE modifying PATH array
 export BUN_INSTALL="$HOME/.bun"
