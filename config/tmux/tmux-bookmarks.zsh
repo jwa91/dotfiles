@@ -11,7 +11,7 @@ typeset -gA TMUX_BOOKMARKS_DIR TMUX_BOOKMARKS_CMD
 
 TMUX_BOOKMARKS_DIR[vault]="$VAULT_PATH"
 TMUX_BOOKMARKS_DIR[vps]="$DEV_DIR/vps"
-TMUX_BOOKMARKS_CMD[vps]="ssh hetzner"
+TMUX_BOOKMARKS_CMD[vps]="ssh edge"
 
 # --------------------------------------------------
 # Function: tpick
