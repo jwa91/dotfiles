@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+
+## [2.16.0] - 2026-05-23
 ### Added
 - **1Password SSH agent integration** in `zsh/.zshenv`: `SSH_AUTH_SOCK` routes
   through `~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock`
