@@ -6,6 +6,19 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.17.0] - 2026-05-26
+### Added
+- Machine-local Git signing include via `~/.gitconfig.local`, with an example
+  config for the 1Password SSH signer and local allowed signers.
+- `gnupg`, `pinentry-mac`, and `hcloud` to the Brewfile for release signing and
+  VPS/Hetzner workflows.
+- 1Password shell plugin loading from `~/.config/op/plugins.sh`.
+
+### Changed
+- Global Git author email now uses `code@janwillemaltink.com`.
+- Replaced Yazi dotfile/bootstrap wiring with Broot config and shell launcher
+  support.
+
 ## [2.16.0] - 2026-05-23
 ### Added
 - **1Password SSH agent integration** in `zsh/.zshenv`: `SSH_AUTH_SOCK` routes
