@@ -350,8 +350,8 @@ reset_symlinks() {
         "$HOME/.config/gh/config.yml"
         "$HOME/.config/cheat/conf.yml"
         "$HOME/.config/cheat/cheatsheets/personal"
-        "$HOME/.config/yazi/yazi.toml"
-        "$HOME/.config/yazi/theme.toml"
+        "$HOME/.config/broot/conf.hjson"
+        "$HOME/.config/broot/verbs.hjson"
         "$HOME/.config/atuin/config.toml"
         "$HOME/.tmux.conf"
     )
@@ -419,9 +419,9 @@ link_configs() {
     ensure_symlink "$HOME/.config/cheat/conf.yml" "$CONFIG_DIR/cheat/conf.yml"
     ensure_symlink "$HOME/.config/cheat/cheatsheets/personal" "$CONFIG_DIR/cheat/cheatsheets"
 
-    # Yazi
-    ensure_symlink "$HOME/.config/yazi/yazi.toml" "$CONFIG_DIR/yazi/yazi.toml"
-    ensure_symlink "$HOME/.config/yazi/theme.toml" "$CONFIG_DIR/yazi/theme.toml"
+    # Broot
+    ensure_symlink "$HOME/.config/broot/conf.hjson" "$CONFIG_DIR/broot/conf.hjson"
+    ensure_symlink "$HOME/.config/broot/verbs.hjson" "$CONFIG_DIR/broot/verbs.hjson"
 
     # Atuin
     ensure_symlink "$HOME/.config/atuin/config.toml" "$CONFIG_DIR/atuin/config.toml"
