@@ -380,6 +380,7 @@ link_configs() {
 
     # Git
     ensure_symlink "$HOME/.gitconfig" "$DOTFILES_DIR/git/config"
+    ensure_local_runtime_file "$HOME/.gitconfig.local" "$DOTFILES_DIR/git/config.local.example"
 
     # Shell and terminal configs
     ensure_symlink "$HOME/.zshrc" "$ZSH_DIR/.zshrc"

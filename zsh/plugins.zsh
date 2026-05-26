@@ -32,3 +32,8 @@ fi
 if command -v atuin &> /dev/null; then
     eval "$(atuin init zsh)"
 fi
+
+# Load 1Password shell plugins (op plugin init <cli> populates this file)
+if [[ -f "$HOME/.config/op/plugins.sh" ]]; then
+    source "$HOME/.config/op/plugins.sh"
+fi

@@ -46,6 +46,9 @@ brew "zoxide"
 brew "atuin"
 brew "biome"
 brew "marksman"
+brew "hcloud"
+brew "gnupg"
+brew "pinentry-mac"
 
 # Languages & runtimes
 brew "bun"

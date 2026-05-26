@@ -4,7 +4,7 @@
 
 [user]
     name = jwa91
-    email = 122170013+jwa91@users.noreply.github.com
+    email = code@janwillemaltink.com
 
 [init]
     defaultBranch = main
@@ -27,3 +27,6 @@
 
 [pull]
     rebase = true
+
+[include]
+    path = ~/.gitconfig.local
