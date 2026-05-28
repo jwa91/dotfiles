@@ -6,6 +6,16 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [2.18.0] - 2026-05-28
+### Added
+- Ghostty keybindings and ZLE helpers for Shift+Arrow text selection, with
+  region deletion and a `SHIFT_SELECT=false` escape hatch.
+- Ghostty shell integration settings for SSH environment and terminfo setup.
+
+### Changed
+- Starship initialization is now guarded so shell reloads do not re-wrap ZLE
+  widgets used by vi mode and shift-select.
+
 ## [2.17.0] - 2026-05-26
 ### Added
 - Machine-local Git signing include via `~/.gitconfig.local`, with an example

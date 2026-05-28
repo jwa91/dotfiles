@@ -3,4 +3,30 @@ font-family = "JetBrainsMono Nerd Font"
 font-size = 14.5
 font-thicken = true
 font-thicken-strength = 100
-macos-option-as-alt = true
+
+# Misc
+confirm-close-surface = true
+macos-option-as-alt = right
+clipboard-paste-protection = true
+clipboard-paste-bracketed-safe = true
+quick-terminal-size = 50%,70%
+quick-terminal-position = center
+auto-update-channel = stable
+quit-after-last-window-closed = true
+shell-integration = zsh
+shell-integration-features = cursor,ssh-env,ssh-terminfo
+macos-window-buttons = hidden
+macos-titlebar-style = hidden
+macos-titlebar-proxy-icon = hidden
+macos-shortcuts = allow
+term = xterm-ghostty
+
+# Shift-select: force distinct CSI for Option (word) vs Cmd (line)
+keybind = alt+shift+arrow_left=text:\x1b[1;4D
+keybind = alt+shift+arrow_right=text:\x1b[1;4C
+keybind = super+shift+arrow_left=text:\x1b[1;10D
+keybind = super+shift+arrow_right=text:\x1b[1;10C
+keybind = super+shift+home=text:\x1b[1;10H
+keybind = super+shift+end=text:\x1b[1;10F
+keybind = shift+home=text:\x1b[1;2H
+keybind = shift+end=text:\x1b[1;2F
