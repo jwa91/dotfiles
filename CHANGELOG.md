@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+
+## [2.18.1] - 2026-05-29
+### Added
+- Proton Pass CLI via Homebrew for password-manager workflows.
+
 ### Removed
 - Removed the Ghostty/ZLE shift-select experiment entirely. The terminal now
   keeps normal Ghostty selection behavior, and zsh no longer loads custom
