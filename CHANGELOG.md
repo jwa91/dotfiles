@@ -5,13 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
-### Changed
-- Shift-select is now opt-in instead of enabled by default. Ghostty's base
-  config restores both Option keys as Alt; optional shift-select keybindings
-  live in `config/ghostty/shift-select` and must be paired with
-  `SHIFT_SELECT=true` in zsh.
-
 ### Removed
+- Removed the Ghostty/ZLE shift-select experiment entirely. The terminal now
+  keeps normal Ghostty selection behavior, and zsh no longer loads custom
+  Shift+Arrow widgets.
 - Retired the terminal editor integration that wrote project-local workspace
   state. Ghostty shells and editor helpers now use `micro`.
 

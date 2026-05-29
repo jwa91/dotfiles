@@ -18,12 +18,6 @@ source $ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Load history substring search
 source $ZSH_PLUGINS_DIR/zsh-history-substring-search/zsh-history-substring-search.zsh
 
-# Load local shift-select widget setup only when explicitly enabled.
-# Also include config/ghostty/shift-select from Ghostty when enabling this.
-if [[ "${SHIFT_SELECT:-false}" == "true" ]]; then
-    source "$ZSH_DIR/zsh-functions/shift-select.zsh"
-fi
-
 # Load fzf integration
 if command -v fzf &> /dev/null; then
     source <(fzf --zsh)

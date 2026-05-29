@@ -20,7 +20,3 @@ macos-titlebar-style = hidden
 macos-titlebar-proxy-icon = hidden
 macos-shortcuts = allow
 term = xterm-ghostty
-
-# Optional ZLE shift-select support:
-# config-file = shift-select
-# Requires SHIFT_SELECT=true in zsh.
