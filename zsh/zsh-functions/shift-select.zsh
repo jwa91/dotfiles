@@ -3,7 +3,7 @@
 # Description: Shift+Arrow selection mode for ZLE (macOS-focused)
 # ----------------------------------------
 
-[[ "${SHIFT_SELECT:-true}" == "true" ]] || return 0
+[[ "${SHIFT_SELECT:-false}" == "true" ]] || return 0
 
 # Keep custom end-of-buffer behavior aligned with syntax highlighting redraw.
 function _shiftselect_end_of_buffer() {

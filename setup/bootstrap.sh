@@ -338,7 +338,6 @@ reset_symlinks() {
         "$HOME/.zprofile"
         "$HOME/.config/ghostty/config"
         "$HOME/.config/starship.toml"
-        "$HOME/.config/fresh/config.json"
         "$HOME/Library/Application Support/Cursor/User/settings.json"
         "$HOME/Library/Application Support/Cursor/User/keybindings.json"
         "$HOME/Library/Application Support/Cursor/User/snippets"
@@ -388,7 +387,6 @@ link_configs() {
     ensure_symlink "$HOME/.zprofile" "$ZSH_DIR/.zprofile"
     ensure_symlink "$HOME/.config/ghostty/config" "$CONFIG_DIR/ghostty/config"
     ensure_symlink "$HOME/.config/starship.toml" "$CONFIG_DIR/starship.toml"
-    ensure_symlink "$HOME/.config/fresh/config.json" "$CONFIG_DIR/fresh/config.json"
 
     # Cursor (manual install in v2)
     if is_cursor_installed; then

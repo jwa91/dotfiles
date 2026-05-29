@@ -52,7 +52,7 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 #   3. OUTER_TERM — tmux env var from tmux.conf to recover the launching terminal
 _set_desktop_terminal() {
     export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-    export EDITOR="fresh"
+    export EDITOR="micro"
 }
 _set_mobile_terminal() {
     export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"

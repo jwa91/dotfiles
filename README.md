@@ -85,7 +85,6 @@ dotfiles/
 │   ├── tmux/
 │   ├── starship.toml
 │   ├── starship-mobile.toml
-│   ├── fresh/
 │   ├── cursor/
 │   ├── vscode/
 │   ├── claude-code/            # settings.json only
@@ -124,7 +123,7 @@ When adding new commands: pick the action prefix first, then the shortest unambi
 
 ## Philosophy
 
-- **Reproducible**: Complete automation from fresh macOS install
+- **Reproducible**: Complete automation from a clean macOS install
 - **Modular**: Each component is independent
 - **Secure**: with 1Password for SSH
 - **Modern tooling**: uv, Bun, Starship, Ghostty

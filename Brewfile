@@ -9,6 +9,7 @@ tap "1password/tap"
 tap "ngrok/ngrok"
 tap "steipete/tap"
 tap "jwa91/tap"
+tap "protonpass/tap"
 tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
 
 # Personal tap binaries — installed in bootstrap order:
@@ -49,6 +50,7 @@ brew "marksman"
 brew "hcloud"
 brew "gnupg"
 brew "pinentry-mac"
+brew "protonpass/tap/pass-cli"
 
 # Languages & runtimes
 brew "bun"
@@ -62,13 +64,9 @@ brew "ollama"
 # Fonts
 cask "font-jetbrains-mono-nerd-font"
 
-# Taps — editors
-tap "sinelaw/fresh"
-
 # Terminals & editors
 cask "ghostty"
 brew "micro"
-brew "fresh-editor"
 
 # AI tools
 cask "claude"

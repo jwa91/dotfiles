@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+### Changed
+- Shift-select is now opt-in instead of enabled by default. Ghostty's base
+  config restores both Option keys as Alt; optional shift-select keybindings
+  live in `config/ghostty/shift-select` and must be paired with
+  `SHIFT_SELECT=true` in zsh.
+
+### Removed
+- Retired the terminal editor integration that wrote project-local workspace
+  state. Ghostty shells and editor helpers now use `micro`.
 
 ## [2.18.0] - 2026-05-28
 ### Added
@@ -55,7 +64,6 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
   `~/developer/agentskills` and `prehandover` to `~/developer/prehandover`;
   `mkskill` and docs now point to the new canonical paths.
 - tmux `vps` bookmark SSH target switched from `hetzner` to `edge`.
-- Global gitignore (`git/ignore`) now ignores `.fresh/` workspace state.
 - Repo `.gitignore` now ignores `drafts/06-as-is-machine-analysis.md`.
 - **Pre-push main guard rewritten** to use HEAD + branch state instead of
   reading refs from stdin. prek's `language: script` pre-push hooks do not
@@ -87,7 +95,7 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [2.14.2] - 2026-05-11
 ### Added
-- `go` to Brewfile (needed by an external project; Starship `[golang]` module and Fresh `gopls`/`gofmt` integration already in place).
+- `go` to Brewfile (needed by an external project; Starship `[golang]` module and Go formatter integration already in place).
 - Claude Code `skipAutoPermissionPrompt = true`.
 
 ### Changed
@@ -252,18 +260,17 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [2.3.0] - 2026-02-21
 ### Added
-- Fresh editor config managed via dotfiles symlink (`config/fresh/config.json`).
-- `$EDITOR` set per terminal: `cursor --wait` in vscode, `fresh` in ghostty, `micro` elsewhere.
-- Bootstrap links fresh config to `~/.config/fresh/config.json`.
+- Terminal editor config managed through shell defaults.
+- `$EDITOR` set per terminal: `cursor --wait` in vscode, `micro` elsewhere.
 
 ## [2.2.0] - 2026-02-21
 ### Added
 - Stripped-down `config/starship-mobile.toml` for non-desktop terminals (no nerdfonts, no language detection, no time — safe for mosh).
 - `TERM_PROGRAM`-based detection in `.zshenv`: ghostty and vscode get full starship config, everything else gets the mobile variant.
-- `micro` and `fresh-editor` added to Brewfile as terminal-based editors.
+- `micro` added to Brewfile as terminal-based editor.
 
 ### Changed
-- `open_in_editor` now routes by terminal: Cursor when inside vscode, fresh in ghostty, micro everywhere else.
+- `open_in_editor` now routes by terminal: Cursor when inside vscode, micro everywhere else.
 
 ## [2.1.0] - 2026-02-20
 ### Added

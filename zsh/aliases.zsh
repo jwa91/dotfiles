@@ -13,7 +13,6 @@ _eopen() {
   local target="$1"
   case "$TERM_PROGRAM" in
     vscode)   cursor "$target" ;;
-    ghostty)  fresh "$target" ;;
     *)        micro "$target" ;;
   esac
 }

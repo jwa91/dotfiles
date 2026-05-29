@@ -1,0 +1,11 @@
+# Optional ZLE shift-select support.
+# Enable together with SHIFT_SELECT=true in zsh.
+
+keybind = alt+shift+arrow_left=text:\x1b[1;4D
+keybind = alt+shift+arrow_right=text:\x1b[1;4C
+keybind = super+shift+arrow_left=text:\x1b[1;10D
+keybind = super+shift+arrow_right=text:\x1b[1;10C
+keybind = super+shift+home=text:\x1b[1;10H
+keybind = super+shift+end=text:\x1b[1;10F
+keybind = shift+home=text:\x1b[1;2H
+keybind = shift+end=text:\x1b[1;2F

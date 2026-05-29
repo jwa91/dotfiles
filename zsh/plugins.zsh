@@ -18,9 +18,9 @@ source $ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Load history substring search
 source $ZSH_PLUGINS_DIR/zsh-history-substring-search/zsh-history-substring-search.zsh
 
-# Load local shift-select widget setup (Shift+Arrow selection in ZLE).
-# Disable quickly with SHIFT_SELECT=false before starting zsh.
-if [[ "${SHIFT_SELECT:-true}" == "true" ]]; then
+# Load local shift-select widget setup only when explicitly enabled.
+# Also include config/ghostty/shift-select from Ghostty when enabling this.
+if [[ "${SHIFT_SELECT:-false}" == "true" ]]; then
     source "$ZSH_DIR/zsh-functions/shift-select.zsh"
 fi
 
