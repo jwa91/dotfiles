@@ -45,13 +45,13 @@ Bootstrap will print a checklist of manual installs and skip Cursor config linki
 
 ## What's Included
 
-- **Brewfile**: Canonical package manifest — CLI tools, runtimes, casks, fonts
+- **Brewfile**: Workstation package manifest — CLI tools, casks, fonts
 - **Shell**: Zsh with Starship prompt, FZF, curated plugins
 - **Git**: Global config with commit templates and conventional commit enforcement
 - **Terminal**: Ghostty configuration with terminal-aware editor routing
 - **Tmux**: Session bookmarks, project layouts, and interactive picker
 - **AI tools**: Settings for Claude Code (config files only — agent resources live elsewhere)
-- **Apps**: Cursor, VS Code, and more with symlinked settings
+- **Apps**: Cursor and selected app configs with symlinked settings
 - **Manual installs**: Checklist for tools outside Homebrew (1Password, Cursor, Docker, Xcode, etc.)
 - **Security**: 1Password-based SSH agent and secret-safe config model
 
@@ -59,7 +59,7 @@ Bootstrap will print a checklist of manual installs and skip Cursor config linki
 
 ```
 dotfiles/
-├── Brewfile                    # Canonical package manifest
+├── Brewfile                    # Workstation package manifest
 ├── CHANGELOG.md
 ├── README.md
 ├── setup/
@@ -72,7 +72,6 @@ dotfiles/
 ├── zsh/                        # Shell configuration
 │   ├── .zshenv                 # PATH, env vars, terminal detection
 │   ├── .zshrc
-│   ├── .zprofile
 │   ├── aliases.zsh
 │   ├── completions.zsh
 │   ├── functions.zsh
@@ -86,10 +85,8 @@ dotfiles/
 │   ├── starship.toml
 │   ├── starship-mobile.toml
 │   ├── cursor/
-│   ├── vscode/
 │   ├── claude-code/            # settings.json only
-│   ├── cheat/
-│   └── gh/
+│   └── cheat/
 ├── docs/                       # Reference documentation
 └── .agents/skills/             # Agent skills for working on this repo
     ├── understand-dotfiles/
@@ -117,16 +114,26 @@ When adding new commands: pick the action prefix first, then the shortest unambi
 
 ## Local Repo Layout
 
-- `DEV_DIR` is the canonical root for local source checkouts.
-- Default resolution is `~/developer` when that directory exists, otherwise `~/Developer`.
+- `DEV_DIR` is the canonical root for local source checkouts: `~/developer`.
 - `mkskill` prefers a local `agentskills` checkout at `$DEV_DIR/agentskills` and falls back to the public GitHub repo when no local checkout exists.
+
+## Runtime Tooling
+
+Brew manages workstation tools and apps. Language runtimes, package managers,
+formatters, linters, and release tooling are project concerns.
+
+Project lockfiles choose the package manager: `pnpm-lock.yaml` uses `pnpm`,
+`package-lock.json` uses `npm`, and `bun.lock` uses `bun`. Python projects
+should use project-local `uv` configuration. One-off commands should prefer
+ephemeral runners such as `uvx`, `npx`, `pnpm dlx`, `bunx`, or
+`go run package@version`.
 
 ## Philosophy
 
 - **Reproducible**: Complete automation from a clean macOS install
 - **Modular**: Each component is independent
 - **Secure**: with 1Password for SSH
-- **Modern tooling**: uv, Bun, Starship, Ghostty
+- **Workstation tooling**: Starship, Ghostty, tmux, fzf, and focused CLI tools
 
 ## Config Boundary
 

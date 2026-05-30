@@ -2,7 +2,7 @@
 
 Short ADRs (one paragraph each) capturing intentional design choices for this dotfiles repo and the machine-level conventions it owns. Each entry has a **scope** sentence (what the rule covers) and a **why** sentence (the constraint that produced it). Reference these from PR reviews when someone proposes reverting the decision.
 
-The universal cross-project rules live at `docs/security-ground-rules.md`. The ADRs here are the *enforcement-detail* layer: specific mechanical rules that need their own name so downstream repos (e.g. `homebrew-tap`) can defer to them by number.
+The ADRs here capture specific mechanical rules that need their own name so downstream repos can defer to them by number.
 
 | # | Title |
 |---|-------|

@@ -90,7 +90,9 @@ ensure_dir() {
 conflict_error() {
     local target="$1"
     local source="$2"
-    local backup_path="${target}.backup.$(date +%Y%m%d%H%M%S)"
+    local backup_path
+
+    backup_path="${target}.backup.$(date +%Y%m%d%H%M%S)"
 
     log_error "Target exists and is not a symlink: $target"
     echo ""
@@ -276,31 +278,15 @@ install_standalone_tools() {
             fi
         fi
     fi
-
-    # Vite+ (VoidZero) — https://vite.plus
-    if command -v vp >/dev/null 2>&1; then
-        log_skip "vp (already installed)"
-    else
-        local vp_url="https://vite.plus"
-        log_action "Install Vite+ via $vp_url"
-        if ! $DRY_RUN; then
-            if curl -fsSL --head "$vp_url" >/dev/null 2>&1; then
-                curl -fsSL "$vp_url" | bash
-            else
-                log_warn "Vite+ install script unreachable at $vp_url — install manually: https://viteplus.dev"
-            fi
-        fi
-    fi
 }
 
 setup_zsh_environment() {
     log_section "Zsh Environment"
-    local dev_dir="${DEV_DIR:-$HOME/developer}"
+    local dev_dir="$HOME/developer"
 
     ensure_dir "$HOME/.zsh_plugins"
     ensure_dir "$dev_dir"
     ensure_dir "$HOME/.local/bin"
-    ensure_dir "$HOME/.npm-global/bin"
 
     local plugins=(
         "zsh-autosuggestions:https://github.com/zsh-users/zsh-autosuggestions"
@@ -335,18 +321,12 @@ reset_symlinks() {
         "$HOME/.gitconfig"
         "$HOME/.zshrc"
         "$HOME/.zshenv"
-        "$HOME/.zprofile"
         "$HOME/.config/ghostty/config"
         "$HOME/.config/starship.toml"
         "$HOME/Library/Application Support/Cursor/User/settings.json"
         "$HOME/Library/Application Support/Cursor/User/keybindings.json"
-        "$HOME/Library/Application Support/Cursor/User/snippets"
         "$HOME/.cursor/mcp.json"
-        "$HOME/Library/Application Support/Code/User/settings.json"
-        "$HOME/Library/Application Support/Code/User/keybindings.json"
-        "$HOME/Library/Application Support/Code/User/snippets"
         "$HOME/.claude/settings.json"
-        "$HOME/.config/gh/config.yml"
         "$HOME/.config/cheat/conf.yml"
         "$HOME/.config/cheat/cheatsheets/personal"
         "$HOME/.config/broot/conf.hjson"
@@ -384,7 +364,6 @@ link_configs() {
     # Shell and terminal configs
     ensure_symlink "$HOME/.zshrc" "$ZSH_DIR/.zshrc"
     ensure_symlink "$HOME/.zshenv" "$ZSH_DIR/.zshenv"
-    ensure_symlink "$HOME/.zprofile" "$ZSH_DIR/.zprofile"
     ensure_symlink "$HOME/.config/ghostty/config" "$CONFIG_DIR/ghostty/config"
     ensure_symlink "$HOME/.config/starship.toml" "$CONFIG_DIR/starship.toml"
 
@@ -392,7 +371,6 @@ link_configs() {
     if is_cursor_installed; then
         ensure_symlink "$HOME/Library/Application Support/Cursor/User/settings.json" "$CONFIG_DIR/cursor/settings.json"
         ensure_symlink "$HOME/Library/Application Support/Cursor/User/keybindings.json" "$CONFIG_DIR/cursor/keybindings.json"
-        ensure_symlink "$HOME/Library/Application Support/Cursor/User/snippets" "$CONFIG_DIR/cursor/snippets"
 
         local cursor_runtime="$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json"
         ensure_local_runtime_file "$cursor_runtime" "$CONFIG_DIR/cursor/mcp.example.json"
@@ -402,16 +380,8 @@ link_configs() {
         log_warn "Install Cursor manually, then rerun: ./setup/bootstrap.sh --no-brew"
     fi
 
-    # VS Code
-    ensure_symlink "$HOME/Library/Application Support/Code/User/settings.json" "$CONFIG_DIR/vscode/settings.json"
-    ensure_symlink "$HOME/Library/Application Support/Code/User/keybindings.json" "$CONFIG_DIR/vscode/keybindings.json"
-    ensure_symlink "$HOME/Library/Application Support/Code/User/snippets" "$CONFIG_DIR/vscode/snippets"
-
     # Claude Code
     ensure_symlink "$HOME/.claude/settings.json" "$CONFIG_DIR/claude-code/settings.json"
-
-    # GH
-    ensure_symlink "$HOME/.config/gh/config.yml" "$CONFIG_DIR/gh/config.yml"
 
     # Cheat
     ensure_symlink "$HOME/.config/cheat/conf.yml" "$CONFIG_DIR/cheat/conf.yml"

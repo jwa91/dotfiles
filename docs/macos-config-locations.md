@@ -5,8 +5,8 @@ Five locations where applications store configuration on macOS.
 | # | Location | Used by | Examples |
 |---|----------|---------|---------|
 | 1 | `~/.<app>` | Traditional Unix tools | `.claude/`, `.codex/`, `.gitconfig`, `.tmux.conf` |
-| 2 | `~/.config/<app>/` | XDG-aware tools | `gh/`, `ghostty/`, `cheat/` |
-| 3 | `~/Library/Application Support/<app>/` | macOS GUI apps | Cursor, VS Code, Claude Desktop |
+| 2 | `~/.config/<app>/` | XDG-aware tools | `ghostty/`, `cheat/` |
+| 3 | `~/Library/Application Support/<app>/` | macOS GUI apps | Cursor, Claude Desktop |
 | 4 | `~/Library/Preferences/` | macOS plists (`defaults write`) | Dock, Finder, keyboard repeat rate |
 | 5 | `/opt/homebrew/etc/` | Homebrew service configs | nginx, postgresql, dnsmasq |
 

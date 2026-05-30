@@ -134,9 +134,11 @@ function zshdoctor() {
 
     echo -e "🩺 ZSH Doctor - Checking your configuration...\n"
 
-    # --- Check required commands ---
-    echo -e "Checking required commands..."
-    local commands=("starship" "fzf" "git" "bun" "pnpm" "uv")
+    echo -e "Checking shell commands..."
+    local commands=(
+        brew git starship fzf tmux micro zoxide atuin
+        op jq rg
+    )
     for cmd in "${commands[@]}"; do
         if command -v "$cmd" &> /dev/null; then
             echo -e "  ${GREEN}✓${NC} $cmd"
@@ -146,9 +148,8 @@ function zshdoctor() {
         fi
     done
 
-    # --- Check optional commands ---
     echo -e "\nChecking optional commands..."
-    local optional_commands=("op" "code" "cursor")
+    local optional_commands=(amp cursor docker tailscale)
     for cmd in "${optional_commands[@]}"; do
         if command -v "$cmd" &> /dev/null; then
             echo -e "  ${GREEN}✓${NC} $cmd"
@@ -157,9 +158,11 @@ function zshdoctor() {
         fi
     done
 
-    # --- Check environment variables ---
     echo -e "\nChecking environment variables..."
-    local env_vars=("DOTFILES_DIR" "ZSH_DIR" "DEV_DIR" "ZSH_PLUGINS_DIR")
+    local env_vars=(
+        DOTFILES_DIR CONFIG_DIR GITCONFIG_DIR ZSH_DIR ZSH_PLUGINS_DIR
+        DEV_DIR VAULT_PATH STARSHIP_CONFIG EDITOR
+    )
     for var in "${env_vars[@]}"; do
         if [[ -n "${(P)var}" ]]; then
             echo -e "  ${GREEN}✓${NC} $var = ${(P)var}"
@@ -169,9 +172,11 @@ function zshdoctor() {
         fi
     done
 
-    # --- Check directories ---
     echo -e "\nChecking directories..."
-    local dirs=("$DEV_DIR" "$ZSH_PLUGINS_DIR" "$HOME/.local/bin")
+    local dirs=(
+        "$DOTFILES_DIR" "$CONFIG_DIR" "$GITCONFIG_DIR" "$ZSH_DIR"
+        "$DEV_DIR" "$ZSH_PLUGINS_DIR" "$HOME/.local/bin"
+    )
     for dir in "${dirs[@]}"; do
         if [[ -d "$dir" ]]; then
             echo -e "  ${GREEN}✓${NC} $dir"
@@ -181,9 +186,8 @@ function zshdoctor() {
         fi
     done
 
-    # --- Check ZSH plugins ---
     echo -e "\nChecking ZSH plugins..."
-    local plugins=("zsh-autosuggestions" "zsh-syntax-highlighting" "zsh-history-substring-search")
+    local plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
     for plugin in "${plugins[@]}"; do
         local plugin_path="$ZSH_PLUGINS_DIR/$plugin"
         if [[ -d "$plugin_path" ]]; then
@@ -194,22 +198,39 @@ function zshdoctor() {
         fi
     done
 
-    # --- Check symlinks ---
-    echo -e "\nChecking symlinks..."
-    local symlinks=("$HOME/.zshrc" "$HOME/.zshenv" "$HOME/.zprofile")
-    for link in "${symlinks[@]}"; do
+    echo -e "\nChecking managed links..."
+    local links=(
+        "$HOME/.zshrc:$ZSH_DIR/.zshrc"
+        "$HOME/.zshenv:$ZSH_DIR/.zshenv"
+        "$HOME/.gitconfig:$GITCONFIG_DIR/config"
+        "$HOME/.config/ghostty/config:$CONFIG_DIR/ghostty/config"
+        "$HOME/.config/starship.toml:$CONFIG_DIR/starship.toml"
+        "$HOME/.tmux.conf:$CONFIG_DIR/tmux/tmux.conf"
+    )
+    local spec link expected target
+    for spec in "${links[@]}"; do
+        link="${spec%%:*}"
+        expected="${spec#*:}"
         if [[ -L "$link" ]]; then
-            local target=$(readlink "$link")
-            echo -e "  ${GREEN}✓${NC} $link -> $target"
-        elif [[ -f "$link" ]]; then
-            echo -e "  ${YELLOW}○${NC} $link (exists but not a symlink)"
+            target=$(readlink "$link")
+            if [[ "$link" -ef "$expected" ]]; then
+                echo -e "  ${GREEN}✓${NC} $link -> $target"
+            else
+                echo -e "  ${RED}✗${NC} $link -> $target (expected $expected)"
+                has_errors=1
+            fi
+        elif [[ -e "$link" ]]; then
+            if [[ "$link" -ef "$expected" ]]; then
+                echo -e "  ${GREEN}✓${NC} $link -> $expected (via hardlink)"
+            else
+                echo -e "  ${YELLOW}○${NC} $link (exists but not a symlink)"
+            fi
         else
             echo -e "  ${RED}✗${NC} $link (does not exist)"
             has_errors=1
         fi
     done
 
-    # --- Check config files ---
     echo -e "\nChecking config files..."
     if [[ -n "$STARSHIP_CONFIG" && -f "$STARSHIP_CONFIG" ]]; then
         echo -e "  ${GREEN}✓${NC} Starship config: $STARSHIP_CONFIG"
@@ -223,7 +244,7 @@ function zshdoctor() {
         echo -e "${GREEN}✓ All checks passed!${NC}"
         return 0
     else
-        echo -e "${RED}✗ Some checks failed. Run setup.sh to fix issues.${NC}"
+        echo -e "${RED}✗ Some checks failed. Run ./setup/bootstrap.sh to fix setup issues.${NC}"
         return 1
     fi
 }

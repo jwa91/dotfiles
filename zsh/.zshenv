@@ -10,15 +10,7 @@ export ZSH_PLUGINS_DIR="$HOME/.zsh_plugins"
 # ----------------------------------------
 # External Directories
 # ----------------------------------------
-if [[ -z "${DEV_DIR:-}" || ( "$DEV_DIR" == "$HOME/Developer" && -d "$HOME/developer" ) ]]; then
-    if [[ -d "$HOME/developer" ]]; then
-        export DEV_DIR="$HOME/developer"
-    else
-        export DEV_DIR="$HOME/Developer"
-    fi
-else
-    export DEV_DIR
-fi
+export DEV_DIR="$HOME/developer"
 
 # Workspace + schema/preference roots — referenced as $WORKSPACES_DIR,
 # $SCHEMAS_DIR, $PREFERENCES_DIR from workspaces and tools. See
@@ -97,30 +89,13 @@ fi
 
 # ----------------------------------------
 # PATH modifications
-# Define tool-specific homes/paths BEFORE modifying PATH array
-export BUN_INSTALL="$HOME/.bun"
-export PNPM_HOME="$HOME/Library/pnpm"
-
-# ----------------------------------------
-# PATH modifications
 # Using Zsh 'path' array for cleaner management and duplicate prevention
 # ----------------------------------------
 typeset -U -x path
 path=(
     "$HOME/.local/bin" 
-    /opt/homebrew/opt/node/bin
     /opt/homebrew/bin
     /opt/homebrew/sbin
     /usr/local/bin
-    "$HOME/go/bin"
-    "$HOME/.npm-global/bin"
-    "$BUN_INSTALL/bin"
-    "$HOME/.antigravity/antigravity/bin"
     $path
 )
-if [[ -d "$PNPM_HOME" && "${path[(i)$PNPM_HOME]}" -gt "${#path}" ]]; then
-    path=("$PNPM_HOME" $path)
-fi
-
-# Vite+ bin (https://viteplus.dev)
-[[ -f "$HOME/.vite-plus/env" ]] && . "$HOME/.vite-plus/env"

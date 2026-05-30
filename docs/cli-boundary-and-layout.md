@@ -8,7 +8,7 @@ This document defines where logic belongs and how local repos are organized on t
   - Shell UX and navigation (`zsh/*`)
   - Machine bootstrap/linking (`setup/bootstrap.sh`)
   - Install intent (`Brewfile`)
-  - Security policy references (`docs/security-ground-rules.md`)
+  - Machine-level ADRs (`docs/adr/*`)
 - **`jwa-*` and related CLIs own**
   - Build/release/sign/notarize logic (`.goreleaser.yaml`, `scripts/*`, workflow gates)
   - Project-level doctor/align/init behavior
@@ -25,18 +25,26 @@ Rule of thumb:
 
 `DEV_DIR` is the canonical root for local code checkouts.
 
-Resolution:
-- Prefer `~/developer` when it exists.
-- Fallback to `~/Developer`.
+Resolution: `~/developer`.
 
 ## Current Family Layout (This Machine)
 
 - `~/developer/homebrew-tap`
 - `~/developer/jwa-harden`
-- `~/developer/jwa-tobrew`
 - `~/developer/agentskills`
 - `~/developer/prehandover`
 - `~/developer/vps` and `~/developer/vps/services/*`
+
+## Runtime Tooling Policy
+
+Brew is for workstation tools and apps. Language runtimes, language package
+managers, formatters, linters, and release tooling belong to projects.
+
+Project lockfiles choose the package manager: `pnpm-lock.yaml` uses `pnpm`,
+`package-lock.json` uses `npm`, and `bun.lock` uses `bun`. Python projects
+should use project-local `uv` configuration. Prefer ephemeral runners for
+one-off commands: `uvx`, `npx`, `pnpm dlx`, `bunx`, or
+`go run package@version`.
 
 `mkskill` prefers the local `agentskills` checkout at
 `$DEV_DIR/agentskills`, then falls back to the public repo URL.

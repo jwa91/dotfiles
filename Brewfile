@@ -4,7 +4,6 @@
 # ----------------------------------------
 
 # Taps
-tap "oven-sh/bun"
 tap "1password/tap"
 tap "ngrok/ngrok"
 tap "steipete/tap"
@@ -13,14 +12,13 @@ tap "protonpass/tap"
 tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
 
 # Personal tap binaries — installed in bootstrap order:
-# hardening wrapper, skill distribution, harness alignment, tap publisher.
+# hardening wrapper, skill distribution, harness alignment.
 # All are signed + notarized Casks as of tap v0.4.1.
 # (ADR 0008 in jwa91/homebrew-tap: every Go CLI in the family ships as
 # a Homebrew Cask via goreleaser's homebrew_casks: block).
 cask "jwa-harden"
 cask "agentskills"
 cask "prehandover"
-cask "jwa-tobrew"
 
 # Core CLI tools
 brew "git"
@@ -30,9 +28,6 @@ brew "fzf"
 brew "shellcheck"
 brew "prek"
 brew "gitleaks"
-brew "golangci-lint"
-brew "goreleaser"
-brew "gh"
 brew "forgejo-cli-plus"
 brew "tree"
 brew "cheat"
@@ -45,20 +40,12 @@ brew "coreutils"
 brew "broot"
 brew "zoxide"
 brew "atuin"
-brew "biome"
-brew "marksman"
 brew "hcloud"
 brew "gnupg"
 brew "pinentry-mac"
 brew "protonpass/tap/pass-cli"
 
-# Languages & runtimes
-brew "bun"
-brew "node"
-brew "pnpm"
-brew "uv"
-brew "go"
-brew "odin"
+# Local model runtime
 brew "ollama"
 
 # Fonts

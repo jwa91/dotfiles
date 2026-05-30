@@ -14,9 +14,6 @@ source "$FUNCTIONS_DIR/nextjs-functions.zsh"
 # Agent skills functions
 source "$FUNCTIONS_DIR/agentskills-functions.zsh"
 
-# Claude Code bot (ccbot) — Telegram channel sessions
-source "$FUNCTIONS_DIR/ccbot-functions.zsh"
-
 # Tmux session bookmarks and picker (tpick)
 source "$CONFIG_DIR/tmux/tmux-bookmarks.zsh"
 
