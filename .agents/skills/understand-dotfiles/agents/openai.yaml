@@ -1,4 +1,0 @@
-interface:
-  display_name: "Understand Dotfiles"
-  short_description: "Explain setup flow, linking, and dotfiles behavior"
-  default_prompt: "Use $understand-dotfiles to audit this repo's setup flow, drift points, and concrete next fixes."

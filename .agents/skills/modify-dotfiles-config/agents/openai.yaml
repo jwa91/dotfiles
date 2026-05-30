@@ -1,4 +1,0 @@
-interface:
-  display_name: "Modify Dotfiles Config"
-  short_description: "Edit app config and linking logic with safety checks"
-  default_prompt: "Use $modify-dotfiles-config to change bootstrap/config linking safely and validate with dry-run checks."
