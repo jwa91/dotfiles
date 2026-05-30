@@ -2,5 +2,18 @@
 # Global gitignore (~/.gitconfig core.excludesfile)
 # ----------------------------------------
 
-# Claude Code worktrees
-.claude/worktrees/
+# macOS Finder metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# Local worktree directories
+.worktrees/
+.git-worktrees/
+
+# Claude Code local runtime state
+.claude/settings.local.json

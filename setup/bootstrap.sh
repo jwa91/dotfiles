@@ -1,417 +1,159 @@
 #!/usr/bin/env bash
-# ----------------------------------------
-# File: setup/bootstrap.sh
-# Description: Canonical dotfiles bootstrap entrypoint (v2)
-# Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link]
-# ----------------------------------------
+# Canonical dotfiles bootstrap entrypoint.
 
 set -euo pipefail
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+LIB_DIR="$SCRIPT_DIR/lib"
 
 DRY_RUN=false
 SKIP_BREW=false
 SKIP_LINK=false
 RESET_LINKS=false
 UPDATE_PLUGINS=false
+ALLOW_EMPTY_RUNTIME=false
+ONLY_TARGET="all"
 
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --dry-run)
-            DRY_RUN=true
+# shellcheck source=setup/lib/logging.sh
+source "$LIB_DIR/logging.sh"
+# shellcheck source=setup/lib/paths.sh
+source "$LIB_DIR/paths.sh"
+# shellcheck source=setup/lib/runtime.sh
+source "$LIB_DIR/runtime.sh"
+# shellcheck source=setup/lib/links.sh
+source "$LIB_DIR/links.sh"
+# shellcheck source=setup/lib/brew.sh
+source "$LIB_DIR/brew.sh"
+# shellcheck source=setup/lib/zsh.sh
+source "$LIB_DIR/zsh.sh"
+# shellcheck source=setup/lib/manual.sh
+source "$LIB_DIR/manual.sh"
+# shellcheck source=setup/lib/doctor.sh
+source "$LIB_DIR/doctor.sh"
+
+usage() {
+    cat <<'EOF'
+Usage: ./setup/bootstrap.sh [options]
+
+Options:
+  --dry-run              Print actions without changing files
+  --no-brew              Skip Homebrew and non-Homebrew installs
+  --no-link              Skip config linking
+  --reset                Remove managed symlinks before linking
+  --update               Update zsh plugins with git pull --ff-only
+  --only <target>        Run one target: all, brew, standalone, zsh, manual, runtime, links, doctor
+  --check                Alias for --only doctor
+  --allow-empty-runtime  Create empty runtime files when a seed example is missing
+  -h, --help             Show this help
+EOF
+}
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --dry-run)
+                DRY_RUN=true
+                ;;
+            --no-brew)
+                SKIP_BREW=true
+                ;;
+            --no-link)
+                SKIP_LINK=true
+                ;;
+            --reset)
+                RESET_LINKS=true
+                ;;
+            --update)
+                UPDATE_PLUGINS=true
+                ;;
+            --only)
+                if [[ $# -lt 2 ]]; then
+                    log_error "--only requires a target"
+                    usage
+                    exit 1
+                fi
+                ONLY_TARGET="$2"
+                shift
+                ;;
+            --check)
+                ONLY_TARGET="doctor"
+                ;;
+            --allow-empty-runtime)
+                ALLOW_EMPTY_RUNTIME=true
+                ;;
+            -h|--help)
+                usage
+                exit 0
+                ;;
+            *)
+                log_error "Unknown option '$1'"
+                usage
+                exit 1
+                ;;
+        esac
+        shift
+    done
+}
+
+run_target() {
+    case "$ONLY_TARGET" in
+        all)
+            preflight
+            ensure_homebrew_and_git
+            install_brew_bundle
+            install_standalone_tools
+            setup_zsh_environment
+            print_manual_install_checklist
+            link_configs
             ;;
-        --no-brew)
-            SKIP_BREW=true
+        brew)
+            preflight
+            ensure_homebrew_and_git
+            install_brew_bundle
             ;;
-        --no-link)
-            SKIP_LINK=true
+        standalone)
+            preflight
+            install_standalone_tools
             ;;
-        --reset)
-            RESET_LINKS=true
+        zsh)
+            preflight
+            setup_zsh_environment
             ;;
-        --update)
-            UPDATE_PLUGINS=true
+        manual)
+            print_manual_install_checklist
             ;;
-        -h|--help)
-            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset] [--update]"
-            exit 0
+        runtime)
+            preflight
+            ensure_runtime_files
+            ;;
+        links)
+            preflight
+            link_configs
+            ;;
+        doctor)
+            doctor
             ;;
         *)
-            echo -e "${RED}Error:${NC} Unknown option '$1'"
-            echo "Usage: ./setup/bootstrap.sh [--dry-run] [--no-brew] [--no-link] [--reset] [--update]"
+            log_error "Unknown --only target '$ONLY_TARGET'"
+            usage
             exit 1
             ;;
     esac
-    shift
-done
-
-log_section() { echo -e "\n${BLUE}━━━ $1 ━━━${NC}"; }
-log_skip() { echo -e "${GREEN}✓ SKIP:${NC} $1"; }
-log_action() {
-    if $DRY_RUN; then
-        echo -e "${YELLOW}○ WOULD:${NC} $1"
-    else
-        echo -e "${YELLOW}→ ACTION:${NC} $1"
-    fi
-}
-log_warn() { echo -e "${YELLOW}⚠ WARN:${NC} $1"; }
-log_error() { echo -e "${RED}✗ ERROR:${NC} $1"; }
-
-run_cmd() {
-    if $DRY_RUN; then
-        echo -e "${YELLOW}○ WOULD:${NC} $*"
-    else
-        "$@"
-    fi
-}
-
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-ZSH_DIR="$DOTFILES_DIR/zsh"
-CONFIG_DIR="$DOTFILES_DIR/config"
-BREWFILE="$DOTFILES_DIR/Brewfile"
-MANUAL_INSTALLS_FILE="$DOTFILES_DIR/setup/manual-installs.txt"
-DOTFILES_LOCAL_CONFIG_DIR="${DOTFILES_LOCAL_CONFIG_DIR:-$HOME/.config/dotfiles-local}"
-
-ensure_dir() {
-    local path="$1"
-    if [[ -d "$path" ]]; then
-        log_skip "$path"
-    else
-        log_action "Create directory $path"
-        run_cmd mkdir -p "$path"
-    fi
-}
-
-conflict_error() {
-    local target="$1"
-    local source="$2"
-    local backup_path
-
-    backup_path="${target}.backup.$(date +%Y%m%d%H%M%S)"
-
-    log_error "Target exists and is not a symlink: $target"
-    echo ""
-    echo "Resolve conflict with:"
-    echo "  mv \"$target\" \"$backup_path\""
-    echo "  ln -s \"$source\" \"$target\""
-    echo ""
-    echo "Then rerun: ./setup/bootstrap.sh"
-    exit 1
-}
-
-ensure_symlink() {
-    local target="$1"
-    local source="$2"
-    local parent_dir
-
-    parent_dir="$(dirname "$target")"
-    if [[ ! -d "$parent_dir" ]]; then
-        log_action "Create directory $parent_dir"
-        run_cmd mkdir -p "$parent_dir"
-    fi
-
-    if [[ -L "$target" ]]; then
-        if [[ "$target" -ef "$source" ]]; then
-            log_skip "$target -> $source"
-        else
-            log_action "Update symlink $target -> $source"
-            run_cmd ln -sfn "$source" "$target"
-        fi
-    elif [[ -e "$target" ]]; then
-        if [[ "$target" -ef "$source" ]]; then
-            log_skip "$target -> $source (via hardlink)"
-        else
-            conflict_error "$target" "$source"
-        fi
-    else
-        log_action "Create symlink $target -> $source"
-        run_cmd ln -s "$source" "$target"
-    fi
-}
-
-ensure_local_runtime_file() {
-    local runtime_file="$1"
-    local example_file="$2"
-    local runtime_dir
-
-    runtime_dir="$(dirname "$runtime_file")"
-    if [[ ! -d "$runtime_dir" ]]; then
-        log_action "Create directory $runtime_dir"
-        run_cmd mkdir -p "$runtime_dir"
-    fi
-
-    if [[ ! -f "$runtime_file" ]]; then
-        if [[ -f "$example_file" ]]; then
-            log_action "Initialize $runtime_file from $example_file"
-            run_cmd cp "$example_file" "$runtime_file"
-            log_warn "Review $runtime_file and fill local values before use"
-        else
-            log_action "Create empty runtime config $runtime_file"
-            run_cmd touch "$runtime_file"
-            log_warn "Populate $runtime_file before use"
-        fi
-    else
-        log_skip "$runtime_file"
-    fi
-}
-
-is_cursor_installed() {
-    if command -v cursor >/dev/null 2>&1; then
-        return 0
-    fi
-
-    if [[ -d "/Applications/Cursor.app" || -d "$HOME/Applications/Cursor.app" ]]; then
-        return 0
-    fi
-
-    return 1
-}
-
-print_manual_install_checklist() {
-    log_section "Manual Install Checklist"
-
-    if [[ ! -f "$MANUAL_INSTALLS_FILE" ]]; then
-        log_skip "No manual install checklist found at $MANUAL_INSTALLS_FILE"
-        return
-    fi
-
-    log_warn "The following tools are managed outside Homebrew:"
-    while IFS= read -r line; do
-        if [[ "$line" =~ ^-[[:space:]]+(.+) ]]; then
-            echo "  - ${BASH_REMATCH[1]}"
-        fi
-    done < "$MANUAL_INSTALLS_FILE"
-
-    echo "  -> Details: $MANUAL_INSTALLS_FILE"
-}
-
-preflight() {
-    log_section "Preflight"
-
-    if [[ "$(uname -s)" != "Darwin" ]]; then
-        log_error "This bootstrap currently supports macOS only."
-        exit 1
-    fi
-
-    for required in "$BREWFILE" "$ZSH_DIR/.zshrc" "$ZSH_DIR/.zshenv" "$CONFIG_DIR"; do
-        if [[ ! -e "$required" ]]; then
-            log_error "Required path missing: $required"
-            exit 1
-        fi
-    done
-
-    log_skip "Repository root: $DOTFILES_DIR"
-    log_skip "Brewfile: $BREWFILE"
-}
-
-ensure_homebrew_and_git() {
-    log_section "Tooling Prerequisites"
-
-    if command -v brew >/dev/null 2>&1; then
-        log_skip "Homebrew"
-    else
-        if $SKIP_BREW; then
-            log_error "Homebrew is missing and --no-brew was set."
-            exit 1
-        fi
-
-        log_action "Install Homebrew"
-        run_cmd /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-        if ! $DRY_RUN; then
-            if [[ -x /opt/homebrew/bin/brew ]]; then
-                eval "$(/opt/homebrew/bin/brew shellenv)"
-            elif [[ -x /usr/local/bin/brew ]]; then
-                eval "$(/usr/local/bin/brew shellenv)"
-            fi
-        fi
-    fi
-
-    if command -v git >/dev/null 2>&1; then
-        log_skip "Git"
-    else
-        if $SKIP_BREW; then
-            log_error "Git is missing and --no-brew was set."
-            exit 1
-        fi
-        log_action "Install git via Homebrew"
-        run_cmd brew install git
-    fi
-}
-
-install_brew_bundle() {
-    log_section "Homebrew Bundle"
-
-    if $SKIP_BREW; then
-        log_skip "brew bundle step (--no-brew)"
-        return
-    fi
-
-    log_action "Run brew bundle --file=$BREWFILE"
-    run_cmd brew bundle --file="$BREWFILE"
-}
-
-install_standalone_tools() {
-    log_section "Standalone Tools (non-Homebrew)"
-
-    if $SKIP_BREW; then
-        log_skip "standalone tools step (--no-brew)"
-        return
-    fi
-
-    # Amp (Sourcegraph) — https://ampcode.com
-    if command -v amp >/dev/null 2>&1; then
-        log_skip "amp (already installed)"
-    else
-        local amp_url="https://ampcode.com/install.sh"
-        log_action "Install amp via $amp_url"
-        if ! $DRY_RUN; then
-            if curl -fsSL --head "$amp_url" >/dev/null 2>&1; then
-                curl -fsSL "$amp_url" | bash
-            else
-                log_warn "amp install script unreachable at $amp_url — install manually: https://ampcode.com"
-            fi
-        fi
-    fi
-}
-
-setup_zsh_environment() {
-    log_section "Zsh Environment"
-    local dev_dir="$HOME/developer"
-
-    ensure_dir "$HOME/.zsh_plugins"
-    ensure_dir "$dev_dir"
-    ensure_dir "$HOME/.local/bin"
-
-    local plugins=(
-        "zsh-autosuggestions:https://github.com/zsh-users/zsh-autosuggestions"
-        "zsh-syntax-highlighting:https://github.com/zsh-users/zsh-syntax-highlighting"
-    )
-
-    local plugin
-    for plugin in "${plugins[@]}"; do
-        local name="${plugin%%:*}"
-        local url="${plugin#*:}"
-        local path="$HOME/.zsh_plugins/$name"
-
-        if [[ -d "$path" ]]; then
-            if $UPDATE_PLUGINS; then
-                log_action "Update $name"
-                run_cmd git -C "$path" pull --ff-only
-            else
-                log_skip "$path"
-            fi
-        else
-            log_action "Clone $name"
-            run_cmd git clone --depth 1 "$url" "$path"
-        fi
-    done
-}
-
-reset_symlinks() {
-    log_section "Reset Symlinks"
-
-    local targets=(
-        "$HOME/.gitconfig"
-        "$HOME/.zshrc"
-        "$HOME/.zshenv"
-        "$HOME/.config/ghostty/config"
-        "$HOME/.config/starship.toml"
-        "$HOME/Library/Application Support/Cursor/User/settings.json"
-        "$HOME/Library/Application Support/Cursor/User/keybindings.json"
-        "$HOME/.cursor/mcp.json"
-        "$HOME/.claude/settings.json"
-        "$HOME/.config/cheat/conf.yml"
-        "$HOME/.config/cheat/cheatsheets/personal"
-        "$HOME/.config/broot/conf.hjson"
-        "$HOME/.config/broot/verbs.hjson"
-        "$HOME/.config/atuin/config.toml"
-        "$HOME/.tmux.conf"
-    )
-
-    for target in "${targets[@]}"; do
-        if [[ -L "$target" ]]; then
-            log_action "Remove symlink $target"
-            run_cmd rm "$target"
-        elif [[ -e "$target" ]]; then
-            log_skip "$target (not a symlink, leaving alone)"
-        fi
-    done
-}
-
-link_configs() {
-    log_section "Link Dotfiles & App Configs"
-
-    if $SKIP_LINK; then
-        log_skip "linking step (--no-link)"
-        return
-    fi
-
-    if $RESET_LINKS; then
-        reset_symlinks
-    fi
-
-    # Git
-    ensure_symlink "$HOME/.gitconfig" "$DOTFILES_DIR/git/config"
-    ensure_local_runtime_file "$HOME/.gitconfig.local" "$DOTFILES_DIR/git/config.local.example"
-
-    # Shell and terminal configs
-    ensure_symlink "$HOME/.zshrc" "$ZSH_DIR/.zshrc"
-    ensure_symlink "$HOME/.zshenv" "$ZSH_DIR/.zshenv"
-    ensure_symlink "$HOME/.config/ghostty/config" "$CONFIG_DIR/ghostty/config"
-    ensure_symlink "$HOME/.config/starship.toml" "$CONFIG_DIR/starship.toml"
-
-    # Cursor (manual install in v2)
-    if is_cursor_installed; then
-        ensure_symlink "$HOME/Library/Application Support/Cursor/User/settings.json" "$CONFIG_DIR/cursor/settings.json"
-        ensure_symlink "$HOME/Library/Application Support/Cursor/User/keybindings.json" "$CONFIG_DIR/cursor/keybindings.json"
-
-        local cursor_runtime="$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json"
-        ensure_local_runtime_file "$cursor_runtime" "$CONFIG_DIR/cursor/mcp.example.json"
-        ensure_symlink "$HOME/.cursor/mcp.json" "$cursor_runtime"
-    else
-        log_warn "Cursor not detected; skipping Cursor config links for now"
-        log_warn "Install Cursor manually, then rerun: ./setup/bootstrap.sh --no-brew"
-    fi
-
-    # Claude Code
-    ensure_symlink "$HOME/.claude/settings.json" "$CONFIG_DIR/claude-code/settings.json"
-
-    # Cheat
-    ensure_symlink "$HOME/.config/cheat/conf.yml" "$CONFIG_DIR/cheat/conf.yml"
-    ensure_symlink "$HOME/.config/cheat/cheatsheets/personal" "$CONFIG_DIR/cheat/cheatsheets"
-
-    # Broot
-    ensure_symlink "$HOME/.config/broot/conf.hjson" "$CONFIG_DIR/broot/conf.hjson"
-    ensure_symlink "$HOME/.config/broot/verbs.hjson" "$CONFIG_DIR/broot/verbs.hjson"
-
-    # Atuin
-    ensure_symlink "$HOME/.config/atuin/config.toml" "$CONFIG_DIR/atuin/config.toml"
-
-    # tmux
-    ensure_symlink "$HOME/.tmux.conf" "$CONFIG_DIR/tmux/tmux.conf"
 }
 
 main() {
+    parse_args "$@"
+
     if $DRY_RUN; then
-        echo -e "${BLUE}🔍 DRY RUN MODE - No changes will be made${NC}"
+        log_section "Dry Run Mode"
+        log_skip "No changes will be made"
     fi
 
-    preflight
-    ensure_homebrew_and_git
-    install_brew_bundle
-    install_standalone_tools
-    setup_zsh_environment
-    print_manual_install_checklist
-    link_configs
+    run_target
 
     log_section "Complete"
-    echo -e "${GREEN}✓ Bootstrap finished${NC}"
+    log_skip "Bootstrap target '$ONLY_TARGET' finished"
 }
 
 main "$@"

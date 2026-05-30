@@ -1,10 +1,10 @@
-# Machine-local Git config loaded by ~/dotfiles/git/config.
-# Keep device-specific signing keys and platform-specific signer paths here.
+# Machine-local Git configuration loaded by ~/.gitconfig.
+# Keep device-specific signing keys and signer paths here.
 #
-# Example:
+# Example: 1Password SSH signing
 #
 # [user]
-#     signingkey = ssh-ed25519 REPLACE_WITH_PUBLIC_SIGNING_KEY
+#     signingKey = ssh-ed25519 REPLACE_WITH_PUBLIC_SIGNING_KEY
 #
 # [commit]
 #     gpgsign = true
@@ -14,4 +14,4 @@
 #
 # [gpg "ssh"]
 #     program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-#     allowedSignersFile = ~/dotfiles/git/allowed_signers
+#     allowedSignersFile = ~/.config/git/allowed_signers
