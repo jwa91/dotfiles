@@ -1,76 +1,52 @@
 # Dotfiles
 
-My personal macOS configuration and setup automation.
+Personal macOS dotfiles for my workstation setup.
 
-## What This Is
+The current direction is clearer ownership:
 
-A complete, reproducible system for setting up a new MacBook from scratch. Created primarily to eliminate the pain of manual configuration when migrating machines.
-
-Current major release: **v2**.
+- Brew manages workstation tools and selected apps.
+- Active language runtimes, package managers, formatters, linters, and release tools are owned by projects, not installed globally by bootstrap.
+- This repo may still keep reusable project defaults, templates, and reference configs, but bootstrap should not install or link them globally by default.
+- GitHub and self-hosted Forgejo are both first-class git hosts for my own work.
+- Bootstrap should create the current machine shape, not preserve a log of old repo decisions.
 
 ## Quick Start
 
-**Full setup guide for v1:** [janwillemaltink.com/writings/new-macbook-guide](https://janwillemaltink.com/writings/new-macbook-guide/)
-
-**New Mac setup:**
-
 ```bash
-# 1. Install Xcode CLI tools (required before anything else)
 xcode-select --install
-
-# 2. Clone this repo (uses HTTPS — SSH keys aren't set up yet)
 git clone https://github.com/jwa91/dotfiles.git ~/dotfiles
-
-# 3. Run bootstrap (installs Homebrew, all packages, links configs)
 cd ~/dotfiles
 ./setup/bootstrap.sh
-
-# 4. Install manual apps (see list printed by bootstrap, or:)
-cat ./setup/manual-installs.txt
-
-# 5. After installing manual apps, relink their configs
-./setup/bootstrap.sh --no-brew
 ```
 
-Bootstrap flags:
+Useful bootstrap modes:
 
 ```bash
-./setup/bootstrap.sh              # Full setup
-./setup/bootstrap.sh --dry-run    # Preview without changes
-./setup/bootstrap.sh --no-brew    # Skip Homebrew (relink only)
-./setup/bootstrap.sh --no-link    # Skip symlinks (brew only)
+./setup/bootstrap.sh --dry-run
+./setup/bootstrap.sh --no-brew
+./setup/bootstrap.sh --no-link
+./setup/bootstrap.sh --reset
+./setup/bootstrap.sh --update
 ```
 
-Bootstrap will print a checklist of manual installs and skip Cursor config linking until Cursor is detected.
+Bootstrap installs Homebrew if needed, applies the root `Brewfile`, links managed config files, and prints the manual install checklist from `setup/manual-installs.txt`.
 
-## What's Included
+## Managed Shape
 
-- **Brewfile**: Workstation package manifest — CLI tools, casks, fonts
-- **Shell**: Zsh with Starship prompt, FZF, curated plugins
-- **Git**: Global config with commit templates and conventional commit enforcement
-- **Terminal**: Ghostty configuration with terminal-aware editor routing
-- **Tmux**: Session bookmarks, project layouts, and interactive picker
-- **AI tools**: Settings for Claude Code (config files only — agent resources live elsewhere)
-- **Apps**: Cursor and selected app configs with symlinked settings
-- **Manual installs**: Checklist for tools outside Homebrew (1Password, Cursor, Docker, Xcode, etc.)
-- **Security**: 1Password-based SSH agent and secret-safe config model
-
-## Structure
-
-```
+```text
 dotfiles/
-├── Brewfile                    # Workstation package manifest
-├── CHANGELOG.md
-├── README.md
+├── Brewfile
 ├── setup/
-│   ├── bootstrap.sh            # Main setup entrypoint
-│   └── manual-installs.txt     # Tools outside Homebrew
-├── git/                        # Git configuration
+│   ├── bootstrap.sh
+│   └── manual-installs.txt
+├── hooks/
+│   └── pre-push-main-guard.sh
+├── git/
 │   ├── config
 │   ├── commit_template.txt
 │   └── ignore
-├── zsh/                        # Shell configuration
-│   ├── .zshenv                 # PATH, env vars, terminal detection
+├── zsh/
+│   ├── .zshenv
 │   ├── .zshrc
 │   ├── aliases.zsh
 │   ├── completions.zsh
@@ -79,81 +55,104 @@ dotfiles/
 │   ├── plugins.zsh
 │   ├── prompt.zsh
 │   └── zsh-functions/
-├── config/                     # Application configs
+├── config/
+│   ├── atuin/
+│   ├── broot/
+│   ├── cheat/
+│   ├── claude-code/
+│   ├── cursor/
 │   ├── ghostty/
 │   ├── tmux/
 │   ├── starship.toml
-│   ├── starship-mobile.toml
-│   ├── cursor/
-│   ├── claude-code/            # settings.json only
-│   └── cheat/
-├── docs/                       # Reference documentation
-└── .agents/skills/             # Agent skills for working on this repo
-    ├── understand-dotfiles/
-    ├── modify-dotfiles-config/
-    ├── modify-dotfiles-zsh/
-    └── install-software/
+│   └── starship-mobile.toml
+├── docs/adr/
+├── templates/                  # Optional project defaults and grab-ready config snippets
+└── .agents/skills/
 ```
 
-Skills are stored in `.agents/skills/` and symlinked into `.claude/skills/` so Claude Code picks them up. They teach agents how this repo works — setup flow, symlink behavior, naming conventions, and package management rules.
+## Package Policy
 
-## Naming Conventions
+The `Brewfile` is a workstation manifest. It should contain tools and apps that make the laptop usable across projects.
 
-All aliases and functions follow: **action prefix + shortest target, mashed together** (no hyphens or underscores). Private helpers start with `_`.
+Keep in Brew:
 
-| Prefix | Action                    | Examples                                         |
-| ------ | ------------------------- | ------------------------------------------------ |
-| `mk`   | make/create/generate      | `mkpass`, `mkskill`                              |
-| `e`    | edit/open in editor       | `ezsh`, `edots`, `evault`, `edev`                |
-| `cd`   | navigate to directory     | `cdd`, `cdzsh`, `cddots`, `cdvault`              |
-| `t`    | tmux operation            | `tmain`, `tls`                                   |
-| `py`   | python                    | `pyclean`                                        |
-| —      | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
+- Shell/workstation tools: `git`, `tmux`, `starship`, `fzf`, `ripgrep`, `jq`, `shellcheck`, `gitleaks`, `prek`
+- Navigation/history tools: `zoxide`, `atuin`, `broot`, `cheat`
+- Git host tools that match the real setup, including Forgejo tooling
+- Selected apps and fonts that are genuinely part of the workstation baseline
 
-When adding new commands: pick the action prefix first, then the shortest unambiguous target. If an `e` variant exists, add a matching `cd` variant.
+Keep out of Brew by default:
 
-## Local Repo Layout
+- Language runtimes and package managers such as Node, pnpm, Bun, uv, Go, Rust/Cargo
+- Project formatters, linters, release tools, and framework helpers
+- One-off apps and services that are easy to reinstall when needed
 
-- `DEV_DIR` is the canonical root for local source checkouts: `~/developer`.
-- `mkskill` prefers a local `agentskills` checkout at `$DEV_DIR/agentskills` and falls back to the public GitHub repo when no local checkout exists.
+Keeping something out of Brew does not mean it is banned from this repo. A Ruff,
+Biome, GitHub Actions, Forgejo Actions, or language-specific default can live
+here as a passive template if it is useful to copy into a project. The boundary
+is automatic ownership: Brew/bootstrap should not make that tooling global or
+active unless it is genuinely workstation-level.
 
-## Runtime Tooling
+Project lockfiles choose package managers: `pnpm-lock.yaml` means `pnpm`, `package-lock.json` means `npm`, and `bun.lock` means `bun`. Python projects should carry their own `uv` setup. Prefer ephemeral runners for one-off commands: `uvx`, `npx`, `pnpm dlx`, `bunx`, or `go run package@version`.
 
-Brew manages workstation tools and apps. Language runtimes, package managers,
-formatters, linters, and release tooling are project concerns.
+## Git Hosting
 
-Project lockfiles choose the package manager: `pnpm-lock.yaml` uses `pnpm`,
-`package-lock.json` uses `npm`, and `bun.lock` uses `bun`. Python projects
-should use project-local `uv` configuration. One-off commands should prefer
-ephemeral runners such as `uvx`, `npx`, `pnpm dlx`, `bunx`, or
-`go run package@version`.
+Do not assume new self-built projects live on GitHub. Some projects live on self-hosted Forgejo, and Forgejo is equal to GitHub for this machine's git workflow.
 
-## Philosophy
+The Codeberg-hosted tap for `forgejo-cli-plus` is intentional:
 
-- **Reproducible**: Complete automation from a clean macOS install
-- **Modular**: Each component is independent
-- **Secure**: with 1Password for SSH
-- **Workstation tooling**: Starship, Ghostty, tmux, fzf, and focused CLI tools
+```ruby
+tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
+```
+
+That explicit URL is required because normal Homebrew tap shorthand assumes GitHub.
+
+## Shell Commands
+
+Aliases and functions use action prefix plus the shortest clear target, mashed together.
+
+| Prefix | Action | Examples |
+| --- | --- | --- |
+| `mk` | make/create | `mkpass`, `mkskill` |
+| `e` | edit/open | `ezsh`, `edots`, `evault`, `edev` |
+| `cd` | navigate | `cdd`, `cdzsh`, `cddots`, `cdvault` |
+| `t` | tmux | `tmain`, `tls` |
+| `py` | python | `pyclean` |
+
+When adding or removing shell commands, keep `config/cheat/cheatsheets/zsh` in sync.
 
 ## Config Boundary
 
-This repo manages **classic config files only** — settings, preferences, keybindings. Things like agent skills, instructions (AGENTS.md, CLAUDE.md), commands, and rules are agent resources and belong in a dedicated AI repo, not here.
+This repo has two kinds of content:
 
-For CLI-family ownership and local repo layout conventions, see
-`docs/cli-boundary-and-layout.md`.
+- **Active machine config**: shell, git, terminal, selected editor settings, selected CLI/app config, and bootstrap behavior.
+- **Passive project material**: templates, example configs, and reference defaults that can be copied into projects when needed.
 
-Auth tokens and secrets stay in their default home directory locations (e.g. `~/.codex/auth.json`, `~/.claude.json`) and are never symlinked or tracked. See `docs/macos-config-locations.md` for a reference of where macOS apps store config.
+Only active machine config should be linked by bootstrap. Passive project material should stay opt-in by being copied or selected explicitly.
 
-Local commit protection is enabled with `prek` + `gitleaks`:
-- `prek install`
-- `prek run --all-files`
+Runtime auth files and secrets stay in their app-owned locations and are never tracked. Examples include `~/.codex/auth.json`, `~/.claude.json`, local MCP config, package-manager auth files, and anything containing tokens.
 
-## Versioning
+Agent skills in `.agents/skills/` are part of this repo because they teach agents how to modify this repo safely.
 
-- Baseline snapshot is tagged `v1.0.0`.
-- Major setup refactor is tagged `v2.0.0`.
-- New releases follow semantic versioning and are recorded in `CHANGELOG.md`.
+## Validation
+
+Common checks:
+
+```bash
+bash -n setup/bootstrap.sh
+zsh -n zsh/.zshenv zsh/.zshrc zsh/*.zsh zsh/zsh-functions/*.zsh
+shellcheck setup/bootstrap.sh hooks/pre-push-main-guard.sh
+./setup/bootstrap.sh --dry-run --no-brew
+brew bundle check --file Brewfile
+```
+
+Local commit protection is managed by `prek.toml`:
+
+```bash
+prek install
+prek run --all-files
+```
 
 ## License
 
-MIT — Use freely, but this is tailored to my specific workflow.
+MIT. This repo is public but tuned to my machine and workflow.

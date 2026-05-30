@@ -22,7 +22,7 @@ repo = "local"
 [[repos.hooks]]
 id = "require-tag-and-changelog"
 name = "Require version tag and changelog entry on push to main"
-entry = "setup/hooks/pre-push-main-guard.sh"
+entry = "hooks/pre-push-main-guard.sh"
 language = "script"
 always_run = true
 pass_filenames = false

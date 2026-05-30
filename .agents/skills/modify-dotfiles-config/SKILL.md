@@ -19,6 +19,8 @@ description: Safely modify app config and setup/linking behavior in this reposit
 - Keep secret-bearing runtime files outside tracked templates.
 - Fail fast on unsafe target conflicts.
 - Preserve deterministic linking paths and bootstrap order.
+- Distinguish active machine ownership from passive templates. Keeping a tool out of Brew/bootstrap does not mean its reusable project config must be removed from the repo.
+- Treat Forgejo as a first-class git host in this setup; do not remove Forgejo or Codeberg tap tooling merely because it is not GitHub-hosted.
 - If Python tooling is needed, use `uv run --with ...` instead of global `pip install`.
 
 ## Validation

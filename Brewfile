@@ -5,7 +5,6 @@
 
 # Taps
 tap "1password/tap"
-tap "ngrok/ngrok"
 tap "steipete/tap"
 tap "jwa91/tap"
 tap "protonpass/tap"
@@ -45,9 +44,6 @@ brew "gnupg"
 brew "pinentry-mac"
 brew "protonpass/tap/pass-cli"
 
-# Local model runtime
-brew "ollama"
-
 # Fonts
 cask "font-jetbrains-mono-nerd-font"
 
@@ -65,11 +61,8 @@ cask "codexbar"
 cask "1password-cli"
 cask "raycast"
 cask "hiddenbar"
-cask "brave-browser"
-cask "cleanmymac"
 cask "google-chrome@dev"
 cask "helium-browser"
-cask "ngrok"
 cask "obsidian"
 cask "spotify"
 cask "stats"

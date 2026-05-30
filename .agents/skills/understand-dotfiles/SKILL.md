@@ -20,5 +20,7 @@ description: Analyze this dotfiles repository and explain setup flow, symlink be
 
 ## Guardrails
 - Never recommend storing secrets in tracked files.
+- Separate active setup from passive reference material: Brew/bootstrap ownership should stay lean, while grab-ready project templates can still belong in the repo.
+- Treat GitHub and self-hosted Forgejo as normal git hosts for this machine; non-GitHub taps or remotes are not suspicious by default.
 - Prefer deterministic checks and explicit commands.
 - If Python tooling is needed, use `uv run --with ...` instead of global `pip install`.

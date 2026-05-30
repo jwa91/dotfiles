@@ -20,10 +20,10 @@ All aliases and functions use: **action prefix + shortest target, mashed** (no h
 
 | Prefix | Action | Examples |
 |--------|--------|----------|
-| `mk` | make/create | `mkpass`, `mkroute`, `mkskill` |
+| `mk` | make/create | `mkpass`, `mkskill` |
 | `e` | edit/open | `ezsh`, `edots`, `evault`, `edev` |
 | `cd` | navigate | `cdd`, `cdzsh`, `cddots`, `cdvault` |
-| `t` | tmux | `tmain`, `tls`, `tpick` |
+| `t` | tmux | `tmain`, `tls` |
 | `py` | python | `pyclean` |
 
 When `e` and `cd` target the same directory, both variants must exist. Standalone names (no prefix) are allowed when the name is already unambiguous (`reload`, `key`, `rwe`).

@@ -78,7 +78,6 @@ config/configstore/
 config/pnpm/
 
 # --- Personal Notes ---
-TODO.md
 drafts/06-as-is-machine-analysis.md
 
 # --- Other ---
