@@ -9,8 +9,7 @@
 # Currently using Starship for the prompt.
 # ----------------------------------------
 
-# Initialize Starship once per shell — reload must not re-wrap zle-keymap-select
-# (breaks vi mode; see starship/starship#3418)
+# Initialize Starship once per shell; reload should not stack prompt hooks.
 if [[ -z "${STARSHIP_SHELL:-}" ]]; then
     eval "$(starship init zsh)"
 fi

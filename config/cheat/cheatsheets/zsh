@@ -30,11 +30,9 @@ ls                        # ls -FaG (colorized, all, classify)
 # Tmux (t + action)
 tmain                     # Attach or create 'main' tmux session
 tls                       # List tmux sessions
-tpick [--mobile]          # Interactive tmux session picker (fzf)
 
 # Make (mk + thing)
 mkpass                    # Generate random password -> clipboard
-mkroute <path>            # Create Next.js App Router route structure
 mkskill [name]            # Install/list skills (prefers local $DEV_DIR/agentskills)
 
 # Brew

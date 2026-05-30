@@ -187,7 +187,7 @@ function zshdoctor() {
     done
 
     echo -e "\nChecking ZSH plugins..."
-    local plugins=(zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    local plugins=(zsh-autosuggestions zsh-syntax-highlighting)
     for plugin in "${plugins[@]}"; do
         local plugin_path="$ZSH_PLUGINS_DIR/$plugin"
         if [[ -d "$plugin_path" ]]; then

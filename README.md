@@ -103,10 +103,10 @@ All aliases and functions follow: **action prefix + shortest target, mashed toge
 
 | Prefix | Action                    | Examples                                         |
 | ------ | ------------------------- | ------------------------------------------------ |
-| `mk`   | make/create/generate      | `mkpass`, `mkroute`, `mkskill`                   |
+| `mk`   | make/create/generate      | `mkpass`, `mkskill`                              |
 | `e`    | edit/open in editor       | `ezsh`, `edots`, `evault`, `edev`                |
 | `cd`   | navigate to directory     | `cdd`, `cdzsh`, `cddots`, `cdvault`              |
-| `t`    | tmux operation            | `tmain`, `tls`, `tpick`                          |
+| `t`    | tmux operation            | `tmain`, `tls`                                   |
 | `py`   | python                    | `pyclean`                                        |
 | —      | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
 
