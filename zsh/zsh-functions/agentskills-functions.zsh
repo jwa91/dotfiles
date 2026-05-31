@@ -17,14 +17,16 @@ function mkskill() {
         return 1
     fi
 
-    local repo_path="${AGENTSKILLS_REPO_PATH:-$DEV_DIR/agentskills}"
+    local local_repo="$DEV_DIR/agentskills"
+    local repo_path="${AGENTSKILLS_REPO_PATH:-$local_repo}"
     local repo_args=()
+
     if [[ -n "$repo_path" && -d "$repo_path/skills" ]]; then
         repo_args=(--repo-path "$repo_path")
     elif [[ -n "${AGENTSKILLS_REPO_PATH:-}" ]]; then
-        if [[ ! -d "$AGENTSKILLS_REPO_PATH/skills" && -d "$DEV_DIR/agentskills/skills" ]]; then
-            echo "mkskill: Warning - AGENTSKILLS_REPO_PATH is stale, using $DEV_DIR/agentskills instead." >&2
-            repo_args=(--repo-path "$DEV_DIR/agentskills")
+        if [[ -d "$local_repo/skills" ]]; then
+            echo "mkskill: Warning - AGENTSKILLS_REPO_PATH is stale, using $local_repo instead." >&2
+            repo_args=(--repo-path "$local_repo")
         elif [[ ! -d "$AGENTSKILLS_REPO_PATH/skills" ]]; then
             echo "mkskill: Error - AGENTSKILLS_REPO_PATH has no skills directory: $AGENTSKILLS_REPO_PATH" >&2
             return 1

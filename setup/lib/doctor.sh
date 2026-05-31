@@ -205,11 +205,15 @@ check_managed_links() {
 check_starship_config() {
     log_section "Starship"
 
-    local config_path="${STARSHIP_CONFIG:-$CONFIG_DIR/starship-mobile.toml}"
+    local config_path="$HOME/.config/starship.toml"
 
     if [[ -f "$config_path" ]]; then
         log_skip "$config_path"
     else
         log_warn "$config_path not found"
+    fi
+
+    if [[ -n "${STARSHIP_CONFIG:-}" && "$STARSHIP_CONFIG" != "$config_path" ]]; then
+        log_warn "Current STARSHIP_CONFIG is $STARSHIP_CONFIG; new shells will use $config_path"
     fi
 }

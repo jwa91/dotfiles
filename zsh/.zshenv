@@ -12,21 +12,10 @@ export ZSH_PLUGINS_DIR="$HOME/.zsh_plugins"
 # ----------------------------------------
 export DEV_DIR="$HOME/developer"
 
-# Workspace + schema/preference roots — referenced as $WORKSPACES_DIR,
-# $SCHEMAS_DIR, $PREFERENCES_DIR from workspaces and tools. See
-# go-brew-clis ADR-0008 and preferences/contracts/machine-to-workspace.yaml.
+# Workspace roots
 export WORKSPACES_DIR="$DEV_DIR/workspaces"
 export SCHEMAS_DIR="$DEV_DIR/schemas"
 export PREFERENCES_DIR="$DEV_DIR/preferences"
-
-# Prefer a local agentskills checkout when present on this machine.
-_agentskills_local="$DEV_DIR/agentskills"
-if [[ -n "${AGENTSKILLS_REPO_PATH:-}" && ! -d "$AGENTSKILLS_REPO_PATH/skills" && -d "$_agentskills_local/skills" ]]; then
-    export AGENTSKILLS_REPO_PATH="$_agentskills_local"
-elif [[ -z "${AGENTSKILLS_REPO_PATH:-}" && -d "$_agentskills_local/skills" ]]; then
-    export AGENTSKILLS_REPO_PATH="$_agentskills_local"
-fi
-unset _agentskills_local
 
 # ----------------------------------------
 # XDG Base Directories
@@ -36,41 +25,10 @@ unset _agentskills_local
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 # ----------------------------------------
-# Terminal-aware configurations
+# Default tools
 # ----------------------------------------
-# Detection order:
-#   1. $TERM — survives SSH, set by the terminal emulator (e.g. xterm-ghostty)
-#   2. $TERM_PROGRAM — local-only, used for vscode and tmux detection
-#   3. OUTER_TERM — tmux env var from tmux.conf to recover the launching terminal
-_set_desktop_terminal() {
-    export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-    export EDITOR="micro"
-}
-_set_mobile_terminal() {
-    export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
-    export EDITOR="micro"
-}
-
-if [[ "$TERM" == "xterm-ghostty" ]]; then
-    # Ghostty — works locally and over SSH
-    _set_desktop_terminal
-elif [[ "$TERM_PROGRAM" == "vscode" ]]; then
-    export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-    export EDITOR="cursor --wait"
-elif [[ "$TERM_PROGRAM" == "tmux" ]]; then
-    # tmux overrides both TERM and TERM_PROGRAM; check OUTER_TERM set by tmux.conf
-    _outer=$(tmux show-environment -g OUTER_TERM 2>/dev/null | sed 's/.*=//')
-    if [[ "$_outer" == "ghostty" ]]; then
-        _set_desktop_terminal
-    else
-        _set_mobile_terminal
-    fi
-    unset _outer
-else
-    _set_mobile_terminal
-fi
-
-unset -f _set_desktop_terminal _set_mobile_terminal
+export EDITOR="${EDITOR:-micro}"
+export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
 
 # ----------------------------------------
 # Machine-specific paths

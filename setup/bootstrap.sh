@@ -100,7 +100,7 @@ run_target() {
     case "$ONLY_TARGET" in
         all)
             preflight
-            ensure_homebrew_and_git
+            ensure_tooling_prerequisites
             install_brew_bundle
             install_standalone_tools
             setup_zsh_environment
@@ -109,7 +109,7 @@ run_target() {
             ;;
         brew)
             preflight
-            ensure_homebrew_and_git
+            ensure_tooling_prerequisites
             install_brew_bundle
             ;;
         standalone)

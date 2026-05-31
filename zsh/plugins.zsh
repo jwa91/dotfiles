@@ -9,8 +9,8 @@
 # These plugins are loaded by .zshrc.
 # ----------------------------------------
 
-# Codex gets a plain shell; ZLE plugins also need a real terminal.
-if [[ -n "${CODEX_SHELL:-}" || "${__CFBundleIdentifier:-}" == "com.openai.codex" || ! -o interactive || ! -t 0 || ! -t 1 ]]; then
+# ZLE plugins need an interactive shell attached to a real terminal.
+if [[ ! -o interactive || ! -t 0 || ! -t 1 ]]; then
     return 0
 fi
 
@@ -26,13 +26,11 @@ _source_if_readable() {
     fi
 }
 
-_zsh_plugins_dir="${ZSH_PLUGINS_DIR:-$HOME/.zsh_plugins}"
-
 # Load autosuggestions
-_source_if_readable "$_zsh_plugins_dir/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
+_source_if_readable "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
 
 # Load syntax highlighting
-_source_if_readable "$_zsh_plugins_dir/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
+_source_if_readable "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
 
 # Load fzf integration
 if command -v fzf &> /dev/null; then
@@ -53,4 +51,3 @@ fi
 _source_if_readable "$HOME/.config/op/plugins.sh" "1Password shell plugins" quiet
 
 unfunction _source_if_readable
-unset _zsh_plugins_dir

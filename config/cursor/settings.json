@@ -28,7 +28,7 @@
   // ============================================================================
   // Terminal
   // ============================================================================
-  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font, Menlo, Monaco, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeight": "310",
   "terminal.integrated.letterSpacing": 0,

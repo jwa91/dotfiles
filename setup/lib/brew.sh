@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
 
-ensure_homebrew_and_git() {
+ensure_git_available() {
+    if command -v git >/dev/null 2>&1; then
+        log_skip "Git"
+        return
+    fi
+
+    log_error "Git is missing."
+    log_warn "Install Apple Command Line Tools with: xcode-select --install"
+    log_warn "Or put your source-built Git on PATH before running bootstrap."
+    exit 1
+}
+
+ensure_tooling_prerequisites() {
     log_section "Tooling Prerequisites"
+
+    ensure_git_available
 
     if command -v brew >/dev/null 2>&1; then
         log_skip "Homebrew"
@@ -23,16 +37,6 @@ ensure_homebrew_and_git() {
         fi
     fi
 
-    if command -v git >/dev/null 2>&1; then
-        log_skip "Git"
-    else
-        if $SKIP_BREW; then
-            log_error "Git is missing and --no-brew was set."
-            exit 1
-        fi
-        log_action "Install git via Homebrew"
-        run_cmd brew install git
-    fi
 }
 
 install_brew_bundle() {

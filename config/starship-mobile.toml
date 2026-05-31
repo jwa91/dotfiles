@@ -1,8 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Stripped-down prompt for non-desktop terminals (Termius over mosh, plain SSH, etc).
-# No nerdfonts — mosh miscalculates wide/icon character widths.
-# Active by default; desktop terminals (ghostty, vscode) override via .zshenv.
+# Stripped-down prompt for terminals that miscalculate Nerd Font glyph widths.
+# Opt in with: export STARSHIP_CONFIG="$CONFIG_DIR/starship-mobile.toml"
 
 format = """
 $directory\

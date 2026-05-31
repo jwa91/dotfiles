@@ -18,7 +18,7 @@ fi
 # Completion function for 'cdd'
 _cdd() {
     if [[ -n "$DEV_DIR" && -d "$DEV_DIR" ]]; then
-         _path_files -W "$DEV_DIR" -/
+        _path_files -W "$DEV_DIR" -/
     fi
 }
 

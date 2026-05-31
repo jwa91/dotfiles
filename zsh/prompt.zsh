@@ -9,7 +9,6 @@
 # Currently using Starship for the prompt.
 # ----------------------------------------
 
-# Initialize Starship once per shell; reload should not stack prompt hooks.
-if [[ -z "${STARSHIP_SHELL:-}" ]]; then
-    eval "$(starship init zsh)"
-fi
+# Initialize Starship prompt
+
+eval "$(starship init zsh)"

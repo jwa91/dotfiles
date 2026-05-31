@@ -11,10 +11,7 @@ alias reloadenv='source ~/.zshenv'
 # Edit (e + target) / Navigate (cd + target)
 _eopen() {
   local target="$1"
-  case "$TERM_PROGRAM" in
-    vscode)   cursor "$target" ;;
-    *)        micro "$target" ;;
-  esac
+  "${EDITOR:-micro}" "$target"
 }
 ezsh()    { _eopen "$ZSH_DIR"; }
 edots()   { _eopen "$DOTFILES_DIR"; }
