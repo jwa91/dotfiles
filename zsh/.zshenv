@@ -8,16 +8,6 @@ export ZSH_DIR="${ZSH_DIR:-$DOTFILES_DIR/zsh}"
 export ZSH_PLUGINS_DIR="$HOME/.zsh_plugins"
 
 # ----------------------------------------
-# External Directories
-# ----------------------------------------
-export DEV_DIR="$HOME/developer"
-
-# Workspace roots
-export WORKSPACES_DIR="$DEV_DIR/workspaces"
-export SCHEMAS_DIR="$DEV_DIR/schemas"
-export PREFERENCES_DIR="$DEV_DIR/preferences"
-
-# ----------------------------------------
 # XDG Base Directories
 # ----------------------------------------
 # Let XDG_CONFIG_HOME default to ~/.config (standard location)
@@ -25,15 +15,16 @@ export PREFERENCES_DIR="$DEV_DIR/preferences"
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
 # ----------------------------------------
+# User Directories
+# ----------------------------------------
+export DEV_DIR="$HOME/developer"
+export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/notes"
+
+# ----------------------------------------
 # Default tools
 # ----------------------------------------
 export EDITOR="${EDITOR:-micro}"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
-
-# ----------------------------------------
-# Machine-specific paths
-# ----------------------------------------
-export VAULT_PATH="$HOME/Library/Mobile Documents/com~apple~CloudDocs/notes"
 
 # ----------------------------------------
 # 1Password SSH agent
