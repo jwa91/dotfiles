@@ -6,6 +6,7 @@ MANAGED_LINKS=(
     "$HOME/.config/git/ignore|$GIT_DIR/ignore|always"
     "$HOME/.zshrc|$ZSH_DIR/.zshrc|always"
     "$HOME/.zshenv|$ZSH_DIR/.zshenv|always"
+    "$HOME/.zprofile|$ZSH_DIR/.zprofile|always"
     "$HOME/.config/ghostty/config|$CONFIG_DIR/ghostty/config|always"
     "$HOME/.config/starship.toml|$CONFIG_DIR/starship.toml|always"
     "$HOME/.claude/settings.json|$CONFIG_DIR/claude-code/settings.json|always"

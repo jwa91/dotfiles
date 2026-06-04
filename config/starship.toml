@@ -22,7 +22,7 @@ $php\
 $java\
 $kotlin\
 $haskell\
-$python\
+${custom.python}\
 [ ](fg:color_blue))\
 ([](color_bg3)\
 $docker_context\
@@ -150,10 +150,17 @@ symbol = ""
 style = "fg:color_bg0 bg:color_blue"
 format = '[ $symbol( $version) ]($style)'
 
-[python]
+# Python version via uv — resolves the project interpreter by searching upward,
+# so it shows in subdirectories too, not just the project root. Hidden outside a
+# synced uv project (never the Apple system Python). Gating lives in `when`
+# because a non-zero command would still render the module with an empty version.
+[custom.python]
 symbol = ""
 style = "fg:color_bg0 bg:color_blue"
-format = '[ $symbol( $version) ]($style)'
+format = '[ $symbol( $output) ]($style)'
+when = '''case "$(uv python find 2>/dev/null)" in */.venv/*) exit 0 ;; *) exit 1 ;; esac'''
+command = "uv python find --show-version 2>/dev/null"
+shell = ["/bin/sh"]
 
 [docker_context]
 symbol = ""
