@@ -9,9 +9,11 @@
 
 verbs: [
 
-    # You should customize this standard opening of text files.
-    # If you edit text files in your terminal (vi, emacs, helix, eg.), then
-    #  you'll find it convenient to change the 'key' from 'ctrl-e' to 'enter'.
+    # Opens text files in $EDITOR.
+    # Bound to ctrl-e (and the 'e' / :edit verb) so that Enter keeps broot's
+    #  default meaning: Enter on a file opens it in the system app and leaves
+    #  broot, Enter on a folder drills into it. This keeps Enter from firing
+    #  the editor mid-staging.
     #
     # If $EDITOR isn't set on your computer, you should either set it using
     #  something similar to
@@ -27,7 +29,7 @@ verbs: [
     {
         invocation: edit
         shortcut: e
-        key: enter
+        key: ctrl-e
         apply_to: text_file
         external: "$EDITOR {file:space-separated}"
         leave_broot: false
