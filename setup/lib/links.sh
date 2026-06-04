@@ -15,6 +15,7 @@ MANAGED_LINKS=(
     "$HOME/.config/broot/conf.hjson|$CONFIG_DIR/broot/conf.hjson|always"
     "$HOME/.config/broot/verbs.hjson|$CONFIG_DIR/broot/verbs.hjson|always"
     "$HOME/.config/broot/skins|$CONFIG_DIR/broot/skins|always"
+    "$HOME/.local/bin/clip-md|$DOTFILES_DIR/bin/clip-md|always"
     "$HOME/.config/atuin/config.toml|$CONFIG_DIR/atuin/config.toml|always"
     "$HOME/.tmux.conf|$CONFIG_DIR/tmux/tmux.conf|always"
     "$HOME/Library/Application Support/Cursor/User/settings.json|$CONFIG_DIR/cursor/settings.json|cursor"

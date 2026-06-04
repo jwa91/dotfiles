@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+# clip-md — copy one or more files to the clipboard as a Markdown document.
+#
+# Each file becomes a section: a heading with its path, then a fenced code
+# block with a language hint inferred from the extension. Handy for pasting
+# a coherent set of files into a chat with an AI.
+#
+# Usage:   clip-md FILE [FILE ...]
+# Example: clip-md src/*.ts
+#
+# Invoked by the broot `md` verb on the staging area, but works standalone.
+# macOS copies via pbcopy; override with CLIP_MD_COPY for another clipboard
+# command (e.g. CLIP_MD_COPY='xclip -selection clipboard' on Linux).
+
+set -euo pipefail
+
+if [[ $# -eq 0 ]]; then
+  echo "usage: clip-md FILE [FILE ...]" >&2
+  exit 64
+fi
+
+# Map a filename's extension to a Markdown fence language hint.
+lang_for() {
+  case "${1##*.}" in
+    py)            echo python ;;
+    js|cjs|mjs)    echo javascript ;;
+    ts)            echo typescript ;;
+    tsx)           echo tsx ;;
+    jsx)           echo jsx ;;
+    rs)            echo rust ;;
+    go)            echo go ;;
+    swift)         echo swift ;;
+    sh|bash|zsh)   echo bash ;;
+    json)          echo json ;;
+    yaml|yml)      echo yaml ;;
+    toml)          echo toml ;;
+    hjson)         echo hjson ;;
+    md|markdown)   echo markdown ;;
+    html|htm)      echo html ;;
+    css)           echo css ;;
+    sql)           echo sql ;;
+    *)             echo "" ;;
+  esac
+}
+
+# Pick a fence longer than any run of backticks in the file, so file contents
+# that themselves contain ``` can't break out of the code block.
+fence_for() {
+  local longest
+  longest=$(grep -oE '`+' "$1" 2>/dev/null | awk '{ if (length > m) m = length } END { print m+0 }')
+  local n=$(( longest + 1 ))
+  (( n < 3 )) && n=3
+  printf '%*s' "$n" '' | tr ' ' '`'
+}
+
+# Show the path relative to the current directory when the file is under it.
+rel() {
+  case "$1" in
+    "$PWD"/*) echo "${1#"$PWD"/}" ;;
+    *)        echo "$1" ;;
+  esac
+}
+
+out=""
+count=0
+for f in "$@"; do
+  if [[ ! -f "$f" ]]; then
+    echo "clip-md: skipping (not a regular file): $f" >&2
+    continue
+  fi
+  # grep -Iq treats binary files as non-matching; guard with -s so empty text
+  # files still pass through.
+  if ! grep -Iq . "$f" 2>/dev/null && [[ -s "$f" ]]; then
+    echo "clip-md: skipping (binary): $f" >&2
+    continue
+  fi
+  fence=$(fence_for "$f")
+  out+="## \`$(rel "$f")\`"$'\n\n'
+  out+="${fence}$(lang_for "$f")"$'\n'
+  out+="$(cat "$f")"$'\n'
+  out+="${fence}"$'\n\n'
+  count=$(( count + 1 ))
+done
+
+if [[ $count -eq 0 ]]; then
+  echo "clip-md: nothing to copy" >&2
+  exit 1
+fi
+
+copy_cmd=${CLIP_MD_COPY:-pbcopy}
+printf '%s' "$out" | $copy_cmd
+echo "clip-md: copied $count file(s) as markdown to clipboard" >&2

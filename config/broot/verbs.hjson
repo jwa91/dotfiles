@@ -65,6 +65,17 @@ verbs: [
         working_dir: "{root}"
     }
 
+    # Copy the staged files to the clipboard as one Markdown document — each
+    # file as a fenced code block headed by its path. Built for pasting a set
+    # of files into an AI chat. Stage files first (ctrl-g / + / :stage_all_files),
+    # then type `:md`. Falls back to the highlighted file if nothing is staged.
+    # Logic lives in ~/.local/bin/clip-md so it's reusable from the shell too.
+    {
+        invocation: md
+        leave_broot: false
+        external: "clip-md {file:space-separated}"
+    }
+
     # A convenient shortcut to create a new text file in
     #  the current directory or below
     {
