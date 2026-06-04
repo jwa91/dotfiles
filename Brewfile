@@ -4,7 +4,6 @@
 # ----------------------------------------
 
 # Taps
-tap "1password/tap"
 tap "steipete/tap"
 tap "jwa91/tap"
 tap "protonpass/tap"
@@ -58,7 +57,6 @@ cask "codex"
 cask "codexbar"
 
 # Productivity & communication
-cask "1password-cli"
 cask "raycast"
 cask "hiddenbar"
 cask "google-chrome@dev"

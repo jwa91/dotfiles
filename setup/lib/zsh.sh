@@ -4,6 +4,7 @@ setup_zsh_environment() {
     log_section "Zsh Environment"
 
     ensure_dir "$HOME/.zsh_plugins"
+    ensure_dir "$HOME/.zfunc"
     ensure_dir "$HOME/developer"
     ensure_dir "$HOME/.local/bin"
 
@@ -30,4 +31,15 @@ setup_zsh_environment() {
             run_cmd git clone --depth 1 "$url" "$path"
         fi
     done
+
+    if command -v pass-cli >/dev/null 2>&1; then
+        log_action "Generate pass-cli zsh completion"
+        if $DRY_RUN; then
+            echo -e "${YELLOW}WOULD:${NC} pass-cli completions zsh > $HOME/.zfunc/_pass-cli"
+        else
+            pass-cli completions zsh > "$HOME/.zfunc/_pass-cli"
+        fi
+    else
+        log_warn "pass-cli not found; skipping Proton Pass completion"
+    fi
 }
