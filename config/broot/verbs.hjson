@@ -76,6 +76,18 @@ verbs: [
         external: "clip-md {file:space-separated}"
     }
 
+    # Rename: convert the file name to a case style, keeping the extension.
+    # Type one of: snake | kebab | camel | pascal, e.g. `:case snake`.
+    # Runs once per staged file (fan-out), so it recases a whole batch.
+    # auto_exec:false means it waits for Enter before actually renaming.
+    # Logic lives in ~/.local/bin/rename-case, reusable from the shell too.
+    {
+        invocation: "case {style}"
+        auto_exec: false
+        leave_broot: false
+        external: "rename-case {style} {file}"
+    }
+
     # A convenient shortcut to create a new text file in
     #  the current directory or below
     {
