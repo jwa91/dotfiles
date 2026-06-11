@@ -25,9 +25,7 @@
     "example-skills@anthropic-agent-skills": true,
     "pyright-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "discord@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true
+    "code-review@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",

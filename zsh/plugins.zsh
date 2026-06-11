@@ -29,6 +29,10 @@ _source_if_readable() {
 # Load autosuggestions
 _source_if_readable "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
 
+# Keep interactive comments readable in themes where black is the background.
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
+
 # Load syntax highlighting
 _source_if_readable "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
 
