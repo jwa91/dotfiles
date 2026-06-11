@@ -1,42 +1,23 @@
-Manual installs (intentionally outside Homebrew AND outside setup/apps.sh)
+Manual installs — the human checklist. Everything else: see Brewfile.
 
-GUI apps with a scriptable official download live in setup/apps.sh.
-This file lists the rest: interactive installers, App Store items, and
-on-demand toolchains — plus the CLI tools bootstrap installs automatically.
+Interactive installs (App Store, passwords, biometrics, admin):
 
-- xcode
-  website: Mac App Store
-  reason: full Xcode (not just CLI tools) is required; CLI tools are installed via xcode-select --install in bootstrap, but the full IDE must come from the App Store.
+- xcode           Mac App Store. Day-1 note: run `xcode-select --install`
+                  first — git needs the CLT before anything else works.
+- tailscale       https://tailscale.com/download — interactive
+                  network-extension approval.
+- 1password       https://1password.com/downloads — interactive installer
+                  app; keeps biometrics + browser pairing intact. Current
+                  SSH-agent and secrets truth.
+- google drive    https://www.google.com/drive/download/ — ships as a .pkg
+                  needing an admin install.
+- docker desktop  `brew install --cask --adopt docker-desktop` when wanted;
+                  kept out of the Brewfile because the cask prompts for an
+                  admin password mid-install (CLI symlinks in /usr/local/bin).
 
-- tailscale
-  website: https://tailscale.com/download
-  reason: macOS network extension approval flow is interactive and more reliable via the official installer/app flow.
+On-demand toolchains (install when a project needs them):
 
-- 1password
-  website: https://1password.com/downloads
-  reason: ships as an interactive installer app rather than a drag-install, and the standalone install keeps biometrics and browser-extension pairing intact. Current primary password manager and SSH agent during the (delayed) Proton Pass migration.
-
-- google drive
-  website: https://www.google.com/drive/download/
-  reason: ships as a .pkg requiring an admin install; direct installer is more reliable than the chronically lagging brew cask.
-
-- go
-  website: https://go.dev/dl/
-  reason: official installer is the rule for Go. Since 1.21 the toolchain directive in go.mod pins and auto-downloads per-project toolchain versions, so no extra version manager is needed.
-
-- rust (rustup)
-  website: https://rustup.rs
-  reason: rustup is the canonical Rust toolchain manager; cargo/rustc stay out of Homebrew.
-
-- codex
-  website: https://github.com/openai/codex
-  reason: install from official releases; the brew cask lags and a global npm install is against the runtime policy.
-
-- amp (Sourcegraph)
-  install: curl -fsSL https://ampcode.com/install.sh | bash
-  website: https://ampcode.com
-  reason: official install script is the canonical method; bootstrap.sh runs this automatically.
-
-- claude code
-  install: curl -fsSL https://claude.ai/install.sh | bash
-  reason: native installer self-updates faster than the brew cask; bootstrap.sh runs this automatically. Migrating off the cask: brew uninstall --cask claude-code, then rerun bootstrap.
+- go              https://go.dev/dl/ official installer; go.mod's toolchain
+                  directive pins per-project versions natively.
+- rust            https://rustup.rs — rustup is the canonical toolchain
+                  manager; cargo/rustc stay off Homebrew.

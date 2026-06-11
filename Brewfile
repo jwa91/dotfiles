@@ -1,20 +1,24 @@
 # ----------------------------------------
-# Brewfile — the terminal layer, shared by every machine.
+# Brewfile — the default install channel for ALL host software.
 # Install with: brew bundle --file=~/dotfiles/Brewfile
 #
-# Boundary:
-# - Homebrew owns the terminal, nothing else: shell tooling, CLI tools,
-#   fonts, and the terminal emulator. Same list on every machine.
-# - Anything with its own UI installs straight from its vendor via
-#   setup/apps.sh and self-updates from there. Interactive installers,
-#   App Store items, and on-demand toolchains: setup/manual-installs.txt.
-# - CLI agents and runtime managers (claude code, amp, uv, mise) install
-#   via their official scripts in bootstrap's standalone-tools step.
-# - Project runtimes stay project-owned, never global:
-#   Python -> uv
-#   TypeScript/JavaScript -> mise -> node/pnpm/bun (per-project pins only)
-#   Go -> official go.dev installer (go.mod toolchain directive pins versions)
-#   Rust -> rustup/cargo
+# The one rule: everything installs from this file. Exceptions are
+# enumerated, never derived:
+#   - setup/lib/brew.sh installs the fast-moving agent CLIs (claude code,
+#     codex, amp) via their first-party installers — same-day updates.
+#   - setup/manual-installs.txt is the short human checklist (App Store,
+#     interactive installers, on-demand toolchains).
+# Identical on both machines: a tool exists on both or on neither.
+#
+# House rules:
+# - GUI casks are bootstrap-only installs: the apps self-update through
+#   their own channels; `brew upgrade` skips them (auto_updates).
+#   Never pass --greedy.
+# - Before adding a formula, run `brew deps <formula>` — nothing that
+#   drags python/node/ruby onto the host (that mistake cost us httpie).
+# - Project runtimes never land here: uv (Python) and mise (node/pnpm/bun)
+#   provision per-project only. Outside a project, node and python
+#   intentionally don't resolve. setup/doctor.sh verifies.
 # ----------------------------------------
 
 # Taps
@@ -48,10 +52,14 @@ brew "cheat"
 brew "coreutils"
 
 # Network & infra CLI
-brew "httpie"
+brew "xh"
 brew "mosh"
 brew "hcloud"
 brew "forgejo-cli-plus"
+
+# Project-runtime managers (the runtimes themselves stay project-scoped)
+brew "uv"
+brew "mise"
 
 # Dotfiles and script maintenance (prek hooks need these on every machine)
 brew "ripgrep"
@@ -70,3 +78,19 @@ cask "1password-cli"
 # Terminal visuals
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
+
+# GUI apps (bootstrap-only: each self-updates via its own channel;
+# codexbar and hiddenbar are the exceptions — brew upgrade updates them)
+cask "claude"
+cask "codexbar"
+cask "cursor"
+cask "google-chrome@dev"
+cask "helium-browser"
+cask "hiddenbar"
+cask "obsidian"
+cask "proton-pass"
+cask "raycast"
+cask "spotify"
+cask "stats"
+cask "telegram"
+cask "whatsapp"

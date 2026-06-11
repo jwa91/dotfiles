@@ -15,6 +15,8 @@ doctor() {
     check_managed_sources || failed=1
     check_managed_links || failed=1
     check_ssh_agent
+    check_brew_bundle
+    check_runtime_leaks || failed=1
     check_starship_config
 
     if [[ $failed -ne 0 ]]; then
@@ -42,6 +44,63 @@ check_ssh_agent() {
     else
         log_warn "No SSH agent socket found; enable the 1Password SSH agent (Settings -> Developer) or run: ppagent start"
     fi
+}
+
+check_brew_bundle() {
+    log_section "Brew Bundle"
+
+    if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
+        log_skip "Brewfile satisfied"
+    else
+        log_warn "Brewfile drift; inspect with: brew bundle check --verbose --file=$BREWFILE"
+    fi
+}
+
+check_runtime_leaks() {
+    log_section "Runtime Leaks"
+
+    # The invariant: no persistent global runtime state. Outside a project,
+    # node and python must not resolve from Homebrew; runtimes are
+    # project-scoped via uv and mise.
+    local failed=0 leak tool tool_path expected
+    local brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
+
+    for leak in python3 pip3 node npm; do
+        if [[ -e "$brew_prefix/bin/$leak" ]]; then
+            log_error "$brew_prefix/bin/$leak exists — a formula dragged a runtime onto the host (find it: brew uses --installed <keg>)"
+            failed=1
+        else
+            log_skip "no $brew_prefix/bin/$leak"
+        fi
+    done
+
+    if [[ -d "$brew_prefix/lib/node_modules" ]] && [[ -n "$(ls -A "$brew_prefix/lib/node_modules" 2>/dev/null)" ]]; then
+        log_error "$brew_prefix/lib/node_modules is not empty — global npm residue"
+        failed=1
+    else
+        log_skip "no global npm tree"
+    fi
+
+    if [[ -f "$HOME/.config/mise/config.toml" ]] && grep -q '^\[tools\]' "$HOME/.config/mise/config.toml" 2>/dev/null; then
+        log_warn "global mise tool pins in ~/.config/mise/config.toml — runtimes should be project-pinned"
+    else
+        log_skip "no global mise pins"
+    fi
+
+    if [[ -d "$HOME/.bun" ]]; then
+        log_warn "$HOME/.bun exists — bun should be mise/project-managed"
+    fi
+
+    # Standalone copies of brew-managed tools shadow brew and cause drift.
+    for tool in uv mise; do
+        tool_path="$(command -v "$tool" 2>/dev/null || true)"
+        expected="$brew_prefix/bin/$tool"
+        if [[ -n "$tool_path" && "$tool_path" != "$expected" ]]; then
+            log_warn "$tool resolves to $tool_path (expected $expected) — remove the standalone copy"
+        fi
+    done
+
+    return "$failed"
 }
 
 check_required_commands() {

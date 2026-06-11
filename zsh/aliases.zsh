@@ -72,8 +72,9 @@ alias -s csv='open'
 alias -s webp='open'
 alias -s mov='open'
 
-# Brew
-alias brewsync='brew bundle --file="$DOTFILES_DIR/Brewfile" --cleanup'
+# Brew. Cleanup is dry-run by design: it lists strays but never removes —
+# GUI casks live in the Brewfile, so an automatic cleanup could delete apps.
+alias brewsync='brew bundle --file="$DOTFILES_DIR/Brewfile" && brew bundle cleanup --file="$DOTFILES_DIR/Brewfile"'
 
 # Python
 alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'

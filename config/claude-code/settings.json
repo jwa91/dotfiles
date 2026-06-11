@@ -13,7 +13,18 @@
     ],
     "deny": [
       "Read(./.env)",
-      "Read(./.env.*)"
+      "Read(./.env.*)",
+      "Bash(mise use -g:*)",
+      "Bash(mise use --global:*)",
+      "Bash(npm install -g:*)",
+      "Bash(npm i -g:*)",
+      "Bash(pnpm add -g:*)",
+      "Bash(yarn global add:*)",
+      "Bash(bun add -g:*)",
+      "Bash(bun install -g:*)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)",
+      "Bash(uv tool install:*)"
     ],
     "defaultMode": "bypassPermissions"
   },

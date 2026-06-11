@@ -78,11 +78,10 @@ install_standalone_tools() {
         return
     fi
 
-    # Runtime managers — the Brewfile boundary keeps these out of Homebrew.
-    install_standalone_tool uv "https://astral.sh/uv/install.sh"
-    install_standalone_tool mise "https://mise.run"
-
-    # Agent CLIs — official installers self-update faster than brew casks.
+    # The closed exception list to "everything installs via the Brewfile":
+    # fast-moving agent CLIs whose first-party installers self-update
+    # same-day. Add nothing here without a one-line reason.
     install_standalone_tool claude "https://claude.ai/install.sh"
+    install_standalone_tool codex "https://chatgpt.com/codex/install.sh"
     install_standalone_tool amp "https://ampcode.com/install.sh"
 }
