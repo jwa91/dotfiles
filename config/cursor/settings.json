@@ -36,63 +36,17 @@
   "terminal.integrated.cursorWidth": 1,
   "terminal.integrated.cursorBlinking": true,
 
-  // ============================================================================
-  // File Associations
-  // ============================================================================
-  "files.associations": {
-    "*.scss": "postcss",
-    "*.css": "postcss",
-    "*.toml": "toml"
-  },
   "files.exclude": {
     "**/.git": true,
-    "**/.DS_Store": true,
-    "**/__pycache__": true,
-    "**/*.pyc": true
+    "**/.DS_Store": true
   },
   "files.watcherExclude": {
     "**/.git/objects/**": true,
-    "**/.git/subtree-cache/**": true,
-    "**/node_modules/**": true,
-    "**/.venv/**": true,
-    "**/venv/**": true,
-    "**/__pycache__/**": true
+    "**/.git/subtree-cache/**": true
   },
   "search.exclude": {
-    "**/node_modules": true,
-    "**/.venv": true,
-    "**/venv": true,
-    "**/__pycache__": true,
-    "**/.git": true,
-    "**/dist": true,
-    "**/build": true
+    "**/.git": true
   },
-
-  // ============================================================================
-  // Language-Specific Editor Settings
-  // ============================================================================
-  "[json]": {
-    "editor.quickSuggestions": {
-      "strings": true
-    },
-    "editor.suggest.insertMode": "replace"
-  },
-  "[plaintext]": {
-    "editor.unicodeHighlight.ambiguousCharacters": false,
-    "editor.unicodeHighlight.invisibleCharacters": false
-  },
-
-  // ============================================================================
-  // TypeScript & JavaScript
-  // ============================================================================
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "javascript.updateImportsOnFileMove.enabled": "always",
-
-  // ============================================================================
-  // Python
-  // ============================================================================
-  "python.terminal.activateEnvironment": false,
-  "python.createEnvironment.trigger": "off",
 
   // ============================================================================
   // Cursor-Specific
@@ -104,11 +58,6 @@
   // Extensions & Tools
   // ============================================================================
   "extensions.ignoreRecommendations": true,
-  "projectManager.any.baseFolders": ["~/developer"],
-  "projectManager.any.maxDepthRecursion": 1,
-  "json.schemaDownload.enable": true,
-  "biome.requireConfiguration": true,
-  "biome.suggestInstallingGlobally": false,
 
   // ============================================================================
   // Security & Other
@@ -117,7 +66,5 @@
   "explorer.confirmDragAndDrop": true,
   "update.releaseTrack": "prerelease",
   "workbench.colorTheme": "Default Dark Modern",
-  "claudeCode.preferredLocation": "panel",
-  "claudeCode.useTerminal": true,
   "window.autoDetectColorScheme": false
 }

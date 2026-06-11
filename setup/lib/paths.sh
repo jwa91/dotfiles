@@ -25,6 +25,7 @@ preflight() {
         "$GIT_DIR/ignore"
         "$ZSH_DIR/.zshrc"
         "$ZSH_DIR/.zshenv"
+        "$ZSH_DIR/.zprofile"
     )
 
     local required

@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# rename-case — rename a file by converting its name to a target case style.
+#
+# Usage:  rename-case STYLE FILE
+#   STYLE: snake | kebab | camel | pascal
+#
+# Only the stem (the part before the final extension) is converted; the
+# extension and the containing directory are preserved. Words are detected
+# from snake_case / kebab-case separators, spaces, and camelCase humps (incl.
+# acronyms like HTTPServer), so any style converts cleanly into any other.
+#
+# Used by the broot `:case {style}` verb (run once per staged file), but
+# works standalone:  rename-case snake MyComponent.TSX  ->  my_component.TSX
+
+set -euo pipefail
+
+style="${1:-}"
+src="${2:-}"
+
+case "$style" in
+  snake|kebab|camel|pascal) ;;
+  *) echo "rename-case: unknown style '$style' (use snake|kebab|camel|pascal)" >&2; exit 64 ;;
+esac
+[[ -n "$src" ]] || { echo "usage: rename-case STYLE FILE" >&2; exit 64; }
+[[ -e "$src" ]] || { echo "rename-case: no such file: $src" >&2; exit 1; }
+
+dir=$(dirname "$src")
+base=$(basename "$src")
+
+# Split basename into stem + extension on the final dot. A leading dot marks a
+# dotfile (e.g. .zshrc), which has no extension to preserve.
+if [[ "$base" == .* ]]; then
+  stem="$base"; ext=""
+elif [[ "$base" == *.* ]]; then
+  stem="${base%.*}"; ext=".${base##*.}"
+else
+  stem="$base"; ext=""
+fi
+
+# Tokenize the stem into space-separated words:
+#  1) split camelCase humps and acronym boundaries (HTTPServer -> HTTP Server)
+#  2) turn _, - and spaces into single spaces, then trim
+words=$(printf '%s' "$stem" \
+  | sed -E 's/([a-z0-9])([A-Z])/\1 \2/g; s/([A-Z]+)([A-Z][a-z])/\1 \2/g' \
+  | tr '_-' '  ' \
+  | tr -s ' ' \
+  | sed -E 's/^ +//; s/ +$//')
+
+new=""
+case "$style" in
+  # tr maps positionally: A-Z -> a-z, then space -> the separator.
+  snake) new=$(printf '%s' "$words" | tr '[:upper:] ' '[:lower:]_') ;;
+  kebab) new=$(printf '%s' "$words" | tr '[:upper:] ' '[:lower:]-') ;;
+  camel|pascal)
+    read -r -a arr <<< "$words"
+    i=0
+    for w in "${arr[@]}"; do
+      lw=$(printf '%s' "$w" | tr '[:upper:]' '[:lower:]')
+      if [[ "$style" == camel && $i -eq 0 ]]; then
+        new+="$lw"
+      else
+        first=$(printf '%s' "${lw:0:1}" | tr '[:lower:]' '[:upper:]')
+        new+="${first}${lw:1}"
+      fi
+      i=$(( i + 1 ))
+    done
+    ;;
+esac
+
+[[ -n "$new" ]] || { echo "rename-case: empty result for '$base'" >&2; exit 1; }
+
+new_base="$new$ext"
+if [[ "$new_base" == "$base" ]]; then
+  echo "rename-case: '$base' already $style-case" >&2
+  exit 0
+fi
+
+dst="$dir/$new_base"
+# Refuse to clobber a *different* existing file. `-ef` (same inode) lets a pure
+# case-change through even on case-insensitive filesystems (macOS APFS default),
+# where the destination name appears to already exist but is the same file.
+if [[ -e "$dst" ]] && ! [[ "$dst" -ef "$src" ]]; then
+  echo "rename-case: refusing to overwrite existing '$new_base'" >&2
+  exit 1
+fi
+
+mv -- "$src" "$dst"
+echo "rename-case: '$base' -> '$new_base'" >&2

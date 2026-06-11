@@ -8,9 +8,9 @@ Manual installs (preferred outside Homebrew)
   website: https://www.cursor.com/
   reason: app-managed CLI shim/symlink behavior can conflict with Homebrew-managed expectations; install directly from the app download, then rerun ./setup/bootstrap.sh --no-brew to apply links.
 
-- 1password
-  website: https://1password.com/downloads
-  reason: standalone installer has tighter macOS integration for biometrics and browser extension pairing; brew cask version can disrupt these.
+- proton pass
+  website: https://proton.me/pass/download
+  reason: official desktop app handles account sign-in, biometrics, browser integration, and offline access; the CLI remains managed by Homebrew.
 
 - xcode
   website: Mac App Store

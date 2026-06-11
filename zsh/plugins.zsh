@@ -29,6 +29,10 @@ _source_if_readable() {
 # Load autosuggestions
 _source_if_readable "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
 
+# Keep interactive comments readable in themes where black is the background.
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
+
 # Load syntax highlighting
 _source_if_readable "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
 
@@ -46,8 +50,5 @@ fi
 if command -v atuin &> /dev/null; then
     eval "$(atuin init zsh)"
 fi
-
-# Load 1Password shell plugins (op plugin init <cli> populates this file)
-_source_if_readable "$HOME/.config/op/plugins.sh" "1Password shell plugins" quiet
 
 unfunction _source_if_readable

@@ -42,7 +42,8 @@ brewsync                  # Install/remove/upgrade packages from Brewfile
 pyclean                   # Remove __pycache__ dirs recursively
 
 # Utilities
-key NAME [NAME ...]       # Load API keys from 1Password
+key NAME [NAME ...]       # Load API keys from Proton Pass
+ppagent [action]          # Manage Proton SSH agent scoped to PROTON_PASS_SSH_VAULT
 rwe                       # Retry last command with escaped arguments
 getmd <url> [--no-copy]   # Fetch clean markdown from URL -> clipboard
 zshdoctor                 # Validate zsh config, deps, and paths

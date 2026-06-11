@@ -27,13 +27,14 @@ export EDITOR="${EDITOR:-micro}"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
 
 # ----------------------------------------
-# 1Password SSH agent
-# Routes ssh-add / ssh's identity lookups through 1Password so private keys
-# never live unencrypted on disk. Requires 1Password.app running with the
-# SSH agent enabled in Settings → Developer.
+# Proton Pass SSH agent
+# pass-cli's daemon defaults to ~/.ssh/proton-pass-agent.sock.
 # ----------------------------------------
-if [[ -S "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" ]]; then
-    export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+export PROTON_PASS_SSH_VAULT="${PROTON_PASS_SSH_VAULT:-Work}"
+export PROTON_PASS_SSH_AUTH_SOCK="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton-pass-agent.sock}"
+
+if [[ -S "$PROTON_PASS_SSH_AUTH_SOCK" ]]; then
+    export SSH_AUTH_SOCK="$PROTON_PASS_SSH_AUTH_SOCK"
 fi
 
 # ----------------------------------------

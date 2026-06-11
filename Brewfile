@@ -1,70 +1,43 @@
 # ----------------------------------------
-# Canonical Brewfile for dotfiles v2
+# Canonical Brewfile
 # Install with: brew bundle --file=~/dotfiles/Brewfile
+#
+# Boundary:
+# - Homebrew owns system/shell/bootstrap tools.
+# - App-layer installs stay outside Brewfile.
+# - uv and mise are standalone ~/.local/bin tools.
+# - Project runtimes stay project-owned:
+#   Python -> uv
+#   TypeScript/JavaScript -> mise -> node/pnpm/bun
+#   Go -> official go toolchain
+#   Rust -> rustup/cargo
 # ----------------------------------------
 
 # Taps
-tap "1password/tap"
-tap "steipete/tap"
-tap "jwa91/tap"
 tap "protonpass/tap"
-tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
 
-# Personal tap binaries — installed in bootstrap order:
-# hardening wrapper, skill distribution, harness alignment.
-# All are signed + notarized Casks as of tap v0.4.1.
-# (ADR 0008 in jwa91/homebrew-tap: every Go CLI in the family ships as
-# a Homebrew Cask via goreleaser's homebrew_casks: block).
-cask "jwa-harden"
-cask "agentskills"
-cask "prehandover"
-
-# Core CLI tools
+# Shell & terminal core
 brew "git"
 brew "tmux"
 brew "starship"
 brew "fzf"
-brew "shellcheck"
-brew "prek"
-brew "gitleaks"
-brew "forgejo-cli-plus"
-brew "tree"
-brew "cheat"
-brew "jq"
-brew "httpie"
-brew "mosh"
-brew "watch"
-brew "ripgrep"
-brew "coreutils"
+brew "eza"
 brew "broot"
 brew "zoxide"
 brew "atuin"
-brew "hcloud"
+brew "micro"
+brew "just"
+
+# Dotfiles and script maintenance
+brew "ripgrep"
+brew "jq"
+brew "shellcheck"
+
+# Auth, signing, and password-manager CLI
 brew "gnupg"
 brew "pinentry-mac"
 brew "protonpass/tap/pass-cli"
 
-# Fonts
+# Terminal visuals
 cask "font-jetbrains-mono-nerd-font"
-
-# Terminals & editors
 cask "ghostty"
-brew "micro"
-
-# AI tools
-cask "claude"
-cask "claude-code"
-cask "codex"
-cask "codexbar"
-
-# Productivity & communication
-cask "1password-cli"
-cask "raycast"
-cask "hiddenbar"
-cask "google-chrome@dev"
-cask "helium-browser"
-cask "obsidian"
-cask "spotify"
-cask "stats"
-cask "telegram"
-cask "whatsapp"

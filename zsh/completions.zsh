@@ -3,6 +3,10 @@
 # Description: ZSH completion initialization and custom completions
 # ----------------------------------------
 
+if [[ -d "$HOME/.zfunc" ]]; then
+    fpath=("$HOME/.zfunc" $fpath)
+fi
+
 # Initialize completion system (rebuild dump once per day, use cache otherwise)
 autoload -Uz compinit
 if [[ -f ~/.zcompdump(#qN.mh+24) ]]; then

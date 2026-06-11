@@ -14,6 +14,7 @@ doctor() {
     check_runtime_files
     check_managed_sources || failed=1
     check_managed_links || failed=1
+    check_proton_pass_agent
     check_starship_config
 
     if [[ $failed -ne 0 ]]; then
@@ -24,6 +25,27 @@ doctor() {
     log_skip "Doctor checks passed"
 }
 
+check_proton_pass_agent() {
+    log_section "Proton Pass SSH Agent"
+
+    local socket_path="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton-pass-agent.sock}"
+    local vault="${PROTON_PASS_SSH_VAULT:-Work}"
+
+    if [[ -S "$socket_path" ]]; then
+        log_skip "$socket_path"
+    else
+        log_warn "$socket_path not found; run: pass-cli ssh-agent daemon start --vault-name \"$vault\" --create-new-identities \"$vault\" --socket-path \"$socket_path\""
+    fi
+
+    if [[ "${SSH_AUTH_SOCK:-}" == "$socket_path" ]]; then
+        log_skip "SSH_AUTH_SOCK -> $socket_path"
+    else
+        log_warn "Current SSH_AUTH_SOCK is '${SSH_AUTH_SOCK:-unset}'; new shells will use $socket_path when it exists"
+    fi
+
+    log_skip "Proton SSH vault: $vault"
+}
+
 check_required_commands() {
     log_section "Required Commands"
 
@@ -31,7 +53,7 @@ check_required_commands() {
     local command_name
     local commands=(
         brew git starship fzf tmux micro zoxide atuin
-        op jq rg
+        pass-cli jq rg
     )
 
     for command_name in "${commands[@]}"; do
@@ -73,6 +95,7 @@ check_directories() {
         "$ZSH_DIR"
         "$HOME/developer"
         "$HOME/.zsh_plugins"
+        "$HOME/.zfunc"
         "$HOME/.local/bin"
     )
 

@@ -6,20 +6,76 @@
 
 # --------------------------------------------------
 # Function: key
-# Description: Loads API keys from 1Password by name.
-#              Keys in 1Password should match the env var name (e.g., OPENAI_API_KEY).
+# Description: Loads API keys from Proton Pass by name.
+#              Items should match the env var name (e.g., OPENAI_API_KEY).
+#              The field defaults to "credential"; override with PROTON_PASS_KEY_FIELD.
 # Usage: key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
 # --------------------------------------------------
 function key() {
-  local secret
+  local key secret vault field ref
+  vault="${PROTON_PASS_VAULT:-Personal}"
+  field="${PROTON_PASS_KEY_FIELD:-credential}"
+
   for key in "$@"; do
-    if ! secret=$(op read "op://Personal/$key/credential"); then
-      echo "✗ $key (op read failed)" >&2
+    ref="pass://$vault/$key/$field"
+    if ! secret=$(pass-cli item view "$ref" 2>/dev/null); then
+      if [[ "$field" != "password" ]]; then
+        ref="pass://$vault/$key/password"
+        secret=$(pass-cli item view "$ref" 2>/dev/null) || {
+          echo "✗ $key (pass-cli item view failed for credential/password)" >&2
+          return 1
+        }
+      else
+        echo "✗ $key (pass-cli item view failed)" >&2
+        return 1
+      fi
+    fi
+
+    if [[ -z "$secret" ]]; then
+      echo "✗ $key (empty Proton Pass field)" >&2
       return 1
     fi
+
     export "$key=$secret"
     echo "✓ $key"
   done
+}
+
+# --------------------------------------------------
+# Function: ppagent
+# Description: Manage the Proton Pass SSH agent for this machine's work vault.
+# Usage: ppagent [start|restart|stop|status]
+# --------------------------------------------------
+function ppagent() {
+  local action="${1:-status}"
+  local vault="${PROTON_PASS_SSH_VAULT:-Work}"
+  local socket_path="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton-pass-agent.sock}"
+
+  case "$action" in
+    start)
+      pass-cli ssh-agent daemon start \
+        --vault-name "$vault" \
+        --create-new-identities "$vault" \
+        --socket-path "$socket_path"
+      ;;
+    restart)
+      pass-cli ssh-agent daemon stop 2>/dev/null
+      pass-cli ssh-agent daemon start \
+        --vault-name "$vault" \
+        --create-new-identities "$vault" \
+        --socket-path "$socket_path"
+      ;;
+    stop)
+      pass-cli ssh-agent daemon stop
+      ;;
+    status)
+      pass-cli ssh-agent daemon status
+      ;;
+    *)
+      echo "Usage: ppagent [start|restart|stop|status]" >&2
+      return 2
+      ;;
+  esac
 }
 
 # --------------------------------------------------

@@ -10,3 +10,6 @@ source "$FUNCTIONS_DIR/general-functions.zsh"
 
 # Agent skills functions
 source "$FUNCTIONS_DIR/agentskills-functions.zsh"
+
+# uv-only nudges (bare pip/python)
+source "$FUNCTIONS_DIR/uv-functions.zsh"
