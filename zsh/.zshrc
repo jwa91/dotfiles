@@ -23,6 +23,15 @@ source "$ZSH_DIR/prompt.zsh"
 
 export GPG_TTY="$(tty)"
 
-if [[ -f "$HOME/.config/broot/launcher/bash/br" ]]; then
+if [[ -r "$HOME/.config/broot/launcher/bash/br" ]]; then
     source "$HOME/.config/broot/launcher/bash/br"
+fi
+
+if [[ -d "${BUN_INSTALL:-$HOME/.bun}" ]]; then
+    export BUN_INSTALL="${BUN_INSTALL:-$HOME/.bun}"
+    path=("$BUN_INSTALL/bin" $path)
+
+    if [[ -r "$BUN_INSTALL/_bun" ]]; then
+        source "$BUN_INSTALL/_bun"
+    fi
 fi
