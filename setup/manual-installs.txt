@@ -32,3 +32,27 @@ Manual installs (preferred outside Homebrew)
   install: curl -fsSL https://ampcode.com/install.sh | bash
   website: https://ampcode.com
   reason: official install script is the canonical method; bootstrap.sh runs this automatically.
+
+- go
+  website: https://go.dev/dl/
+  reason: official installer is the rule for Go. Since 1.21 the toolchain directive in go.mod pins and auto-downloads per-project toolchain versions, so no extra version manager is needed.
+
+- rust (rustup)
+  website: https://rustup.rs
+  reason: rustup is the canonical Rust toolchain manager; cargo/rustc stay out of Homebrew.
+
+- claude (desktop app)
+  website: https://claude.ai/download
+  reason: direct download self-updates faster than the brew cask.
+
+- claude code
+  install: curl -fsSL https://claude.ai/install.sh | bash
+  reason: native installer self-updates faster than the brew cask; bootstrap.sh runs this automatically. Migrating off the cask: brew uninstall --cask claude-code, then rerun bootstrap.
+
+- codex
+  website: https://github.com/openai/codex
+  reason: install from official releases; the brew cask lags and a global npm install is against the runtime policy.
+
+- codexbar
+  website: https://github.com/steipete/CodexBar
+  reason: install from official releases; the brew cask lags behind.

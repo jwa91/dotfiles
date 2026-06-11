@@ -49,6 +49,42 @@ install_brew_bundle() {
 
     log_action "Run brew bundle --file=$BREWFILE"
     run_cmd brew bundle --file="$BREWFILE"
+
+    local profile=""
+    if [[ -f "$DOTFILES_PROFILE_FILE" ]]; then
+        profile="$(<"$DOTFILES_PROFILE_FILE")"
+    fi
+
+    if [[ -z "$profile" ]]; then
+        log_warn "No machine profile set; shared Brewfile only. Set one with: echo personal > $DOTFILES_PROFILE_FILE"
+        return
+    fi
+
+    if [[ -f "$DOTFILES_DIR/Brewfile.$profile" ]]; then
+        log_action "Run brew bundle --file=$DOTFILES_DIR/Brewfile.$profile"
+        run_cmd brew bundle --file="$DOTFILES_DIR/Brewfile.$profile"
+    else
+        log_skip "No Brewfile.$profile in repo (profile: $profile)"
+    fi
+}
+
+install_standalone_tool() {
+    local name="$1"
+    local url="$2"
+
+    if command -v "$name" >/dev/null 2>&1; then
+        log_skip "$name (already installed)"
+        return
+    fi
+
+    log_action "Install $name via $url"
+    if ! $DRY_RUN; then
+        if curl -fsSL --head "$url" >/dev/null 2>&1; then
+            curl -fsSL "$url" | bash
+        else
+            log_warn "$name install script unreachable at $url; install manually"
+        fi
+    fi
 }
 
 install_standalone_tools() {
@@ -59,18 +95,11 @@ install_standalone_tools() {
         return
     fi
 
-    if command -v amp >/dev/null 2>&1; then
-        log_skip "amp (already installed)"
-        return
-    fi
+    # Runtime managers — the Brewfile boundary keeps these out of Homebrew.
+    install_standalone_tool uv "https://astral.sh/uv/install.sh"
+    install_standalone_tool mise "https://mise.run"
 
-    local amp_url="https://ampcode.com/install.sh"
-    log_action "Install amp via $amp_url"
-    if ! $DRY_RUN; then
-        if curl -fsSL --head "$amp_url" >/dev/null 2>&1; then
-            curl -fsSL "$amp_url" | bash
-        else
-            log_warn "amp install script unreachable at $amp_url; install manually: https://ampcode.com"
-        fi
-    fi
+    # Agent CLIs — official installers self-update faster than brew casks.
+    install_standalone_tool claude "https://claude.ai/install.sh"
+    install_standalone_tool amp "https://ampcode.com/install.sh"
 }

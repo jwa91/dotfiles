@@ -1,0 +1,26 @@
+# ----------------------------------------
+# Personal-machine Brewfile — applied on top of the shared Brewfile when
+# ~/.config/dotfiles-local/profile contains "personal".
+# Install with: brew bundle --file=~/dotfiles/Brewfile.personal
+# ----------------------------------------
+
+# Taps
+tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
+
+# Personal infra CLI
+brew "httpie"
+brew "mosh"
+brew "coreutils"
+brew "hcloud"
+brew "forgejo-cli-plus"
+
+# Productivity & communication
+cask "raycast"
+cask "hiddenbar"
+cask "google-chrome@dev"
+cask "helium-browser"
+cask "obsidian"
+cask "spotify"
+cask "stats"
+cask "telegram"
+cask "whatsapp"

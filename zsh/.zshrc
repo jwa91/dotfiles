@@ -27,11 +27,8 @@ if [[ -r "$HOME/.config/broot/launcher/bash/br" ]]; then
     source "$HOME/.config/broot/launcher/bash/br"
 fi
 
-if [[ -d "${BUN_INSTALL:-$HOME/.bun}" ]]; then
-    export BUN_INSTALL="${BUN_INSTALL:-$HOME/.bun}"
-    path=("$BUN_INSTALL/bin" $path)
-
-    if [[ -r "$BUN_INSTALL/_bun" ]]; then
-        source "$BUN_INSTALL/_bun"
-    fi
+# Activate mise — runtimes are project-pinned only (node/pnpm/bun via
+# mise.toml), so outside a project these commands intentionally don't exist.
+if command -v mise >/dev/null 2>&1; then
+    eval "$(mise activate zsh)"
 fi

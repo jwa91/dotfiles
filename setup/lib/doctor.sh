@@ -51,7 +51,7 @@ check_required_commands() {
     local command_name
     local commands=(
         brew git starship fzf tmux micro zoxide atuin
-        pass-cli jq rg
+        eza prek gitleaks op pass-cli jq rg uv mise
     )
 
     for command_name in "${commands[@]}"; do
