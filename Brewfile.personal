@@ -15,6 +15,11 @@ brew "hcloud"
 brew "forgejo-cli-plus"
 
 # Productivity & communication
+# Casks here are bootstrap-only installs of each vendor's own artifact
+# (checked 2026-06: every cask URL is the official distribution point).
+# The apps self-update through their own channels after install, so cask
+# version lag doesn't apply (`brew upgrade` skips auto_updates casks).
+# Exception: hiddenbar has no self-updater — brew upgrade is its update path.
 cask "raycast"
 cask "hiddenbar"
 cask "google-chrome@dev"
