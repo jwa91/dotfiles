@@ -72,9 +72,11 @@ alias -s csv='open'
 alias -s webp='open'
 alias -s mov='open'
 
-# Brew. Cleanup is dry-run by design: it lists strays but never removes —
-# GUI casks live in the Brewfile, so an automatic cleanup could delete apps.
-alias brewsync='brew bundle --file="$DOTFILES_DIR/Brewfile" && brew bundle cleanup --file="$DOTFILES_DIR/Brewfile"'
+# Brew. brewsync converges presence only: installs what's missing, never
+# upgrades (self-updating casks run ahead of brew's records by design;
+# `brew upgrade` covers the CLI layer). Cleanup is dry-run: it lists strays
+# but never removes — an automatic cleanup could delete GUI apps.
+alias brewsync='HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$DOTFILES_DIR/Brewfile" && brew bundle cleanup --file="$DOTFILES_DIR/Brewfile"'
 
 # Python
 alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'

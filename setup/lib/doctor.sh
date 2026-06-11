@@ -49,10 +49,12 @@ check_ssh_agent() {
 check_brew_bundle() {
     log_section "Brew Bundle"
 
-    if brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
+    # Presence-only: self-updating casks run ahead of brew's recorded
+    # versions by design, so version drift is not drift.
+    if HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
         log_skip "Brewfile satisfied"
     else
-        log_warn "Brewfile drift; inspect with: brew bundle check --verbose --file=$BREWFILE"
+        log_warn "Brewfile drift; inspect with: HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --verbose --file=$BREWFILE"
     fi
 }
 
