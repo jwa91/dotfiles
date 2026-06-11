@@ -3,13 +3,13 @@
 # Install with: brew bundle --file=~/dotfiles/Brewfile
 #
 # Boundary:
-# - Homebrew owns the terminal: shell tooling, CLI tools, and the terminal
-#   emulator itself. Same list everywhere — no machine profiles.
-# - GUI / desktop apps live in setup/apps.sh; which apps a machine gets is
-#   decided by running that script, not by this file.
-# - uv and mise are standalone ~/.local/bin tools (bootstrap installs them).
-# - AI tools (claude desktop, claude code, codex, codexbar) install via their
-#   official channels for faster updates — see setup/manual-installs.txt.
+# - Homebrew owns the terminal, nothing else: shell tooling, CLI tools,
+#   fonts, and the terminal emulator. Same list on every machine.
+# - Anything with its own UI installs straight from its vendor via
+#   setup/apps.sh and self-updates from there. Interactive installers,
+#   App Store items, and on-demand toolchains: setup/manual-installs.txt.
+# - CLI agents and runtime managers (claude code, amp, uv, mise) install
+#   via their official scripts in bootstrap's standalone-tools step.
 # - Project runtimes stay project-owned, never global:
 #   Python -> uv
 #   TypeScript/JavaScript -> mise -> node/pnpm/bun (per-project pins only)

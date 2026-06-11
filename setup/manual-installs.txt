@@ -1,37 +1,24 @@
-Manual installs (preferred outside Homebrew)
+Manual installs (intentionally outside Homebrew AND outside setup/apps.sh)
 
-- tailscale
-  website: https://tailscale.com/download
-  reason: macOS network extension approval flow is interactive and more reliable via the official installer/app flow.
-
-- cursor
-  website: https://www.cursor.com/
-  reason: app-managed CLI shim/symlink behavior can conflict with Homebrew-managed expectations; install directly from the app download, then rerun ./setup/bootstrap.sh --no-brew to apply links.
-
-- 1password
-  website: https://1password.com/downloads
-  reason: standalone installer has tighter macOS integration for biometrics and browser extension pairing; brew cask version can disrupt these. Current primary password manager and SSH agent during the (delayed) Proton Pass migration.
-
-- proton pass
-  website: https://proton.me/pass/download
-  reason: official desktop app handles account sign-in, biometrics, browser integration, and offline access; the CLI remains managed by Homebrew. Delayed migration target — 1Password stays the truth until the move completes.
+GUI apps with a scriptable official download live in setup/apps.sh.
+This file lists the rest: interactive installers, App Store items, and
+on-demand toolchains — plus the CLI tools bootstrap installs automatically.
 
 - xcode
   website: Mac App Store
   reason: full Xcode (not just CLI tools) is required; CLI tools are installed via xcode-select --install in bootstrap, but the full IDE must come from the App Store.
 
-- docker
-  website: https://www.docker.com/products/docker-desktop/
-  reason: brew cask requires sudo for symlinks into /usr/local/bin which breaks non-interactive brew bundle installs; direct installer handles this seamlessly.
+- tailscale
+  website: https://tailscale.com/download
+  reason: macOS network extension approval flow is interactive and more reliable via the official installer/app flow.
+
+- 1password
+  website: https://1password.com/downloads
+  reason: ships as an interactive installer app rather than a drag-install, and the standalone install keeps biometrics and browser-extension pairing intact. Current primary password manager and SSH agent during the (delayed) Proton Pass migration.
 
 - google drive
   website: https://www.google.com/drive/download/
-  reason: brew cask has chronic version-tracking issues and upgrade failures; direct installer is more reliable.
-
-- amp (Sourcegraph)
-  install: curl -fsSL https://ampcode.com/install.sh | bash
-  website: https://ampcode.com
-  reason: official install script is the canonical method; bootstrap.sh runs this automatically.
+  reason: ships as a .pkg requiring an admin install; direct installer is more reliable than the chronically lagging brew cask.
 
 - go
   website: https://go.dev/dl/
@@ -41,18 +28,15 @@ Manual installs (preferred outside Homebrew)
   website: https://rustup.rs
   reason: rustup is the canonical Rust toolchain manager; cargo/rustc stay out of Homebrew.
 
-- claude (desktop app)
-  website: https://claude.ai/download
-  reason: direct download self-updates faster than the brew cask.
-
-- claude code
-  install: curl -fsSL https://claude.ai/install.sh | bash
-  reason: native installer self-updates faster than the brew cask; bootstrap.sh runs this automatically. Migrating off the cask: brew uninstall --cask claude-code, then rerun bootstrap.
-
 - codex
   website: https://github.com/openai/codex
   reason: install from official releases; the brew cask lags and a global npm install is against the runtime policy.
 
-- codexbar
-  website: https://github.com/steipete/CodexBar
-  reason: install from official releases; the brew cask lags behind.
+- amp (Sourcegraph)
+  install: curl -fsSL https://ampcode.com/install.sh | bash
+  website: https://ampcode.com
+  reason: official install script is the canonical method; bootstrap.sh runs this automatically.
+
+- claude code
+  install: curl -fsSL https://claude.ai/install.sh | bash
+  reason: native installer self-updates faster than the brew cask; bootstrap.sh runs this automatically. Migrating off the cask: brew uninstall --cask claude-code, then rerun bootstrap.
