@@ -6,12 +6,33 @@
 
 # --------------------------------------------------
 # Function: key
-# Description: Loads API keys from Proton Pass by name.
-#              Items should match the env var name (e.g., OPENAI_API_KEY).
-#              The field defaults to "credential"; override with PROTON_PASS_KEY_FIELD.
+# Description: Loads API keys from 1Password by name. 1Password is the
+#              current truth during the (delayed) Proton Pass migration;
+#              pkey is the Proton equivalent and takes over as `key` once
+#              the migration completes.
+#              Keys in 1Password should match the env var name (e.g., OPENAI_API_KEY).
 # Usage: key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
 # --------------------------------------------------
 function key() {
+  local key secret
+  for key in "$@"; do
+    if ! secret=$(op read "op://Personal/$key/credential"); then
+      echo "✗ $key (op read failed)" >&2
+      return 1
+    fi
+    export "$key=$secret"
+    echo "✓ $key"
+  done
+}
+
+# --------------------------------------------------
+# Function: pkey
+# Description: Loads API keys from Proton Pass by name.
+#              Items should match the env var name (e.g., OPENAI_API_KEY).
+#              The field defaults to "credential"; override with PROTON_PASS_KEY_FIELD.
+# Usage: pkey OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
+# --------------------------------------------------
+function pkey() {
   local key secret vault field ref
   vault="${PROTON_PASS_VAULT:-Personal}"
   field="${PROTON_PASS_KEY_FIELD:-credential}"

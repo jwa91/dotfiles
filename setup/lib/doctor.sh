@@ -14,7 +14,7 @@ doctor() {
     check_runtime_files
     check_managed_sources || failed=1
     check_managed_links || failed=1
-    check_proton_pass_agent
+    check_ssh_agent
     check_starship_config
 
     if [[ $failed -ne 0 ]]; then
@@ -25,25 +25,23 @@ doctor() {
     log_skip "Doctor checks passed"
 }
 
-check_proton_pass_agent() {
-    log_section "Proton Pass SSH Agent"
+check_ssh_agent() {
+    log_section "SSH Agent"
 
-    local socket_path="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton-pass-agent.sock}"
+    # Transition state: 1Password is the current truth, Proton Pass is the
+    # delayed migration target. Mirrors the socket precedence in zsh/.zshenv
+    # (1Password wins when both agents run).
+    local op_socket="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    local proton_socket="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton-pass-agent.sock}"
     local vault="${PROTON_PASS_SSH_VAULT:-Work}"
 
-    if [[ -S "$socket_path" ]]; then
-        log_skip "$socket_path"
+    if [[ -S "$op_socket" ]]; then
+        log_skip "1Password agent: $op_socket"
+    elif [[ -S "$proton_socket" ]]; then
+        log_skip "Proton Pass agent: $proton_socket (vault: $vault)"
     else
-        log_warn "$socket_path not found; run: pass-cli ssh-agent daemon start --vault-name \"$vault\" --create-new-identities \"$vault\" --socket-path \"$socket_path\""
+        log_warn "No SSH agent socket found; enable the 1Password SSH agent (Settings -> Developer) or run: ppagent start"
     fi
-
-    if [[ "${SSH_AUTH_SOCK:-}" == "$socket_path" ]]; then
-        log_skip "SSH_AUTH_SOCK -> $socket_path"
-    else
-        log_warn "Current SSH_AUTH_SOCK is '${SSH_AUTH_SOCK:-unset}'; new shells will use $socket_path when it exists"
-    fi
-
-    log_skip "Proton SSH vault: $vault"
 }
 
 check_required_commands() {

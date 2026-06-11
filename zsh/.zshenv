@@ -27,7 +27,10 @@ export EDITOR="${EDITOR:-micro}"
 export STARSHIP_CONFIG="$XDG_CONFIG_HOME/starship.toml"
 
 # ----------------------------------------
-# Proton Pass SSH agent
+# SSH agent — transition state: 1Password is the current truth, Proton Pass
+# is the delayed migration target. Both checks are socket-gated, so machines
+# running only one agent are unaffected; when both sockets exist, 1Password
+# wins because its check runs last.
 # pass-cli's daemon defaults to ~/.ssh/proton-pass-agent.sock.
 # ----------------------------------------
 export PROTON_PASS_SSH_VAULT="${PROTON_PASS_SSH_VAULT:-Work}"
@@ -35,6 +38,10 @@ export PROTON_PASS_SSH_AUTH_SOCK="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton
 
 if [[ -S "$PROTON_PASS_SSH_AUTH_SOCK" ]]; then
     export SSH_AUTH_SOCK="$PROTON_PASS_SSH_AUTH_SOCK"
+fi
+
+if [[ -S "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" ]]; then
+    export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 fi
 
 # ----------------------------------------
