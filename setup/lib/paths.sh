@@ -7,8 +7,6 @@ BREWFILE="$DOTFILES_DIR/Brewfile"
 # shellcheck disable=SC2034 # Consumed by setup/lib/manual.sh after bootstrap sources modules.
 MANUAL_INSTALLS_FILE="$DOTFILES_DIR/setup/manual-installs.txt"
 DOTFILES_LOCAL_CONFIG_DIR="${DOTFILES_LOCAL_CONFIG_DIR:-$HOME/.config/dotfiles-local}"
-# shellcheck disable=SC2034 # Consumed by setup/lib/brew.sh after bootstrap sources modules.
-DOTFILES_PROFILE_FILE="$DOTFILES_LOCAL_CONFIG_DIR/profile"
 
 preflight() {
     log_section "Preflight"

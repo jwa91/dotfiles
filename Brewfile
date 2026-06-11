@@ -1,12 +1,12 @@
 # ----------------------------------------
-# Shared Brewfile — installed on every machine.
+# Brewfile — the terminal layer, shared by every machine.
 # Install with: brew bundle --file=~/dotfiles/Brewfile
-# Machine extras live in Brewfile.<profile>; bootstrap applies both based on
-# the profile name in ~/.config/dotfiles-local/profile.
 #
 # Boundary:
-# - Homebrew owns system/shell/bootstrap tools.
-# - App-layer installs stay outside Brewfile.
+# - Homebrew owns the terminal: shell tooling, CLI tools, and the terminal
+#   emulator itself. Same list everywhere — no machine profiles.
+# - GUI / desktop apps live in setup/apps.sh; which apps a machine gets is
+#   decided by running that script, not by this file.
 # - uv and mise are standalone ~/.local/bin tools (bootstrap installs them).
 # - AI tools (claude desktop, claude code, codex, codexbar) install via their
 #   official channels for faster updates — see setup/manual-installs.txt.
@@ -21,6 +21,7 @@
 tap "1password/tap"
 tap "jwa91/tap"
 tap "protonpass/tap"
+tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
 
 # Personal tap binaries — installed in bootstrap order:
 # hardening wrapper, skill distribution, harness alignment.
@@ -44,6 +45,13 @@ brew "just"
 brew "tree"
 brew "watch"
 brew "cheat"
+brew "coreutils"
+
+# Network & infra CLI
+brew "httpie"
+brew "mosh"
+brew "hcloud"
+brew "forgejo-cli-plus"
 
 # Dotfiles and script maintenance (prek hooks need these on every machine)
 brew "ripgrep"

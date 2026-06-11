@@ -49,23 +49,6 @@ install_brew_bundle() {
 
     log_action "Run brew bundle --file=$BREWFILE"
     run_cmd brew bundle --file="$BREWFILE"
-
-    local profile=""
-    if [[ -f "$DOTFILES_PROFILE_FILE" ]]; then
-        profile="$(<"$DOTFILES_PROFILE_FILE")"
-    fi
-
-    if [[ -z "$profile" ]]; then
-        log_warn "No machine profile set; shared Brewfile only. Set one with: echo personal > $DOTFILES_PROFILE_FILE"
-        return
-    fi
-
-    if [[ -f "$DOTFILES_DIR/Brewfile.$profile" ]]; then
-        log_action "Run brew bundle --file=$DOTFILES_DIR/Brewfile.$profile"
-        run_cmd brew bundle --file="$DOTFILES_DIR/Brewfile.$profile"
-    else
-        log_skip "No Brewfile.$profile in repo (profile: $profile)"
-    fi
 }
 
 install_standalone_tool() {
