@@ -36,14 +36,15 @@ mkpass                    # Generate random password -> clipboard
 mkskill [name]            # Install/list skills (prefers local $DEV_DIR/agentskills)
 
 # Brew
-brewsync                  # Install/remove/upgrade packages from Brewfile
+brewsync                  # Install missing Brewfile entries; cleanup is dry-run
 
 # Python
 pyclean                   # Remove __pycache__ dirs recursively
 
 # Utilities
-key NAME [NAME ...]       # Load API keys from Proton Pass
-ppagent [action]          # Manage Proton SSH agent scoped to PROTON_PASS_SSH_VAULT
+key NAME [NAME ...]       # Load API keys from 1Password
+pkey NAME [NAME ...]      # Load API keys from Proton Pass experiment
+ppagent [action]          # Manage optional Proton SSH agent
 rwe                       # Retry last command with escaped arguments
 getmd <url> [--no-copy]   # Fetch clean markdown from URL -> clipboard
 zshdoctor                 # Validate zsh config, deps, and paths

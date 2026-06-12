@@ -3,6 +3,7 @@
 ZSH_DIR="$DOTFILES_DIR/zsh"
 CONFIG_DIR="$DOTFILES_DIR/config"
 GIT_DIR="$DOTFILES_DIR/git"
+SHELL_DIR="$DOTFILES_DIR/shell"
 BREWFILE="$DOTFILES_DIR/Brewfile"
 # shellcheck disable=SC2034 # Consumed by setup/lib/manual.sh after bootstrap sources modules.
 MANUAL_INSTALLS_FILE="$DOTFILES_DIR/setup/manual-installs.txt"
@@ -23,9 +24,11 @@ preflight() {
         "$GIT_DIR/config.local.example"
         "$GIT_DIR/commit_template.txt"
         "$GIT_DIR/ignore"
+        "$SHELL_DIR/env.sh"
         "$ZSH_DIR/.zshrc"
         "$ZSH_DIR/.zshenv"
         "$ZSH_DIR/.zprofile"
+        "$ZSH_DIR/path.zsh"
     )
 
     local required

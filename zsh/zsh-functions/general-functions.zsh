@@ -7,9 +7,8 @@
 # --------------------------------------------------
 # Function: key
 # Description: Loads API keys from 1Password by name. 1Password is the
-#              current truth during the (delayed) Proton Pass migration;
-#              pkey is the Proton equivalent and takes over as `key` once
-#              the migration completes.
+#              current secrets truth. `pkey` is the Proton Pass experiment,
+#              kept separate so the default workflow remains unambiguous.
 #              Keys in 1Password should match the env var name (e.g., OPENAI_API_KEY).
 # Usage: key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
 # --------------------------------------------------

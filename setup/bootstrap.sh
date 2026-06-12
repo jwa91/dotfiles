@@ -12,15 +12,15 @@ SKIP_BREW=false
 SKIP_LINK=false
 RESET_LINKS=false
 UPDATE_PLUGINS=false
-ALLOW_EMPTY_RUNTIME=false
+ALLOW_EMPTY_LOCAL_CONFIG=false
 ONLY_TARGET="all"
 
 # shellcheck source=setup/lib/logging.sh
 source "$LIB_DIR/logging.sh"
 # shellcheck source=setup/lib/paths.sh
 source "$LIB_DIR/paths.sh"
-# shellcheck source=setup/lib/runtime.sh
-source "$LIB_DIR/runtime.sh"
+# shellcheck source=setup/lib/local_config.sh
+source "$LIB_DIR/local_config.sh"
 # shellcheck source=setup/lib/links.sh
 source "$LIB_DIR/links.sh"
 # shellcheck source=setup/lib/brew.sh
@@ -42,9 +42,10 @@ Options:
   --no-link              Skip config linking
   --reset                Remove managed symlinks before linking
   --update               Update zsh plugins with git pull --ff-only
-  --only <target>        Run one target: all, brew, standalone, zsh, manual, runtime, links, doctor
+  --only <target>        Run one target: all, brew, standalone, zsh, manual, local-config, links, doctor
   --check                Alias for --only doctor
-  --allow-empty-runtime  Create empty runtime files when a seed example is missing
+  --allow-empty-local-config
+                         Create empty local config files when a seed example is missing
   -h, --help             Show this help
 EOF
 }
@@ -79,8 +80,8 @@ parse_args() {
             --check)
                 ONLY_TARGET="doctor"
                 ;;
-            --allow-empty-runtime)
-                ALLOW_EMPTY_RUNTIME=true
+            --allow-empty-local-config)
+                ALLOW_EMPTY_LOCAL_CONFIG=true
                 ;;
             -h|--help)
                 usage
@@ -123,9 +124,9 @@ run_target() {
         manual)
             print_manual_install_checklist
             ;;
-        runtime)
+        local-config)
             preflight
-            ensure_runtime_files
+            ensure_local_config_files
             ;;
         links)
             preflight

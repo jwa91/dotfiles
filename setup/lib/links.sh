@@ -7,7 +7,7 @@ MANAGED_LINKS=(
     "$HOME/.zshrc|$ZSH_DIR/.zshrc|always"
     "$HOME/.zshenv|$ZSH_DIR/.zshenv|always"
     "$HOME/.zprofile|$ZSH_DIR/.zprofile|always"
-    "$HOME/.config/ghostty/config|$CONFIG_DIR/ghostty/config|always"
+    "$HOME/.config/ghostty|$CONFIG_DIR/ghostty|always"
     "$HOME/.config/starship.toml|$CONFIG_DIR/starship.toml|always"
     "$HOME/.claude/settings.json|$CONFIG_DIR/claude-code/settings.json|always"
     "$HOME/.config/cheat/conf.yml|$CONFIG_DIR/cheat/conf.yml|always"
@@ -24,7 +24,7 @@ MANAGED_LINKS=(
     "$HOME/.cursor/mcp.json|$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json|cursor"
 )
 
-RUNTIME_FILES=(
+LOCAL_CONFIG_FILES=(
     "$HOME/.gitconfig.local|$GIT_DIR/config.local.example|always"
     "$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json|$CONFIG_DIR/cursor/mcp.example.json|cursor"
 )
@@ -67,13 +67,13 @@ split_spec() {
     printf -v "$condition_ref" '%s' "$parsed_condition"
 }
 
-runtime_source_planned() {
+local_config_source_planned() {
     local source="$1"
-    local spec runtime_file example_file condition
+    local spec local_config_file example_file condition
 
-    for spec in "${RUNTIME_FILES[@]}"; do
-        split_spec "$spec" runtime_file example_file condition
-        if [[ "$runtime_file" == "$source" && -f "$example_file" ]]; then
+    for spec in "${LOCAL_CONFIG_FILES[@]}"; do
+        split_spec "$spec" local_config_file example_file condition
+        if [[ "$local_config_file" == "$source" && -f "$example_file" ]]; then
             return 0
         fi
     done
@@ -104,8 +104,8 @@ ensure_symlink() {
     local parent_dir
 
     if [[ ! -e "$source" ]]; then
-        if $DRY_RUN && runtime_source_planned "$source"; then
-            log_warn "Managed source will be initialized from runtime seed: $source"
+        if $DRY_RUN && local_config_source_planned "$source"; then
+            log_warn "Managed source will be initialized from local config seed: $source"
         else
             log_error "Managed source missing: $source"
             exit 1
@@ -152,16 +152,16 @@ reset_symlinks() {
     done
 }
 
-ensure_runtime_files() {
-    log_section "Runtime Configs"
+ensure_local_config_files() {
+    log_section "Local Configs"
 
-    local spec runtime_file example_file condition
-    for spec in "${RUNTIME_FILES[@]}"; do
-        split_spec "$spec" runtime_file example_file condition
+    local spec local_config_file example_file condition
+    for spec in "${LOCAL_CONFIG_FILES[@]}"; do
+        split_spec "$spec" local_config_file example_file condition
         if should_manage_condition "$condition"; then
-            ensure_local_runtime_file "$runtime_file" "$example_file"
+            ensure_local_config_file "$local_config_file" "$example_file"
         else
-            log_skip "$runtime_file ($condition not detected)"
+            log_skip "$local_config_file ($condition not detected)"
         fi
     done
 }
@@ -190,6 +190,6 @@ link_configs() {
         reset_symlinks
     fi
 
-    ensure_runtime_files
+    ensure_local_config_files
     link_managed_configs
 }

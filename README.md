@@ -1,47 +1,48 @@
 # dotfiles
 
-Configuration and machine setup for two Apple Silicon Macs (personal + work),
-kept intentionally identical: **a tool exists on both machines or on neither.**
+Clean, bootstrappable macOS configuration for Apple Silicon machines.
 
-## The one rule
+The governing rule is: **every tool has exactly one owner**. Homebrew is the
+base package/bootstrap layer, not the authority for fast-moving GUI app updates
+or project runtime state.
 
-**Everything installs via the [Brewfile](Brewfile).** Exceptions are
-enumerated, never derived:
+See [docs/system.md](docs/system.md) for the full system model.
 
-| Where | What | Why |
-|---|---|---|
-| [Brewfile](Brewfile) | All host software brew can deliver — CLI and GUI alike | One manifest, one update channel, ecosystem-maintained |
-| [setup/lib/brew.sh](setup/lib/brew.sh) (runs in bootstrap) | claude code, codex, amp | Fast-moving agent CLIs; first-party installers self-update same-day |
-| [setup/manual-installs.txt](setup/manual-installs.txt) | Xcode, Tailscale, 1Password, Google Drive, Docker, go, rustup | Need a human (App Store, passwords, biometrics) or are on-demand toolchains |
+## Stack
 
-GUI casks are bootstrap-only installs: every app self-updates through its own
-channel afterwards. `brew upgrade` skips them by design — never pass `--greedy`.
+| Layer | Owner |
+|---|---|
+| Base packages | [Brewfile](Brewfile) |
+| GUI apps | Direct app update channels; Brew casks are bootstrap-only when used |
+| Containers | OrbStack |
+| Shell | zsh, with shared environment kept separable for future bash/fish |
+| Prompt/terminal | starship + Ghostty |
+| Task runner | just |
+| Python | uv |
+| TypeScript | Node via mise/project pins; pnpm by default, Bun when useful |
+| Go | Official Go toolchain and Go modules/toolchain directive |
+| Rust | rustup |
+| Secrets/SSH | 1Password today; Proton remains an installed experiment, not the plan |
+| Signing | GPG for code signing, SSH for Git/VPS access |
 
-## Layers
+Project runtimes do not land in Homebrew. Outside a project, bare `python`,
+`pip`, `node`, `npm`, `pnpm`, and `bun` should not become accidental global
+state.
 
-1. **Shell & config** — this repo; `./setup/bootstrap.sh` links everything.
-2. **Host software** — the rule above.
-3. **Project runtimes** — never global: uv (Python), mise (node/pnpm/bun,
-   per-project pins only), the go toolchain directive, rustup. Outside a
-   project, `node` and `python` deliberately don't resolve — this keeps both
-   humans and coding agents from installing globally without a discussion.
-   [config/claude-code/settings.json](config/claude-code/settings.json)
-   additionally denies global-install commands outright.
-4. **Project dependencies** — lockfiles inside each repo, nowhere else.
+## New Machine
 
-## A new machine, day 1
+1. `xcode-select --install` — interactive GUI prompt; git needs the CLT.
+2. `git clone https://github.com/jwa91/dotfiles ~/dotfiles` — HTTPS, no keys yet.
+3. `cd ~/dotfiles && ./setup/bootstrap.sh` — Homebrew, base packages, links, zsh.
+4. Work through [setup/manual-installs.txt](setup/manual-installs.txt).
+5. Sign in to 1Password and enable its SSH agent.
+6. Switch the git remote to SSH.
+7. Run `just doctor` until the managed state is clean.
 
-1. `xcode-select --install` — interactive GUI prompt; git needs it
-2. `git clone https://github.com/jwa91/dotfiles ~/dotfiles` — HTTPS, no keys yet
-3. `./setup/bootstrap.sh` — Homebrew, Brewfile, agent CLIs, links, zsh
-4. Install 1Password from the checklist, sign in, enable its SSH agent
-5. Switch the git remote to SSH; work through the rest of the checklist
-6. `./setup/doctor.sh` until green
+## Daily Commands
 
-## Staying aligned
-
-- `brewsync` — installs anything missing from the Brewfile, then dry-run
-  lists strays (removal is always a deliberate manual step)
-- `./setup/doctor.sh` — drift and runtime-leak detector; fails if a global
-  python/node sneaks onto the host
-- Apps update themselves; `brew upgrade` covers the CLI layer
+- `just` — list available dotfile tasks.
+- `just bootstrap` — converge a new or existing machine.
+- `just doctor` — check links, package presence, runtime leaks, and app state.
+- `just brew-sync` — install missing Brewfile entries without upgrading apps.
+- `brewsync` — shell alias for the same Homebrew presence check.

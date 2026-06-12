@@ -47,8 +47,15 @@ install_brew_bundle() {
         return
     fi
 
-    log_action "Run brew bundle --file=$BREWFILE"
-    run_cmd brew bundle --file="$BREWFILE"
+    if brew trust --help >/dev/null 2>&1; then
+        log_action "Tap steipete/tap for CodexBar"
+        run_cmd brew tap steipete/tap
+        log_action "Trust steipete/tap/codexbar cask"
+        run_cmd brew trust --cask steipete/tap/codexbar
+    fi
+
+    log_action "Run brew bundle --no-upgrade --file=$BREWFILE"
+    run_cmd env HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$BREWFILE"
 }
 
 install_standalone_tool() {
@@ -78,8 +85,7 @@ install_standalone_tools() {
         return
     fi
 
-    # The closed exception list to "everything installs via the Brewfile":
-    # fast-moving agent CLIs whose first-party installers self-update
+    # Fast-moving agent CLIs whose first-party installers self-update
     # same-day. Add nothing here without a one-line reason.
     install_standalone_tool claude "https://claude.ai/install.sh"
     install_standalone_tool codex "https://chatgpt.com/codex/install.sh"

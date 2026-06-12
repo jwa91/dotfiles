@@ -1,24 +1,21 @@
 # ----------------------------------------
-# Brewfile — the default install channel for ALL host software.
+# Brewfile — base macOS package/bootstrap layer.
 # Install with: brew bundle --file=~/dotfiles/Brewfile
 #
-# The one rule: everything installs from this file. Exceptions are
-# enumerated, never derived:
-#   - setup/lib/brew.sh installs the fast-moving agent CLIs (claude code,
-#     codex, amp) via their first-party installers — same-day updates.
-#   - setup/manual-installs.txt is the short human checklist (App Store,
-#     interactive installers, on-demand toolchains).
-# Identical on both machines: a tool exists on both or on neither.
+# The rule: every tool has one owner. Homebrew owns base packages and
+# bootstrap casks, but not project runtime versions or self-updating app
+# freshness. See docs/system.md for the full model.
 #
 # House rules:
-# - GUI casks are bootstrap-only installs: the apps self-update through
-#   their own channels; `brew upgrade` skips them (auto_updates).
-#   Never pass --greedy.
+# - Bootstrap runs brew bundle with HOMEBREW_BUNDLE_NO_UPGRADE=1.
+# - GUI casks are allowed only as bootstrap installers. The app's own
+#   updater owns freshness afterwards. Interactive shells set
+#   HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 for this reason.
 # - Before adding a formula, run `brew deps <formula>` — nothing that
 #   drags python/node/ruby onto the host (that mistake cost us httpie).
-# - Project runtimes never land here: uv (Python) and mise (node/pnpm/bun)
-#   provision per-project only. Outside a project, node and python
-#   intentionally don't resolve. setup/doctor.sh verifies.
+# - Project runtimes never land here: uv owns Python projects, mise
+#   activates node/pnpm/bun per project, Go comes from the official
+#   toolchain, and Rust comes from rustup.
 # ----------------------------------------
 
 # Taps
@@ -26,6 +23,7 @@ tap "1password/tap"
 tap "jwa91/tap"
 tap "protonpass/tap"
 tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
+tap "steipete/tap"
 
 # Personal tap binaries — installed in bootstrap order:
 # hardening wrapper, skill distribution, harness alignment.
@@ -37,6 +35,7 @@ cask "prehandover"
 
 # Shell & terminal core
 brew "git"
+brew "git-lfs"
 brew "tmux"
 brew "starship"
 brew "fzf"
@@ -69,7 +68,8 @@ brew "prek"
 brew "gitleaks"
 
 # Auth, signing, and password-manager CLI
-# 1Password is the current truth; Proton Pass is the delayed migration target.
+# 1Password is the current truth; Proton Pass is installed but not part of
+# the current secrets/SSH plan.
 brew "gnupg"
 brew "pinentry-mac"
 brew "protonpass/tap/pass-cli"
@@ -79,10 +79,12 @@ cask "1password-cli"
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
 
-# GUI apps (bootstrap-only: each self-updates via its own channel;
-# codexbar and hiddenbar are the exceptions — brew upgrade updates them)
+# Containers
+cask "orbstack"
+
+# GUI apps (bootstrap-only: each self-updates via its own channel)
 cask "claude"
-cask "codexbar"
+cask "steipete/tap/codexbar"
 cask "cursor"
 cask "google-chrome@dev"
 cask "helium-browser"

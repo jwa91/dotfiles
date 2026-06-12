@@ -1,9 +1,12 @@
-Manual installs — the human checklist. Everything else: see Brewfile.
+Manual steps — the human checklist. Everything else should be handled by
+bootstrap, Brewfile, or project-local tooling.
 
 Interactive installs (App Store, passwords, biometrics, admin):
 
-- xcode           Mac App Store. Day-1 note: run `xcode-select --install`
-                  first — git needs the CLT before anything else works.
+- xcode clt       Run `xcode-select --install` first — git needs the Command
+                  Line Tools before anything else works. Install full Xcode
+                  only for native Apple-platform work, and keep it current if
+                  it lives in /Applications.
 - tailscale       https://tailscale.com/download — interactive
                   network-extension approval.
 - 1password       https://1password.com/downloads — interactive installer
@@ -11,13 +14,9 @@ Interactive installs (App Store, passwords, biometrics, admin):
                   SSH-agent and secrets truth.
 - google drive    https://www.google.com/drive/download/ — ships as a .pkg
                   needing an admin install.
-- docker desktop  `brew install --cask --adopt docker-desktop` when wanted;
-                  kept out of the Brewfile because the cask prompts for an
-                  admin password mid-install (CLI symlinks in /usr/local/bin).
 
-On-demand toolchains (install when a project needs them):
+Post-bootstrap checks:
 
-- go              https://go.dev/dl/ official installer; go.mod's toolchain
-                  directive pins per-project versions natively.
-- rust            https://rustup.rs — rustup is the canonical toolchain
-                  manager; cargo/rustc stay off Homebrew.
+- orbstack        Open once after bootstrap if it has not completed first-run
+                  setup. Docker Desktop should stay absent after migration.
+- zed             Optional trial: https://zed.dev/download
