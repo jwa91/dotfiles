@@ -1,0 +1,21 @@
+# eza theme overrides.
+#
+# Keep this small: eza's built-in theme already tracks new file types and
+# Nerd Font icons. This file is only for dotfiles-specific names eza cannot
+# infer from extensions.
+
+filekinds:
+  normal:
+    foreground: null
+
+filenames:
+  Brewfile: { icon: { glyph: "" } }
+  justfile: { icon: { glyph: "" } }
+  uv.lock: { icon: { glyph: "" } }
+  pnpm-lock.yaml: { icon: { glyph: "" } }
+  bun.lock: { icon: { glyph: "" } }
+  mise.toml: { icon: { glyph: "󰦗" } }
+  starship.toml: { icon: { glyph: "" } }
+
+extensions:
+  zsh: { icon: { glyph: "" } }

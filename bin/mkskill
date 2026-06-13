@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# mkskill — install agent skills into the current project.
+
+set -euo pipefail
+
+if ! command -v agentskills >/dev/null 2>&1; then
+  echo "mkskill: agentskills CLI not found. Install with: brew install jwa91/tap/agentskills" >&2
+  exit 1
+fi
+
+dev_dir="${DEV_DIR:-$HOME/developer}"
+local_repo="$dev_dir/agentskills"
+repo_path="${AGENTSKILLS_REPO_PATH:-$local_repo}"
+repo_args=()
+
+if [[ -n "$repo_path" && -d "$repo_path/skills" ]]; then
+  repo_args=(--repo-path "$repo_path")
+elif [[ -n "${AGENTSKILLS_REPO_PATH:-}" ]]; then
+  if [[ -d "$local_repo/skills" ]]; then
+    echo "mkskill: AGENTSKILLS_REPO_PATH is stale, using $local_repo instead." >&2
+    repo_args=(--repo-path "$local_repo")
+  elif [[ ! -d "$AGENTSKILLS_REPO_PATH/skills" ]]; then
+    echo "mkskill: AGENTSKILLS_REPO_PATH has no skills directory: $AGENTSKILLS_REPO_PATH" >&2
+    exit 1
+  else
+    repo_args=(--repo-path "$AGENTSKILLS_REPO_PATH")
+  fi
+else
+  repo_args=(--repo-url "${AGENTSKILLS_REPO_URL:-https://github.com/jwa91/agentskills.git}")
+fi
+
+if [[ -n "${AGENTSKILLS_REF:-}" && -z "${AGENTSKILLS_REPO_PATH:-}" ]]; then
+  repo_args+=(--ref "$AGENTSKILLS_REF")
+fi
+
+if [[ $# -eq 0 ]]; then
+  exec agentskills list "${repo_args[@]}"
+fi
+
+skill_args=()
+for skill in "$@"; do
+  skill_args+=(--skill "$skill")
+done
+
+agentskills bootstrap --project . "${repo_args[@]}" "${skill_args[@]}" --mode copy --force
+agentskills link --project . --force

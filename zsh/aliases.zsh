@@ -21,11 +21,11 @@ cdzsh()   { builtin cd "$ZSH_DIR"; }
 cddots()  { builtin cd "$DOTFILES_DIR"; }
 cdvault() { builtin cd "$VAULT_PATH"; }
 
-# Listing (eza — icons need a Nerd Font, configured in Ghostty)
-alias ls='eza --icons --group-directories-first'                              # tidy default (dotfiles hidden — use la)
-alias la='eza --icons --group-directories-first --all'                        # include dotfiles
-alias ll='eza --icons --group-directories-first --long --all --git --header'  # detailed: perms, size, git, header
-alias lt='eza --icons --group-directories-first --tree --level=2'             # 2-level tree
+# Listing (eza icons use EZA_ICONS_AUTO + the Nerd Font configured in Ghostty)
+alias ls='eza --group-directories-first'                              # tidy default (dotfiles hidden — use la)
+alias la='eza --group-directories-first --all'                        # include dotfiles
+alias ll='eza --group-directories-first --long --all --git --header'  # detailed: perms, size, git, header
+alias lt='eza --group-directories-first --tree --level=2'             # 2-level tree
 
 # Navigation
 alias ..='cd ..'

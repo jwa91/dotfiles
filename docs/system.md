@@ -13,6 +13,7 @@
 | Rust projects | mise | mise owns Rust version selection; rustup is the backend implementation. |
 | Shell | zsh now, portable env later | Keep shared environment separate from interactive zsh behavior. |
 | Tasks | just | Human interface for bootstrap, checks, and maintenance. |
+| Command help | cheat + tldr + man | Personal sheets document local workflow; upstream examples are cloned/cached. |
 | Secrets/SSH | 1Password | Proton apps may be installed, but 1Password owns secrets and SSH. |
 | Code signing | GPG | SSH is for transport and machine access. |
 
@@ -106,6 +107,20 @@ ported to bash and fish later:
 - Interactive aliases, plugins, and completion behavior stay shell-specific.
 - No shell framework is used.
 - Plugins are explicit and deliberately installed.
+
+Shell functions are only for behavior that must mutate or intercept the parent
+interactive shell, such as `cd`, `export`, or toolchain command wrappers.
+Standalone helpers live in `bin/` and bootstrap links every executable there
+into `~/.local/bin` so future bash/fish setups can reuse them.
+
+## Command Help
+
+Personal `cheat` sheets should document local workflows, aliases, and dotfiles
+policy only. Do not mirror upstream app manuals there; those drift quickly.
+
+Use `how <topic>` for lookup. It tries personal/community `cheat` sheets first,
+then `tldr`, then `man`. Bootstrap and `just help` clone/update the community
+`cheat` sheets and refresh the tldr cache.
 
 ## Runtime Rules
 

@@ -16,6 +16,7 @@ doctor() {
     check_local_config_files
     check_managed_sources || failed=1
     check_managed_links || failed=1
+    check_command_help
     check_ssh_agent
     check_brew_bundle
     check_runtime_leaks || failed=1
@@ -148,7 +149,7 @@ check_required_commands() {
     local command_name
     local commands=(
         brew git starship fzf tmux micro zoxide atuin
-        eza just prek gitleaks op pass-cli jq rg uv mise
+        eza just prek gitleaks op pass-cli jq rg uv mise cheat tldr
     )
 
     for command_name in "${commands[@]}"; do
@@ -406,7 +407,7 @@ check_managed_sources() {
 
     local failed=0
     local spec target source _condition
-    for spec in "${MANAGED_LINKS[@]}"; do
+    while IFS= read -r spec; do
         split_spec "$spec" target source _condition
         if [[ -e "$source" ]]; then
             log_skip "$source"
@@ -416,7 +417,7 @@ check_managed_sources() {
             log_error "Managed source missing for $target: $source"
             failed=1
         fi
-    done
+    done < <(managed_link_specs)
 
     return "$failed"
 }
@@ -427,7 +428,7 @@ check_managed_links() {
     local failed=0
     local spec target source condition current_target
 
-    for spec in "${MANAGED_LINKS[@]}"; do
+    while IFS= read -r spec; do
         split_spec "$spec" target source condition
 
         if ! should_manage_condition "$condition"; then
@@ -451,9 +452,27 @@ check_managed_links() {
             log_error "$target missing"
             failed=1
         fi
-    done
+    done < <(managed_link_specs)
 
     return "$failed"
+}
+
+check_command_help() {
+    log_section "Command Help"
+
+    local community_dir="${CHEAT_COMMUNITY_DIR:-$HOME/.config/cheat/cheatsheets/community}"
+
+    if [[ -d "$community_dir/.git" ]]; then
+        log_skip "cheat community sheets: $community_dir"
+    else
+        log_warn "cheat community sheets missing; run: just help"
+    fi
+
+    if command -v tldr >/dev/null 2>&1; then
+        log_skip "tldr client"
+    else
+        log_warn "tldr client missing; run: just brew-sync"
+    fi
 }
 
 check_starship_config() {

@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# how — command help, in descending order of personal relevance.
+
+set -euo pipefail
+
+usage() {
+  echo "usage: how TOPIC" >&2
+  echo "tries: personal cheat -> tldr -> man" >&2
+}
+
+if [[ $# -eq 0 || "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 64
+fi
+
+topic="$*"
+hyphenated="${topic// /-}"
+candidates=("$topic")
+[[ "$hyphenated" != "$topic" ]] && candidates+=("$hyphenated")
+
+try_page() {
+  local tool="$1"
+  local page="$2"
+  local output
+
+  if ! command -v "$tool" >/dev/null 2>&1; then
+    return 1
+  fi
+
+  if output="$("$tool" "$page" 2>/dev/null)"; then
+    printf '%s\n' "$output"
+    return 0
+  fi
+
+  return 1
+}
+
+for page in "${candidates[@]}"; do
+  try_page cheat "$page" && exit 0
+done
+
+for page in "${candidates[@]}"; do
+  try_page tldr "$page" && exit 0
+done
+
+for page in "${candidates[@]}"; do
+  if command -v man >/dev/null 2>&1 && man "$page" >/dev/null 2>&1; then
+    exec man "$page"
+  fi
+done
+
+echo "how: no cheat, tldr, or man entry for '$topic'" >&2
+exit 1

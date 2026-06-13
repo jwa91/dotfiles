@@ -17,6 +17,9 @@ export VAULT_PATH="${VAULT_PATH:-$HOME/Library/Mobile Documents/com~apple~CloudD
 
 export EDITOR="${EDITOR:-micro}"
 export STARSHIP_CONFIG="${STARSHIP_CONFIG:-$XDG_CONFIG_HOME/starship.toml}"
+export EZA_CONFIG_DIR="${EZA_CONFIG_DIR:-$XDG_CONFIG_HOME/eza}"
+export EZA_ICON_SPACING="${EZA_ICON_SPACING:-2}"
+export EZA_ICONS_AUTO="${EZA_ICONS_AUTO:-1}"
 
 # Brew casks are bootstrap installers here; apps with their own updater should
 # not be chased by routine `brew upgrade`.

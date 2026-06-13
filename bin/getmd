@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# getmd — fetch clean markdown from a URL via defuddle.md.
+
+set -euo pipefail
+
+usage() {
+  echo "usage: getmd URL [--no-copy]" >&2
+}
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 64
+fi
+
+url="${1#https://}"
+url="${url#http://}"
+no_copy=false
+[[ "${2:-}" == "--no-copy" ]] && no_copy=true
+
+content="$(curl -sf "defuddle.md/$url")"
+if [[ -z "$content" ]]; then
+  echo "getmd: failed to fetch markdown for $url" >&2
+  exit 1
+fi
+
+printf '%s\n' "$content"
+
+if ! $no_copy; then
+  printf '%s\n' "$content" | pbcopy
+  words="$(printf '%s\n' "$content" | wc -w | tr -d ' ')"
+  echo "getmd: copied ${words} words to clipboard" >&2
+fi

@@ -1,6 +1,6 @@
 # ----------------------------------------
 # File: toolchain-functions.zsh
-# Description: Keep language toolchain mutations routed through mise.
+# Description: Keep language toolchain mutations routed through their owner.
 # ----------------------------------------
 
 _toolchain_nudge() {
@@ -23,6 +23,28 @@ _run_external_tool() {
   command "$command_name" "$@"
 }
 
+_python_nudge() {
+  local command_name="$1"
+  shift
+
+  case "$command_name" in
+    pip|pip3)
+      echo "x uv owns Python dependencies on this machine; skip bare pip." >&2
+      echo "  Use: uv add <pkg>          # project dependency" >&2
+      echo "  Use: uv pip install <pkg>  # one-off, into the current venv" >&2
+      echo "  Escape hatch: command $command_name $*" >&2
+      ;;
+    python|python3)
+      echo "x uv owns Python execution on this machine; skip bare python." >&2
+      echo "  Use: uv run <script.py>    # run a script" >&2
+      echo "  Use: uv run python         # REPL, or add -m <module>" >&2
+      echo "  Escape hatch: command $command_name $*" >&2
+      ;;
+  esac
+
+  return 127
+}
+
 _toolchain_has_global_flag() {
   local arg previous=""
 
@@ -41,6 +63,22 @@ _toolchain_has_global_flag() {
   done
 
   return 1
+}
+
+pip() {
+  _python_nudge pip "$@"
+}
+
+pip3() {
+  _python_nudge pip3 "$@"
+}
+
+python() {
+  _python_nudge python "$@"
+}
+
+python3() {
+  _python_nudge python3 "$@"
 }
 
 bun() {

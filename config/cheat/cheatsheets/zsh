@@ -21,7 +21,10 @@ cdd [subdir]              # cd to DEV_DIR (or subdir within it)
 # Navigation
 z <query>                 # Jump to frecency-matched directory (zoxide)
 zi                        # Interactive directory picker (zoxide + fzf)
-ls                        # ls -FaG (colorized, all, classify)
+ls                        # Compact eza listing with directories first
+la                        # ls plus dotfiles
+ll                        # Long eza listing with git status and header
+lt                        # Two-level eza tree
 ..                        # cd ..
 ...                       # cd ../..
 ....                      # cd ../../..
@@ -45,9 +48,8 @@ pyclean                   # Remove __pycache__ dirs recursively
 key NAME [NAME ...]       # Load API keys from 1Password
 pkey NAME [NAME ...]      # Load API keys from Proton Pass experiment
 ppagent [action]          # Manage optional Proton SSH agent
-rwe                       # Retry last command with escaped arguments
 getmd <url> [--no-copy]   # Fetch clean markdown from URL -> clipboard
-zshdoctor                 # Validate zsh config, deps, and paths
+how <topic>               # Personal cheat -> tldr -> man lookup
 
 # Atuin (shell history)
 ctrl-r                    # Search all history (atuin fuzzy search)

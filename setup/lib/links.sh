@@ -12,11 +12,10 @@ MANAGED_LINKS=(
     "$HOME/.claude/settings.json|$CONFIG_DIR/claude-code/settings.json|always"
     "$HOME/.config/cheat/conf.yml|$CONFIG_DIR/cheat/conf.yml|always"
     "$HOME/.config/cheat/cheatsheets/personal|$CONFIG_DIR/cheat/cheatsheets|always"
+    "$HOME/.config/eza|$CONFIG_DIR/eza|always"
     "$HOME/.config/broot/conf.hjson|$CONFIG_DIR/broot/conf.hjson|always"
     "$HOME/.config/broot/verbs.hjson|$CONFIG_DIR/broot/verbs.hjson|always"
     "$HOME/.config/broot/skins|$CONFIG_DIR/broot/skins|always"
-    "$HOME/.local/bin/clip-md|$DOTFILES_DIR/bin/clip-md|always"
-    "$HOME/.local/bin/rename-case|$DOTFILES_DIR/bin/rename-case|always"
     "$HOME/.config/atuin/config.toml|$CONFIG_DIR/atuin/config.toml|always"
     "$HOME/.config/mise/config.toml|$CONFIG_DIR/mise/config.toml|always"
     "$HOME/.tmux.conf|$CONFIG_DIR/tmux/tmux.conf|always"
@@ -24,6 +23,19 @@ MANAGED_LINKS=(
     "$HOME/Library/Application Support/Cursor/User/keybindings.json|$CONFIG_DIR/cursor/keybindings.json|cursor"
     "$HOME/.cursor/mcp.json|$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json|cursor"
 )
+
+managed_link_specs() {
+    local source
+
+    printf '%s\n' "${MANAGED_LINKS[@]}"
+
+    if [[ -d "$DOTFILES_DIR/bin" ]]; then
+        for source in "$DOTFILES_DIR/bin"/*; do
+            [[ -f "$source" && -x "$source" ]] || continue
+            printf '%s|%s|always\n' "$HOME/.local/bin/$(basename "$source")" "$source"
+        done
+    fi
+}
 
 LOCAL_CONFIG_FILES=(
     "$HOME/.gitconfig.local|$GIT_DIR/config.local.example|always"
@@ -176,7 +188,7 @@ reset_symlinks() {
     log_section "Reset Symlinks"
 
     local spec target source condition
-    for spec in "${MANAGED_LINKS[@]}"; do
+    while IFS= read -r spec; do
         split_spec "$spec" target source condition
         if [[ -L "$target" ]]; then
             log_action "Remove symlink $target"
@@ -184,7 +196,7 @@ reset_symlinks() {
         elif [[ -e "$target" ]]; then
             log_skip "$target (not a symlink, leaving alone)"
         fi
-    done
+    done < <(managed_link_specs)
 }
 
 ensure_local_config_files() {
@@ -203,14 +215,14 @@ ensure_local_config_files() {
 
 link_managed_configs() {
     local spec target source condition
-    for spec in "${MANAGED_LINKS[@]}"; do
+    while IFS= read -r spec; do
         split_spec "$spec" target source condition
         if should_manage_condition "$condition"; then
             ensure_symlink "$target" "$source"
         else
             log_skip "$target ($condition not detected)"
         fi
-    done
+    done < <(managed_link_specs)
 }
 
 link_configs() {

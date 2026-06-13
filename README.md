@@ -17,6 +17,7 @@ See [docs/system.md](docs/system.md) for the full system model.
 | Containers | OrbStack |
 | Shell | zsh, with shared environment kept separable for future bash/fish |
 | Prompt/terminal | starship + Ghostty |
+| Listings/help | eza + cheat/tldr/man |
 | Task runner | just |
 | Python | uv |
 | TypeScript | Node via mise/project pins; pnpm by default, Bun when useful |

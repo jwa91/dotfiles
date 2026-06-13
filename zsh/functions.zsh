@@ -5,14 +5,6 @@
 
 FUNCTIONS_DIR="$ZSH_DIR/zsh-functions"
 
-# Load general functions
+# Parent-shell functions: cd/export and interactive command wrappers.
 source "$FUNCTIONS_DIR/general-functions.zsh"
-
-# Agent skills functions
-source "$FUNCTIONS_DIR/agentskills-functions.zsh"
-
-# uv-only nudges (bare pip/python)
-source "$FUNCTIONS_DIR/uv-functions.zsh"
-
-# mise-owned toolchain nudges
 source "$FUNCTIONS_DIR/toolchain-functions.zsh"

@@ -48,6 +48,10 @@ toolchains:
 reset-links:
     ./setup/bootstrap.sh --only links --reset
 
+# Update local command-help caches.
+help:
+    ./setup/bootstrap.sh --only help
+
 # Install or update explicit zsh plugins.
 zsh:
     ./setup/bootstrap.sh --only zsh --update
