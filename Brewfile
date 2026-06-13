@@ -25,8 +25,6 @@ tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew
 tap "steipete/tap", trusted: true
 
 # Personal tap binaries — installed in bootstrap order:
-# hardening wrapper, skill distribution, harness alignment.
-# (ADR 0008 in jwa91/homebrew-tap: every Go CLI in the family ships as
 # a Homebrew Cask via goreleaser's homebrew_casks: block).
 cask "jwa-harden"
 cask "agentskills"
@@ -48,40 +46,25 @@ brew "tree"
 brew "watch"
 brew "cheat"
 brew "coreutils"
-
-# Network & infra CLI
 brew "xh"
 brew "mosh"
 brew "hcloud"
 brew "forgejo-cli-plus"
-
-# Project-runtime managers (the runtimes themselves stay project-scoped)
 brew "uv"
 brew "mise"
-
-# Dotfiles and script maintenance (prek hooks need these on every machine)
 brew "ripgrep"
 brew "jq"
 brew "shellcheck"
 brew "prek"
 brew "gitleaks"
-
-# Auth, signing, and password-manager CLI
-# 1Password is the current truth; Proton Pass is installed but not part of
-# the current secrets/SSH plan.
 brew "gnupg"
 brew "pinentry-mac"
 brew "protonpass/tap/pass-cli"
-cask "1password-cli"
 
-# Terminal visuals
+cask "1password-cli"
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
-
-# Containers
 cask "orbstack"
-
-# Homebrew-owned utility casks (fixed-version casks without auto_updates)
 cask "steipete/tap/codexbar"
 cask "hiddenbar"
 
