@@ -9,7 +9,7 @@ doctor() {
     check_required_commands || failed=1
     check_optional_commands
     check_container_stack
-    check_toolchain_stack
+    check_toolchain_stack || failed=1
     check_directories || failed=1
     check_zsh_plugins || failed=1
     check_local_config_seeds || failed=1
@@ -236,7 +236,7 @@ check_container_stack() {
 check_toolchain_stack() {
     log_section "Mise Toolchains"
 
-    local failed=0 command_name command_path current version_output
+    local failed=0 command_name command_path current version_output undeclared_mise_tools undeclared_tool
 
     if [[ -f "$HOME/.config/mise/config.toml" ]]; then
         log_skip "$HOME/.config/mise/config.toml"
@@ -287,6 +287,29 @@ check_toolchain_stack() {
             log_skip "$command_name project-scoped via mise"
         fi
     done
+
+    if command -v jq >/dev/null 2>&1; then
+        if undeclared_mise_tools="$(mise ls --json 2>/dev/null | jq -r '
+            to_entries[]
+            | .key as $tool
+            | .value[]?
+            | select(.installed == true and (.source? | not))
+            | "\($tool)@\(.version)"
+        ')"; then
+            if [[ -n "$undeclared_mise_tools" ]]; then
+                while IFS= read -r undeclared_tool; do
+                    log_error "mise tool installed without repo/project config source: $undeclared_tool"
+                    failed=1
+                done <<< "$undeclared_mise_tools"
+            else
+                log_skip "no undeclared mise-installed tools"
+            fi
+        else
+            log_warn "Could not inspect undeclared mise-installed tools"
+        fi
+    else
+        log_warn "jq missing; cannot inspect undeclared mise-installed tools"
+    fi
 
     return "$failed"
 }

@@ -47,19 +47,13 @@ install_brew_bundle() {
         return
     fi
 
-    if brew trust --help >/dev/null 2>&1; then
-        log_action "Tap steipete/tap for CodexBar"
-        run_cmd brew tap steipete/tap
-        log_action "Trust steipete/tap/codexbar cask"
-        run_cmd brew trust --cask steipete/tap/codexbar
-    fi
-
-    log_action "Run brew bundle --no-upgrade --file=$BREWFILE"
+    log_action "Run brew bundle with HOMEBREW_BUNDLE_NO_UPGRADE=1 --file=$BREWFILE"
     run_cmd env HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$BREWFILE"
 }
 
 install_mise_toolchains() {
     log_section "Mise Toolchains"
+    local failed=0
 
     if $SKIP_BREW; then
         log_skip "mise toolchain step (--no-brew)"
@@ -67,14 +61,29 @@ install_mise_toolchains() {
     fi
 
     if ! command -v mise >/dev/null 2>&1; then
-        log_error "mise is missing; run the brew target first"
-        exit 1
+        if $DRY_RUN; then
+            log_warn "mise is missing now, but brew bundle would install it before toolchains"
+        else
+            log_error "mise is missing; run the brew target first"
+            failed=1
+        fi
     fi
 
     if [[ ! -f "$HOME/.config/mise/config.toml" ]]; then
-        log_error "$HOME/.config/mise/config.toml missing; run the links target first"
+        if $DRY_RUN; then
+            log_warn "$HOME/.config/mise/config.toml missing now, but links would create it before toolchains"
+        else
+            log_error "$HOME/.config/mise/config.toml missing; run the links target first"
+            failed=1
+        fi
+    fi
+
+    if [[ "$failed" -ne 0 ]]; then
         exit 1
     fi
+
+    log_action "Trust mise config"
+    run_cmd mise trust "$HOME/.config/mise/config.toml"
 
     log_action "Install mise-managed Go/Rust baseline"
     run_cmd mise install go rust

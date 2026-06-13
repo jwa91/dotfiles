@@ -23,6 +23,26 @@ _run_external_tool() {
   command "$command_name" "$@"
 }
 
+_toolchain_has_global_flag() {
+  local arg previous=""
+
+  for arg in "$@"; do
+    case "$arg" in
+      -g|--global|--location=global)
+        return 0
+        ;;
+    esac
+
+    if [[ "$previous" == "--location" && "$arg" == "global" ]]; then
+      return 0
+    fi
+
+    previous="$arg"
+  done
+
+  return 1
+}
+
 bun() {
   case "${1:-}" in
     upgrade)
@@ -31,9 +51,10 @@ bun() {
         "  Or update the project/global mise.toml intentionally."
       ;;
     add|install)
-      if [[ " $* " == *" -g "* || " $* " == *" --global "* ]]; then
+      if _toolchain_has_global_flag "$@"; then
         _toolchain_nudge "bun $1 -g" \
-          "  Use project dependencies, or install CLIs through mise: mise use bun:<package>@<version>."
+          "  Use project dependencies, or install JS CLIs through mise's npm: backend or the Brewfile." \
+          "  Use mise use bun@<version> only for the Bun runtime itself."
       else
         _run_external_tool bun "$@"
       fi
@@ -45,7 +66,7 @@ bun() {
 }
 
 npm() {
-  if [[ "${1:-}" == "install" || "${1:-}" == "i" ]] && [[ " $* " == *" -g "* || " $* " == *" --global "* ]]; then
+  if [[ "${1:-}" == "install" || "${1:-}" == "i" ]] && _toolchain_has_global_flag "$@"; then
     _toolchain_nudge "npm $1 -g" \
       "  Use project dependencies, or install CLIs through mise: mise use npm:<package>@<version>."
   else
@@ -54,8 +75,8 @@ npm() {
 }
 
 pnpm() {
-  if [[ "${1:-}" == "add" ]] && [[ " $* " == *" -g "* || " $* " == *" --global "* ]]; then
-    _toolchain_nudge "pnpm add -g" \
+  if [[ "${1:-}" == "add" || "${1:-}" == "install" ]] && _toolchain_has_global_flag "$@"; then
+    _toolchain_nudge "pnpm $1 -g" \
       "  Use project dependencies, or install CLIs through mise: mise use npm:<package>@<version>."
   else
     _run_external_tool pnpm "$@"
@@ -76,15 +97,9 @@ go() {
     _toolchain_nudge "go env -w" \
       "  Put persistent Go environment in mise.toml, shell/env.sh, or project config."
   elif [[ "${1:-}" == "install" ]]; then
-    local arg
-    for arg in "${@:2}"; do
-      if [[ "$arg" == *@* ]]; then
-        _toolchain_nudge "go install <module>@<version>" \
-          "  Use mise for Go CLIs: mise use go:<module>@<version>."
-        return
-      fi
-    done
-    _run_external_tool go "$@"
+    _toolchain_nudge "go install" \
+      "  Use go build or go run for project-local binaries." \
+      "  Use mise for Go CLIs: mise use go:<module>@<version>, or add the tool to the Brewfile."
   else
     _run_external_tool go "$@"
   fi
@@ -93,7 +108,8 @@ go() {
 cargo() {
   if [[ "${1:-}" == "install" ]]; then
     _toolchain_nudge "cargo install" \
-      "  Use mise for Rust CLIs: mise use cargo:<crate>@<version>."
+      "  Use mise for Rust CLIs: mise use cargo:<crate>@<version>." \
+      "  Escape hatch: command cargo install --path ."
   else
     _run_external_tool cargo "$@"
   fi

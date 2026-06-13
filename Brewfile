@@ -3,14 +3,14 @@
 # Install with: brew bundle --file=~/dotfiles/Brewfile
 #
 # The rule: every tool has one owner. Homebrew owns base packages and
-# bootstrap casks, but not project runtime versions or self-updating app
-# freshness. See docs/system.md for the full model.
+# casks without their own updater, but not project runtime versions or
+# self-updating app freshness. See docs/system.md for the full model.
 #
 # House rules:
 # - Bootstrap runs brew bundle with HOMEBREW_BUNDLE_NO_UPGRADE=1.
-# - GUI casks are allowed only as bootstrap installers. The app's own
-#   updater owns freshness afterwards. Interactive shells set
-#   HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 for this reason.
+# - App casks with `auto_updates true` are bootstrap installers. The app's own
+#   updater owns freshness afterwards. Casks without that metadata stay
+#   Homebrew-owned.
 # - Before adding a formula, run `brew deps <formula>` — nothing that
 #   drags python/node/ruby onto the host (that mistake cost us httpie).
 # - Project runtimes never land here: uv owns Python projects, and mise
@@ -18,11 +18,11 @@
 # ----------------------------------------
 
 # Taps
-tap "1password/tap"
-tap "jwa91/tap"
-tap "protonpass/tap"
-tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git"
-tap "steipete/tap"
+tap "1password/tap", trusted: true
+tap "jwa91/tap", trusted: true
+tap "protonpass/tap", trusted: true
+tap "stalecontext/forgejo-cli-plus", "https://codeberg.org/stalecontext/homebrew-forgejo-cli-plus.git", trusted: true
+tap "steipete/tap", trusted: true
 
 # Personal tap binaries — installed in bootstrap order:
 # hardening wrapper, skill distribution, harness alignment.
@@ -81,14 +81,16 @@ cask "ghostty"
 # Containers
 cask "orbstack"
 
-# GUI apps (bootstrap-only: each self-updates via its own channel)
+# Homebrew-owned utility casks (fixed-version casks without auto_updates)
+cask "steipete/tap/codexbar"
+cask "hiddenbar"
+
+# GUI apps (bootstrap casks with auto_updates true; app owns freshness)
 cask "claude"
 cask "codex-app"
-cask "steipete/tap/codexbar"
 cask "cursor"
 cask "google-chrome@dev"
 cask "helium-browser"
-cask "hiddenbar"
 cask "obsidian"
 cask "proton-drive"
 cask "proton-mail"

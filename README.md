@@ -13,7 +13,7 @@ See [docs/system.md](docs/system.md) for the full system model.
 | Layer | Owner |
 |---|---|
 | Base packages | [Brewfile](Brewfile) |
-| GUI apps | Direct app update channels; Brew casks are bootstrap-only when used |
+| GUI apps | App updater or Homebrew, per cask metadata; see `docs/system.md` |
 | Containers | OrbStack |
 | Shell | zsh, with shared environment kept separable for future bash/fish |
 | Prompt/terminal | starship + Ghostty |

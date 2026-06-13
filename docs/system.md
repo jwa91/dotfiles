@@ -5,7 +5,7 @@
 | Thing | Owner | Notes |
 |---|---|---|
 | Base CLI packages | Homebrew | Installed from `Brewfile`; upgraded deliberately. |
-| GUI apps | The app itself | Brew casks may bootstrap an app, but the app's updater owns freshness. |
+| GUI apps | App updater or Homebrew, per cask | Brew may bootstrap both; ownership is listed below. |
 | Containers | OrbStack | Target replacement for Docker Desktop on macOS. |
 | Python projects | uv | Owns Python versions, virtualenvs, dependencies, and locks. |
 | TypeScript projects | mise + pnpm/Bun | mise activates Node/tooling per project; pnpm is default, Bun is intentional. |
@@ -18,14 +18,15 @@
 
 ## Homebrew Policy
 
-Homebrew installs missing host packages and stable bootstrap casks. It does not
-own project runtime versions and it does not decide when self-updating apps are
+Homebrew installs missing host packages and casks. It does not own project
+runtime versions, and it does not decide when casks with their own updater are
 fresh.
 
 Do:
 
 - Put stable CLI tools in `Brewfile`.
-- Put bootstrap casks in `Brewfile` when that makes new-machine setup faster.
+- Put casks in `Brewfile` when that makes new-machine setup faster or when
+  Homebrew is the app's update owner.
 - Run `just brew-sync` to install missing entries without upgrading casks.
 - Run `brew upgrade` deliberately for the CLI layer. Interactive shells export
   `HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1` so apps with their own updater
@@ -37,22 +38,45 @@ Do not:
 - Use `brew upgrade --greedy` as a general maintenance habit.
 - Let Homebrew cleanup remove GUI apps automatically.
 
-## Direct Apps
+## Cask Ownership
 
-Direct apps are applications whose own updater is the update authority. Some
-may still be installed by a Homebrew cask during bootstrap, but they are not
-maintained by repeated Brewfile upgrades.
+Some Brewfile entries are casks because that is how Homebrew packages them.
+That does not automatically make Homebrew the update owner.
 
-Current direct-app set:
+App-updated casks are bootstrap-only. The app owns freshness after install, and
+interactive shells export `HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1` so
+`brew upgrade` does not chase these versions:
 
 - Ghostty
-- Cursor
-- Raycast
-- 1Password
-- Proton Drive, Mail, Pass, and VPN; Bridge is intentionally excluded
-- Proton Authenticator via the App Store/iOS wrapper, not Homebrew
 - OrbStack
-- Tailscale via manual `.pkg` install; the cask needs the same sudo path
+- Claude
+- Codex
+- Cursor
+- Google Chrome Dev
+- Helium
+- Obsidian
+- Proton Drive, Mail, Pass, and VPN; Bridge is intentionally excluded
+- Raycast
+- Spotify
+- Stats
+- Telegram
+- WhatsApp
+
+Homebrew-owned casks have no self-update metadata or are packaged as fixed
+host artifacts:
+
+- CodexBar
+- Hidden Bar
+- 1Password CLI
+- JetBrains Mono Nerd Font
+- Personal tap CLI casks: `jwa-harden`, `agentskills`, `prehandover`
+
+Manual or non-Brew app installs:
+
+- 1Password app
+- Google Drive via manual `.pkg`
+- Proton Authenticator via the App Store/iOS wrapper
+- Tailscale via manual `.pkg`; the cask needs the same sudo path
 
 Possible trials:
 
@@ -97,16 +121,22 @@ TypeScript:
 - `pnpm` is the default package manager.
 - `bun` is used when the project intentionally uses Bun runtime/tooling.
 - Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.
+- Do not use global `npm`, `pnpm`, or `bun` package installs. Use project
+  dependencies, mise's `npm:` backend for reusable JS CLIs, or the Brewfile.
+  mise's `bun@<version>` backend owns the Bun runtime; there is no `bun:`
+  package backend.
 
 Go:
 
 - `mise` owns Go versions.
 - The global baseline is declared in `config/mise/config.toml`.
-- Project expectations can be pinned with project `mise.toml`, `.go-version`,
-  `go.mod`, or `go.work`.
+- Project expectations can be pinned with project `mise.toml` or
+  `.go-version`; `go.mod` and `go.work` toolchain directives are honored by
+  Go itself after mise selects the baseline Go binary.
 - Use Go modules for dependencies.
-- Do not use versioned `go install <module>@<version>` for global CLIs; use
-  the mise `go:` backend or add the tool to the Brewfile.
+- Do not use `go install` for durable CLI installs; use `go build` or `go run`
+  for project-local binaries, and use the mise `go:` backend or the Brewfile
+  for reusable CLIs.
 - Do not use `go env -w`; persistent Go environment belongs in mise config,
   shell env, or project config.
 
@@ -118,7 +148,8 @@ Rust:
 - The global baseline is declared in `config/mise/config.toml`.
 - Toolchain components and targets belong in mise tool options.
 - Do not use `cargo install` for global CLIs; use the mise `cargo:` backend or
-  add the tool to the Brewfile.
+  add the tool to the Brewfile. For an intentional one-off local install, type
+  the explicit shell escape hatch: `command cargo install --path .`.
 
 ## Bootstrap Contract
 
