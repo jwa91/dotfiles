@@ -73,22 +73,6 @@ The zsh PATH prefers OrbStack's bundled Docker-compatible CLI at
 `/Applications/OrbStack.app/Contents/MacOS/xbin` ahead of Docker Desktop's old
 `/usr/local/bin/docker` symlink.
 
-## Accounts And Privileges
-
-Do not enable the macOS root user as part of this setup. It creates more risk
-than clarity on a personal developer machine.
-
-The cleaner model is:
-
-- Keep one administrator account for system changes.
-- Use the daily account as a standard user if you want stricter separation.
-- Escalate with macOS authorization prompts or `sudo` only when needed.
-- Keep container access limited to the daily user that owns the development
-  workspace.
-
-Linux VPS machines can be stricter: prefer a non-root login user, SSH keys,
-`sudo`, and rootless containers where practical.
-
 ## Shells
 
 zsh is the primary shell. The shared environment should stay small enough to be
