@@ -17,6 +17,9 @@ setopt MENU_COMPLETE
 unsetopt AUTO_REMOVE_SLASH
 unsetopt LIST_BEEP
 
+# Treat # as a comment marker in interactive shells, matching bash behavior.
+setopt INTERACTIVE_COMMENTS
+
 # History
 HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
 HISTSIZE=50000

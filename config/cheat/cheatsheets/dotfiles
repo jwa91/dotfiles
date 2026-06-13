@@ -1,0 +1,21 @@
+---
+syntax: bash
+tags: [ dotfiles, bootstrap, help, personal ]
+---
+# Bootstrap
+just bootstrap             # Full new-machine convergence
+just doctor                # Check managed links, tools, runtime ownership
+just links                 # Recreate managed symlinks
+just dry-run               # Preview bootstrap actions
+
+# Help system
+how zsh                    # Personal cheat sheet first, then tldr, then man
+cheat -l                   # List available personal/community sheets
+cheat -e dotfiles          # Edit a personal sheet in this repo
+just help                  # Update community cheat sheets and tldr cache
+tldr --update              # Refresh tldr examples only
+
+# Ownership model
+just brew-sync             # Install missing Brewfile entries, do not upgrade
+just toolchains            # Install mise-managed Go/Rust baselines
+brewsync                   # Shell alias for the same Homebrew presence check

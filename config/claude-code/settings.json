@@ -13,7 +13,43 @@
     ],
     "deny": [
       "Read(./.env)",
-      "Read(./.env.*)"
+      "Read(./.env.*)",
+      "Bash(mise use -g:*)",
+      "Bash(mise use --global:*)",
+      "Bash(npm install -g:*)",
+      "Bash(npm install --global:*)",
+      "Bash(npm install --location global:*)",
+      "Bash(npm install --location=global:*)",
+      "Bash(npm i -g:*)",
+      "Bash(npm i --global:*)",
+      "Bash(npm i --location global:*)",
+      "Bash(npm i --location=global:*)",
+      "Bash(pnpm add -g:*)",
+      "Bash(pnpm add --global:*)",
+      "Bash(pnpm install -g:*)",
+      "Bash(pnpm install --global:*)",
+      "Bash(yarn global:*)",
+      "Bash(yarn global add:*)",
+      "Bash(bun add -g:*)",
+      "Bash(bun add --global:*)",
+      "Bash(bun install -g:*)",
+      "Bash(bun install --global:*)",
+      "Bash(bun upgrade:*)",
+      "Bash(cargo install:*)",
+      "Bash(go env -w:*)",
+      "Bash(go install:*)",
+      "Bash(rustup update:*)",
+      "Bash(rustup default:*)",
+      "Bash(rustup override:*)",
+      "Bash(rustup toolchain install:*)",
+      "Bash(rustup toolchain uninstall:*)",
+      "Bash(rustup target add:*)",
+      "Bash(rustup target remove:*)",
+      "Bash(rustup component add:*)",
+      "Bash(rustup component remove:*)",
+      "Bash(pip install:*)",
+      "Bash(pip3 install:*)",
+      "Bash(uv tool install:*)"
     ],
     "defaultMode": "bypassPermissions"
   },
@@ -25,9 +61,7 @@
     "example-skills@anthropic-agent-skills": true,
     "pyright-lsp@claude-plugins-official": true,
     "swift-lsp@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "discord@claude-plugins-official": true,
-    "telegram@claude-plugins-official": true
+    "code-review@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
@@ -36,8 +70,10 @@
     "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
   "preferredNotifChannel": "ghostty",
+  "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "voiceEnabled": true,
-  "agentPushNotifEnabled": true
+  "skipWorkflowUsageWarning": true
 }

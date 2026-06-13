@@ -1,30 +1,25 @@
-Manual installs (preferred outside Homebrew)
+Manual steps — the human checklist. Everything else should be handled by
+bootstrap, Brewfile, or project-local tooling.
 
-- tailscale
-  website: https://tailscale.com/download
-  reason: macOS network extension approval flow is interactive and more reliable via the official installer/app flow.
+Interactive installs (App Store, passwords, biometrics, admin):
 
-- cursor
-  website: https://www.cursor.com/
-  reason: app-managed CLI shim/symlink behavior can conflict with Homebrew-managed expectations; install directly from the app download, then rerun ./setup/bootstrap.sh --no-brew to apply links.
+- xcode clt       Run `xcode-select --install` first — git needs the Command
+                  Line Tools before anything else works. Install full Xcode
+                  only for native Apple-platform work, and keep it current if
+                  it lives in /Applications.
+- tailscale       https://tailscale.com/download — ships as a .pkg needing
+                  admin install and macOS network-extension approval. The
+                  Homebrew cask has the same sudo requirement.
+- 1password       https://1password.com/downloads — interactive installer
+                  app; keeps biometrics + browser pairing intact. Current
+                  SSH-agent and secrets truth.
+- google drive    https://www.google.com/drive/download/ — ships as a .pkg
+                  needing an admin install.
+- proton auth     Install Proton Authenticator from the App Store. It is an
+                  iOS-style wrapped app and has no Homebrew cask.
 
-- 1password
-  website: https://1password.com/downloads
-  reason: standalone installer has tighter macOS integration for biometrics and browser extension pairing; brew cask version can disrupt these.
+Post-bootstrap checks:
 
-- xcode
-  website: Mac App Store
-  reason: full Xcode (not just CLI tools) is required; CLI tools are installed via xcode-select --install in bootstrap, but the full IDE must come from the App Store.
-
-- docker
-  website: https://www.docker.com/products/docker-desktop/
-  reason: brew cask requires sudo for symlinks into /usr/local/bin which breaks non-interactive brew bundle installs; direct installer handles this seamlessly.
-
-- google drive
-  website: https://www.google.com/drive/download/
-  reason: brew cask has chronic version-tracking issues and upgrade failures; direct installer is more reliable.
-
-- amp (Sourcegraph)
-  install: curl -fsSL https://ampcode.com/install.sh | bash
-  website: https://ampcode.com
-  reason: official install script is the canonical method; bootstrap.sh runs this automatically.
+- orbstack        Open once after bootstrap if it has not completed first-run
+                  setup. Docker Desktop should stay absent after migration.
+- zed             Optional trial: https://zed.dev/download

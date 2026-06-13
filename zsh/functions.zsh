@@ -5,22 +5,6 @@
 
 FUNCTIONS_DIR="$ZSH_DIR/zsh-functions"
 
-# Load general functions
+# Parent-shell functions: cd/export and interactive command wrappers.
 source "$FUNCTIONS_DIR/general-functions.zsh"
-
-# Next.js functions
-source "$FUNCTIONS_DIR/nextjs-functions.zsh"
-
-# Agent skills functions
-source "$FUNCTIONS_DIR/agentskills-functions.zsh"
-
-# Claude Code bot (ccbot) — Telegram channel sessions
-source "$FUNCTIONS_DIR/ccbot-functions.zsh"
-
-# Tmux session bookmarks and picker (tpick)
-source "$CONFIG_DIR/tmux/tmux-bookmarks.zsh"
-
-# Python functions (external from templates repo)
-if [[ -f "$DEV_DIR/templates/python/python-functions.sh" ]]; then
-    source "$DEV_DIR/templates/python/python-functions.sh"
-fi
+source "$FUNCTIONS_DIR/toolchain-functions.zsh"

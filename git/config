@@ -1,19 +1,21 @@
 # -----------------------------------------------------------------------------
-# Git Global Configuration (~/.gitconfig -> ~/dotfiles/git/config)
+# Global Git configuration.
+# Machine-specific signing config is loaded from ~/.gitconfig.local.
 # -----------------------------------------------------------------------------
 
 [user]
     name = jwa91
     email = code@janwillemaltink.com
+    useConfigOnly = true
 
 [init]
     defaultBranch = main
 
 [core]
-    excludesfile = ~/dotfiles/git/ignore
+    excludesfile = ~/.config/git/ignore
 
 [commit]
-    template = ~/dotfiles/git/commit_template.txt
+    template = ~/.config/git/commit_template.txt
 
 [filter "lfs"]
     clean = git-lfs clean -- %f

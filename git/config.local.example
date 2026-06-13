@@ -1,17 +1,14 @@
-# Machine-local Git config loaded by ~/dotfiles/git/config.
-# Keep device-specific signing keys and platform-specific signer paths here.
+# Machine-local Git configuration loaded by ~/.gitconfig.
+# Keep device-specific signing keys and signer paths here.
 #
-# Example:
-#
-# [user]
-#     signingkey = ssh-ed25519 REPLACE_WITH_PUBLIC_SIGNING_KEY
+# Example: GPG commit signing
+# The Proton Pass SSH key is for SSH transport/authentication only.
 #
 # [commit]
 #     gpgsign = true
 #
 # [gpg]
-#     format = ssh
+#     format = openpgp
 #
-# [gpg "ssh"]
-#     program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-#     allowedSignersFile = ~/dotfiles/git/allowed_signers
+# [user]
+#     signingKey = REPLACE_WITH_GPG_KEY_ID

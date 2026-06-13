@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# starship-uv-python — print uv project Python version for Starship.
+
+set -euo pipefail
+
+dir="$PWD"
+project_dir=""
+
+while [[ -n "$dir" && "$dir" != "/" ]]; do
+  if [[ -f "$dir/uv.lock" || -d "$dir/.venv" ]]; then
+    project_dir="$dir"
+    break
+  fi
+  dir="${dir%/*}"
+done
+
+[[ -n "$project_dir" ]] || exit 1
+
+python_path="$(uv python find 2>/dev/null)" || exit 1
+case "$python_path" in
+  */.venv/*)
+    uv python find --show-version 2>/dev/null
+    ;;
+  *)
+    exit 1
+    ;;
+esac

@@ -21,7 +21,10 @@ cdd [subdir]              # cd to DEV_DIR (or subdir within it)
 # Navigation
 z <query>                 # Jump to frecency-matched directory (zoxide)
 zi                        # Interactive directory picker (zoxide + fzf)
-ls                        # ls -FaG (colorized, all, classify)
+ls                        # Compact eza listing with directories first
+la                        # ls plus dotfiles
+ll                        # Long eza listing with git status and header
+lt                        # Two-level eza tree
 ..                        # cd ..
 ...                       # cd ../..
 ....                      # cd ../../..
@@ -30,24 +33,23 @@ ls                        # ls -FaG (colorized, all, classify)
 # Tmux (t + action)
 tmain                     # Attach or create 'main' tmux session
 tls                       # List tmux sessions
-tpick [--mobile]          # Interactive tmux session picker (fzf)
 
 # Make (mk + thing)
 mkpass                    # Generate random password -> clipboard
-mkroute <path>            # Create Next.js App Router route structure
 mkskill [name]            # Install/list skills (prefers local $DEV_DIR/agentskills)
 
 # Brew
-brewsync                  # Install/remove/upgrade packages from Brewfile
+brewsync                  # Install missing Brewfile entries; cleanup is dry-run
 
 # Python
 pyclean                   # Remove __pycache__ dirs recursively
 
 # Utilities
 key NAME [NAME ...]       # Load API keys from 1Password
-rwe                       # Retry last command with escaped arguments
+pkey NAME [NAME ...]      # Load API keys from Proton Pass experiment
+ppagent [action]          # Manage optional Proton SSH agent
 getmd <url> [--no-copy]   # Fetch clean markdown from URL -> clipboard
-zshdoctor                 # Validate zsh config, deps, and paths
+how <topic>               # Personal cheat -> tldr -> man lookup
 
 # Atuin (shell history)
 ctrl-r                    # Search all history (atuin fuzzy search)

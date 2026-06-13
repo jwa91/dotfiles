@@ -9,14 +9,32 @@
 # These plugins are loaded by .zshrc.
 # ----------------------------------------
 
+# ZLE plugins need an interactive shell attached to a real terminal.
+if [[ ! -o interactive || ! -t 0 || ! -t 1 ]]; then
+    return 0
+fi
+
+_source_if_readable() {
+    local file="$1"
+    local label="${2:-$1}"
+    local mode="${3:-warn}"
+
+    if [[ -r "$file" ]]; then
+        source "$file"
+    elif [[ "$mode" != "quiet" ]]; then
+        print -u2 "dotfiles: skipping $label (missing: $file)"
+    fi
+}
+
 # Load autosuggestions
-source $ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh
+_source_if_readable "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
 
-# Load syntax highlighting (must be loaded before history-substring-search)
-source $ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Keep interactive comments readable in themes where black is the background.
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
 
-# Load history substring search
-source $ZSH_PLUGINS_DIR/zsh-history-substring-search/zsh-history-substring-search.zsh
+# Load syntax highlighting
+_source_if_readable "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
 
 # Load fzf integration
 if command -v fzf &> /dev/null; then
@@ -34,6 +52,6 @@ if command -v atuin &> /dev/null; then
 fi
 
 # Load 1Password shell plugins (op plugin init <cli> populates this file)
-if [[ -f "$HOME/.config/op/plugins.sh" ]]; then
-    source "$HOME/.config/op/plugins.sh"
-fi
+_source_if_readable "$HOME/.config/op/plugins.sh" "1Password shell plugins" quiet
+
+unfunction _source_if_readable

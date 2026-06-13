@@ -18,14 +18,17 @@ $cpp\
 $rust\
 $golang\
 $nodejs\
+$bun\
+$package\
 $php\
 $java\
 $kotlin\
 $haskell\
-$python\
+$custom\
 [ ](fg:color_blue))\
 ([](color_bg3)\
 $docker_context\
+$mise\
 $conda\
 $pixi\
 [ ](fg:color_bg3))\
@@ -110,6 +113,17 @@ symbol = ""
 style = "fg:color_bg0 bg:color_blue"
 format = '[ $symbol( $version) ]($style)'
 
+[bun]
+symbol = ""
+style = "fg:color_bg0 bg:color_blue"
+format = '[ $symbol( $version) ]($style)'
+
+[package]
+symbol = "󰏗"
+style = "fg:color_bg0 bg:color_blue"
+format = '[ $symbol( $version) ]($style)'
+display_private = true
+
 [c]
 symbol = " "
 style = "fg:color_bg0 bg:color_blue"
@@ -150,10 +164,42 @@ symbol = ""
 style = "fg:color_bg0 bg:color_blue"
 format = '[ $symbol( $version) ]($style)'
 
-[python]
+# JS package manager clue from packageManager or lockfiles, searching upward.
+[custom.js_pm]
+symbol = "󰏗"
+style = "fg:color_bg0 bg:color_blue"
+format = '[ $symbol( $output) ]($style)'
+when = '''
+dir="$PWD"
+while [ -n "$dir" ] && [ "$dir" != "/" ]; do
+  if [ -f "$dir/package.json" ] || [ -f "$dir/pnpm-lock.yaml" ] || [ -f "$dir/bun.lock" ] || [ -f "$dir/bun.lockb" ] || [ -f "$dir/yarn.lock" ] || [ -f "$dir/package-lock.json" ] || [ -f "$dir/npm-shrinkwrap.json" ]; then
+    exit 0
+  fi
+  dir=${dir%/*}
+done
+exit 1
+'''
+command = "starship-js-package-manager"
+shell = ["/bin/sh"]
+
+# Python version via uv. The helper first searches upward for uv project
+# markers, so ordinary non-Python directories do not pay for `uv python find`.
+[custom.python]
 symbol = ""
 style = "fg:color_bg0 bg:color_blue"
-format = '[ $symbol( $version) ]($style)'
+format = '[ $symbol( $output) ]($style)'
+when = '''
+dir="$PWD"
+while [ -n "$dir" ] && [ "$dir" != "/" ]; do
+  if [ -d "$dir/.venv" ]; then
+    exit 0
+  fi
+  dir=${dir%/*}
+done
+exit 1
+'''
+command = "starship-uv-python"
+shell = ["/bin/sh"]
 
 [docker_context]
 symbol = ""
@@ -167,6 +213,12 @@ format = '[ $symbol( $environment) ]($style)'
 [pixi]
 style = "fg:color_fg0 bg:color_bg3"
 format = '[ $symbol( $version)( $environment) ]($style)'
+
+[mise]
+symbol = "󱁤"
+style = "fg:color_fg0 bg:color_bg3"
+format = '[ $symbol $health ]($style)'
+disabled = false
 
 [time]
 disabled = false

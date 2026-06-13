@@ -1,152 +1,51 @@
-# Dotfiles
+# dotfiles
 
-My personal macOS configuration and setup automation.
+Clean, bootstrappable macOS configuration for Apple Silicon machines.
 
-## What This Is
+The governing rule is: **every tool has exactly one owner**. Homebrew is the
+base package/bootstrap layer, not the authority for fast-moving GUI app updates
+or project runtime state.
 
-A complete, reproducible system for setting up a new MacBook from scratch. Created primarily to eliminate the pain of manual configuration when migrating machines.
+See [docs/system.md](docs/system.md) for the full system model.
 
-Current major release: **v2**.
+## Stack
 
-## Quick Start
+| Layer | Owner |
+|---|---|
+| Base packages | [Brewfile](Brewfile) |
+| GUI apps | App updater or Homebrew, per cask metadata; see `docs/system.md` |
+| Containers | OrbStack |
+| Shell | zsh, with shared environment kept separable for future bash/fish |
+| Prompt/terminal | starship + Ghostty |
+| Listings/help | eza + cheat/tldr/man |
+| Task runner | just |
+| Python | uv |
+| TypeScript | Node via mise/project pins; pnpm by default, Bun when useful |
+| Go | mise-managed Go toolchain |
+| Rust | mise-managed Rust; rustup is the backend implementation |
+| Secrets/SSH | 1Password today; Proton apps are installed but do not own secrets/SSH |
+| Signing | GPG for code signing, SSH for Git/VPS access |
 
-**Full setup guide for v1:** [janwillemaltink.com/writings/new-macbook-guide](https://janwillemaltink.com/writings/new-macbook-guide/)
+Project runtimes do not land in Homebrew. Homebrew owns only the managers:
+`mise` for Go/Rust/Node/Bun and `uv` for Python. Outside a project, bare
+`python`, `pip`, `node`, `npm`, `pnpm`, and `bun` should not become accidental
+global state.
 
-**New Mac setup:**
+## New Machine
 
-```bash
-# 1. Install Xcode CLI tools (required before anything else)
-xcode-select --install
+1. `xcode-select --install` — interactive GUI prompt; git needs the CLT.
+2. `git clone https://github.com/jwa91/dotfiles ~/dotfiles` — HTTPS, no keys yet.
+3. `cd ~/dotfiles && ./setup/bootstrap.sh` — Homebrew, base packages, links, zsh.
+4. Work through [setup/manual-installs.txt](setup/manual-installs.txt).
+5. Sign in to 1Password and enable its SSH agent.
+6. Switch the git remote to SSH.
+7. Run `just doctor` until the managed state is clean.
 
-# 2. Clone this repo (uses HTTPS — SSH keys aren't set up yet)
-git clone https://github.com/jwa91/dotfiles.git ~/dotfiles
+## Daily Commands
 
-# 3. Run bootstrap (installs Homebrew, all packages, links configs)
-cd ~/dotfiles
-./setup/bootstrap.sh
-
-# 4. Install manual apps (see list printed by bootstrap, or:)
-cat ./setup/manual-installs.txt
-
-# 5. After installing manual apps, relink their configs
-./setup/bootstrap.sh --no-brew
-```
-
-Bootstrap flags:
-
-```bash
-./setup/bootstrap.sh              # Full setup
-./setup/bootstrap.sh --dry-run    # Preview without changes
-./setup/bootstrap.sh --no-brew    # Skip Homebrew (relink only)
-./setup/bootstrap.sh --no-link    # Skip symlinks (brew only)
-```
-
-Bootstrap will print a checklist of manual installs and skip Cursor config linking until Cursor is detected.
-
-## What's Included
-
-- **Brewfile**: Canonical package manifest — CLI tools, runtimes, casks, fonts
-- **Shell**: Zsh with Starship prompt, FZF, curated plugins
-- **Git**: Global config with commit templates and conventional commit enforcement
-- **Terminal**: Ghostty configuration with terminal-aware editor routing
-- **Tmux**: Session bookmarks, project layouts, and interactive picker
-- **AI tools**: Settings for Claude Code (config files only — agent resources live elsewhere)
-- **Apps**: Cursor, VS Code, and more with symlinked settings
-- **Manual installs**: Checklist for tools outside Homebrew (1Password, Cursor, Docker, Xcode, etc.)
-- **Security**: 1Password-based SSH agent and secret-safe config model
-
-## Structure
-
-```
-dotfiles/
-├── Brewfile                    # Canonical package manifest
-├── CHANGELOG.md
-├── README.md
-├── setup/
-│   ├── bootstrap.sh            # Main setup entrypoint
-│   └── manual-installs.txt     # Tools outside Homebrew
-├── git/                        # Git configuration
-│   ├── config
-│   ├── commit_template.txt
-│   └── ignore
-├── zsh/                        # Shell configuration
-│   ├── .zshenv                 # PATH, env vars, terminal detection
-│   ├── .zshrc
-│   ├── .zprofile
-│   ├── aliases.zsh
-│   ├── completions.zsh
-│   ├── functions.zsh
-│   ├── options.zsh
-│   ├── plugins.zsh
-│   ├── prompt.zsh
-│   └── zsh-functions/
-├── config/                     # Application configs
-│   ├── ghostty/
-│   ├── tmux/
-│   ├── starship.toml
-│   ├── starship-mobile.toml
-│   ├── cursor/
-│   ├── vscode/
-│   ├── claude-code/            # settings.json only
-│   ├── cheat/
-│   └── gh/
-├── docs/                       # Reference documentation
-└── .agents/skills/             # Agent skills for working on this repo
-    ├── understand-dotfiles/
-    ├── modify-dotfiles-config/
-    ├── modify-dotfiles-zsh/
-    └── install-software/
-```
-
-Skills are stored in `.agents/skills/` and symlinked into `.claude/skills/` so Claude Code picks them up. They teach agents how this repo works — setup flow, symlink behavior, naming conventions, and package management rules.
-
-## Naming Conventions
-
-All aliases and functions follow: **action prefix + shortest target, mashed together** (no hyphens or underscores). Private helpers start with `_`.
-
-| Prefix | Action                    | Examples                                         |
-| ------ | ------------------------- | ------------------------------------------------ |
-| `mk`   | make/create/generate      | `mkpass`, `mkroute`, `mkskill`                   |
-| `e`    | edit/open in editor       | `ezsh`, `edots`, `evault`, `edev`                |
-| `cd`   | navigate to directory     | `cdd`, `cdzsh`, `cddots`, `cdvault`              |
-| `t`    | tmux operation            | `tmain`, `tls`, `tpick`                          |
-| `py`   | python                    | `pyclean`                                        |
-| —      | standalone (clear enough) | `reload`, `reloadenv`, `key`, `rwe`, `zshdoctor` |
-
-When adding new commands: pick the action prefix first, then the shortest unambiguous target. If an `e` variant exists, add a matching `cd` variant.
-
-## Local Repo Layout
-
-- `DEV_DIR` is the canonical root for local source checkouts.
-- Default resolution is `~/developer` when that directory exists, otherwise `~/Developer`.
-- `mkskill` prefers a local `agentskills` checkout at `$DEV_DIR/agentskills` and falls back to the public GitHub repo when no local checkout exists.
-
-## Philosophy
-
-- **Reproducible**: Complete automation from a clean macOS install
-- **Modular**: Each component is independent
-- **Secure**: with 1Password for SSH
-- **Modern tooling**: uv, Bun, Starship, Ghostty
-
-## Config Boundary
-
-This repo manages **classic config files only** — settings, preferences, keybindings. Things like agent skills, instructions (AGENTS.md, CLAUDE.md), commands, and rules are agent resources and belong in a dedicated AI repo, not here.
-
-For CLI-family ownership and local repo layout conventions, see
-`docs/cli-boundary-and-layout.md`.
-
-Auth tokens and secrets stay in their default home directory locations (e.g. `~/.codex/auth.json`, `~/.claude.json`) and are never symlinked or tracked. See `docs/macos-config-locations.md` for a reference of where macOS apps store config.
-
-Local commit protection is enabled with `prek` + `gitleaks`:
-- `prek install`
-- `prek run --all-files`
-
-## Versioning
-
-- Baseline snapshot is tagged `v1.0.0`.
-- Major setup refactor is tagged `v2.0.0`.
-- New releases follow semantic versioning and are recorded in `CHANGELOG.md`.
-
-## License
-
-MIT — Use freely, but this is tailored to my specific workflow.
+- `just` — list available dotfile tasks.
+- `just bootstrap` — converge a new or existing machine.
+- `just doctor` — check links, package presence, runtime leaks, and app state.
+- `just toolchains` — install the mise-managed Go/Rust baseline.
+- `just brew-sync` — install missing Brewfile entries without upgrading apps.
+- `brewsync` — shell alias for the same Homebrew presence check.

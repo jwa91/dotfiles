@@ -1,5 +1,0 @@
-github.com:
-    git_protocol: ssh
-    users:
-        your-github-username:
-    user: your-github-username

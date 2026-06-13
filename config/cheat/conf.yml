@@ -1,9 +1,9 @@
 ---
-# The editor to use with 'cheat -e <sheet>'. Defaults to $EDITOR or $VISUAL.
-editor: /usr/bin/nano
+# The editor to use with 'cheat -e <sheet>'.
+editor: micro
 
 # Should 'cheat' always colorize output?
-colorize: false
+colorize: true
 
 # Which 'chroma' colorscheme should be applied to the output?
 # Options are available here:
@@ -15,9 +15,7 @@ style: monokai
 formatter: terminal256
 
 # Through which pager should output be piped?
-# 'less -FRX' is recommended on Unix systems
-# 'more' is recommended on Windows
-pager:
+pager: less -FRX
 
 # Cheatpaths are paths at which cheatsheets are available on your local
 # filesystem.
@@ -48,11 +46,7 @@ pager:
 # on certain paths, which can be useful for querying purposes.
 # Example: 'cheat -t work jenkins'.
 #
-# Community cheatsheets must be installed separately, though you may have
-# downloaded them automatically when installing 'cheat'. If not, you may
-# download them here:
-#
-# https://github.com/cheat/cheatsheets
+# Community cheatsheets are cloned/updated by `just help`.
 cheatpaths:
   # Community cheatsheets (git clone https://github.com/cheat/cheatsheets)
   - name: community

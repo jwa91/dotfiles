@@ -1,0 +1,15 @@
+[mcp_servers.rechtspraak]
+command = "docker"
+args = [
+    "run",
+    "--rm",
+    "-i",
+    "--read-only",
+    "--tmpfs",
+    "/tmp:size=64m,mode=1777",
+    "--security-opt",
+    "no-new-privileges:true",
+    "--cap-drop",
+    "ALL",
+    "rechtspraak-mcp:local",
+]

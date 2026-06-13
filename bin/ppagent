@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# ppagent — manage the optional Proton Pass SSH agent.
+
+set -euo pipefail
+
+action="${1:-status}"
+vault="${PROTON_PASS_SSH_VAULT:-Work}"
+socket_path="${PROTON_PASS_SSH_AUTH_SOCK:-$HOME/.ssh/proton-pass-agent.sock}"
+
+case "$action" in
+  start)
+    pass-cli ssh-agent daemon start \
+      --vault-name "$vault" \
+      --create-new-identities "$vault" \
+      --socket-path "$socket_path"
+    ;;
+  restart)
+    pass-cli ssh-agent daemon stop 2>/dev/null || true
+    pass-cli ssh-agent daemon start \
+      --vault-name "$vault" \
+      --create-new-identities "$vault" \
+      --socket-path "$socket_path"
+    ;;
+  stop)
+    pass-cli ssh-agent daemon stop
+    ;;
+  status)
+    pass-cli ssh-agent daemon status
+    ;;
+  *)
+    echo "usage: ppagent [start|restart|stop|status]" >&2
+    exit 64
+    ;;
+esac

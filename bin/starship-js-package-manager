@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# starship-js-package-manager — print the active JS package manager clue.
+
+set -euo pipefail
+
+dir="$PWD"
+project_dir=""
+
+while [[ -n "$dir" && "$dir" != "/" ]]; do
+  if [[ -f "$dir/package.json" || -f "$dir/pnpm-lock.yaml" || -f "$dir/bun.lock" || -f "$dir/bun.lockb" || -f "$dir/yarn.lock" || -f "$dir/package-lock.json" || -f "$dir/npm-shrinkwrap.json" ]]; then
+    project_dir="$dir"
+    break
+  fi
+  dir="${dir%/*}"
+done
+
+[[ -n "$project_dir" ]] || exit 1
+
+if [[ -f "$project_dir/package.json" ]] && command -v jq >/dev/null 2>&1; then
+  package_manager="$(jq -r '.packageManager // empty' "$project_dir/package.json" 2>/dev/null || true)"
+  if [[ -n "$package_manager" ]]; then
+    printf '%s\n' "$package_manager"
+    exit 0
+  fi
+fi
+
+if [[ -f "$project_dir/bun.lock" || -f "$project_dir/bun.lockb" ]]; then
+  echo "bun"
+elif [[ -f "$project_dir/pnpm-lock.yaml" ]]; then
+  echo "pnpm"
+elif [[ -f "$project_dir/yarn.lock" ]]; then
+  echo "yarn"
+elif [[ -f "$project_dir/package-lock.json" || -f "$project_dir/npm-shrinkwrap.json" ]]; then
+  echo "npm"
+else
+  exit 1
+fi

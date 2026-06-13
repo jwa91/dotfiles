@@ -11,10 +11,7 @@ alias reloadenv='source ~/.zshenv'
 # Edit (e + target) / Navigate (cd + target)
 _eopen() {
   local target="$1"
-  case "$TERM_PROGRAM" in
-    vscode)   cursor "$target" ;;
-    *)        micro "$target" ;;
-  esac
+  "${EDITOR:-micro}" "$target"
 }
 ezsh()    { _eopen "$ZSH_DIR"; }
 edots()   { _eopen "$DOTFILES_DIR"; }
@@ -24,8 +21,13 @@ cdzsh()   { builtin cd "$ZSH_DIR"; }
 cddots()  { builtin cd "$DOTFILES_DIR"; }
 cdvault() { builtin cd "$VAULT_PATH"; }
 
+# Listing (eza icons use EZA_ICONS_AUTO + the Nerd Font configured in Ghostty)
+alias ls='eza --group-directories-first'                              # tidy default (dotfiles hidden — use la)
+alias la='eza --group-directories-first --all'                        # include dotfiles
+alias ll='eza --group-directories-first --long --all --git --header'  # detailed: perms, size, git, header
+alias lt='eza --group-directories-first --tree --level=2'             # 2-level tree
+
 # Navigation
-alias ls='ls -FaG'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -70,8 +72,11 @@ alias -s csv='open'
 alias -s webp='open'
 alias -s mov='open'
 
-# Brew
-alias brewsync='brew bundle --file="$DOTFILES_DIR/Brewfile" --cleanup'
+# Brew. brewsync converges presence only: installs what's missing, never
+# upgrades. `brew upgrade` covers the CLI layer; self-updating casks stay
+# app-owned via HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1. Cleanup is dry-run:
+# it lists strays but never removes — an automatic cleanup could delete GUI apps.
+alias brewsync='HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$DOTFILES_DIR/Brewfile" && { brew bundle cleanup --file="$DOTFILES_DIR/Brewfile" || true; }'
 
 # Python
 alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'
