@@ -40,6 +40,10 @@ links:
 local-config:
     ./setup/bootstrap.sh --only local-config
 
+# Install mise-managed language toolchains declared by the dotfiles.
+toolchains:
+    ./setup/bootstrap.sh --only toolchains
+
 # Recreate managed symlinks.
 reset-links:
     ./setup/bootstrap.sh --only links --reset

@@ -13,3 +13,6 @@ source "$FUNCTIONS_DIR/agentskills-functions.zsh"
 
 # uv-only nudges (bare pip/python)
 source "$FUNCTIONS_DIR/uv-functions.zsh"
+
+# mise-owned toolchain nudges
+source "$FUNCTIONS_DIR/toolchain-functions.zsh"

@@ -63,13 +63,12 @@ check_brew_bundle() {
 check_runtime_leaks() {
     log_section "Runtime Leaks"
 
-    # The invariant: no persistent global runtime state. Outside a project,
-    # Python and TypeScript runtimes must not resolve from Homebrew; runtimes
-    # are project-scoped via uv and mise.
-    local failed=0 leak tool tool_path expected
+    # The invariant: Homebrew owns managers only. uv owns Python projects;
+    # mise owns Go, Rust, Node, pnpm, and Bun versions.
+    local failed=0 leak tool tool_path expected cargo_entry cargo_drift
     local brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
 
-    for leak in python3 pip3 node npm pnpm bun; do
+    for leak in python3 pip3 node npm pnpm bun go rustup rustc cargo; do
         if [[ -e "$brew_prefix/bin/$leak" ]]; then
             log_error "$brew_prefix/bin/$leak exists — a formula dragged a runtime onto the host (find it: brew uses --installed <keg>)"
             failed=1
@@ -85,14 +84,49 @@ check_runtime_leaks() {
         log_skip "no global npm tree"
     fi
 
-    if [[ -f "$HOME/.config/mise/config.toml" ]] && grep -q '^\[tools\]' "$HOME/.config/mise/config.toml" 2>/dev/null; then
-        log_warn "global mise tool pins in ~/.config/mise/config.toml — runtimes should be project-pinned"
-    else
-        log_skip "no global mise pins"
-    fi
-
     if [[ -d "$HOME/.bun" ]]; then
         log_warn "$HOME/.bun exists — bun should be mise/project-managed"
+    fi
+
+    if [[ -d "$HOME/.local/share/go" ]]; then
+        log_error "$HOME/.local/share/go exists — direct Go install should be removed; mise owns Go"
+        failed=1
+    else
+        log_skip "no direct Go install in ~/.local/share/go"
+    fi
+
+    if [[ -d "/usr/local/go" ]]; then
+        log_error "/usr/local/go exists — direct/admin Go install should be removed; mise owns Go"
+        failed=1
+    else
+        log_skip "no direct Go install in /usr/local/go"
+    fi
+
+    if [[ -d "$HOME/go/bin" ]] && [[ -n "$(ls -A "$HOME/go/bin" 2>/dev/null)" ]]; then
+        log_error "$HOME/go/bin is not empty — global Go CLI installs should be managed by mise or Brewfile"
+        failed=1
+    else
+        log_skip "no global Go CLI bin"
+    fi
+
+    cargo_drift=0
+    if [[ -d "$HOME/.cargo/bin" ]]; then
+        for cargo_entry in "$HOME/.cargo/bin"/*; do
+            [[ -e "$cargo_entry" ]] || continue
+            if [[ "$(basename "$cargo_entry")" == "rustup" ]]; then
+                continue
+            fi
+            if [[ -L "$cargo_entry" && "$(readlink "$cargo_entry")" == "rustup" ]]; then
+                continue
+            fi
+            log_error "$cargo_entry is not a rustup shim — global Cargo CLIs should be managed by mise or Brewfile"
+            cargo_drift=1
+        done
+    fi
+    if [[ "$cargo_drift" -eq 0 ]]; then
+        log_skip "cargo bin contains only rustup shims"
+    else
+        failed=1
     fi
 
     # Standalone copies of brew-managed tools shadow brew and cause drift.
@@ -200,20 +234,50 @@ check_container_stack() {
 }
 
 check_toolchain_stack() {
-    log_section "Toolchains"
+    log_section "Mise Toolchains"
 
-    local command_name command_path
+    local failed=0 command_name command_path current version_output
 
-    if command_path="$(command -v go 2>/dev/null)"; then
-        log_skip "go: $command_path"
+    if [[ -f "$HOME/.config/mise/config.toml" ]]; then
+        log_skip "$HOME/.config/mise/config.toml"
     else
-        log_warn "go not found; install the official Go toolchain when Go projects need it"
+        log_error "$HOME/.config/mise/config.toml missing; bootstrap should link config/mise/config.toml"
+        failed=1
     fi
 
-    if command_path="$(command -v rustup 2>/dev/null)"; then
-        log_skip "rustup: $command_path"
+    if current="$(mise current go 2>/dev/null)" && [[ -n "$current" ]]; then
+        log_skip "mise go: $current"
     else
-        log_warn "rustup not found; install from https://rustup.rs when Rust projects need it"
+        log_error "mise go baseline missing; expected config/mise/config.toml to define it"
+        failed=1
+    fi
+
+    if version_output="$(mise exec -- go version 2>/dev/null)"; then
+        log_skip "$version_output"
+    else
+        log_error "go is not available through mise; run: mise install go"
+        failed=1
+    fi
+
+    if current="$(mise current rust 2>/dev/null)" && [[ -n "$current" ]]; then
+        log_skip "mise rust: $current"
+    else
+        log_error "mise rust baseline missing; expected config/mise/config.toml to define it"
+        failed=1
+    fi
+
+    if version_output="$(mise exec -- rustc --version 2>/dev/null)"; then
+        log_skip "$version_output"
+    else
+        log_error "rustc is not available through mise; run: mise install rust"
+        failed=1
+    fi
+
+    if version_output="$(mise exec -- cargo --version 2>/dev/null)"; then
+        log_skip "$version_output"
+    else
+        log_error "cargo is not available through mise; run: mise install rust"
+        failed=1
     fi
 
     for command_name in node pnpm bun; do
@@ -223,6 +287,8 @@ check_toolchain_stack() {
             log_skip "$command_name project-scoped via mise"
         fi
     done
+
+    return "$failed"
 }
 
 check_directories() {
@@ -286,7 +352,7 @@ check_local_config_seeds() {
         elif $ALLOW_EMPTY_LOCAL_CONFIG; then
             log_warn "$example_file missing, allowed by --allow-empty-local-config"
         else
-            log_error "Runtime seed missing: $example_file"
+            log_error "Local config seed missing: $example_file"
             failed=1
         fi
     done

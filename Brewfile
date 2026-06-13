@@ -13,9 +13,8 @@
 #   HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 for this reason.
 # - Before adding a formula, run `brew deps <formula>` — nothing that
 #   drags python/node/ruby onto the host (that mistake cost us httpie).
-# - Project runtimes never land here: uv owns Python projects, mise
-#   activates node/pnpm/bun per project, Go comes from the official
-#   toolchain, and Rust comes from rustup.
+# - Project runtimes never land here: uv owns Python projects, and mise
+#   owns Go, Rust, Node, pnpm, and Bun versions.
 # ----------------------------------------
 
 # Taps
@@ -84,13 +83,17 @@ cask "orbstack"
 
 # GUI apps (bootstrap-only: each self-updates via its own channel)
 cask "claude"
+cask "codex-app"
 cask "steipete/tap/codexbar"
 cask "cursor"
 cask "google-chrome@dev"
 cask "helium-browser"
 cask "hiddenbar"
 cask "obsidian"
+cask "proton-drive"
+cask "proton-mail"
 cask "proton-pass"
+cask "protonvpn"
 cask "raycast"
 cask "spotify"
 cask "stats"

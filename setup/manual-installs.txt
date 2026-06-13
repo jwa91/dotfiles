@@ -7,13 +7,16 @@ Interactive installs (App Store, passwords, biometrics, admin):
                   Line Tools before anything else works. Install full Xcode
                   only for native Apple-platform work, and keep it current if
                   it lives in /Applications.
-- tailscale       https://tailscale.com/download — interactive
-                  network-extension approval.
+- tailscale       https://tailscale.com/download — ships as a .pkg needing
+                  admin install and macOS network-extension approval. The
+                  Homebrew cask has the same sudo requirement.
 - 1password       https://1password.com/downloads — interactive installer
                   app; keeps biometrics + browser pairing intact. Current
                   SSH-agent and secrets truth.
 - google drive    https://www.google.com/drive/download/ — ships as a .pkg
                   needing an admin install.
+- proton auth     Install Proton Authenticator from the App Store. It is an
+                  iOS-style wrapped app and has no Homebrew cask.
 
 Post-bootstrap checks:
 

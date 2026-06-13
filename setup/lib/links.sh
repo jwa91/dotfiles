@@ -18,6 +18,7 @@ MANAGED_LINKS=(
     "$HOME/.local/bin/clip-md|$DOTFILES_DIR/bin/clip-md|always"
     "$HOME/.local/bin/rename-case|$DOTFILES_DIR/bin/rename-case|always"
     "$HOME/.config/atuin/config.toml|$CONFIG_DIR/atuin/config.toml|always"
+    "$HOME/.config/mise/config.toml|$CONFIG_DIR/mise/config.toml|always"
     "$HOME/.tmux.conf|$CONFIG_DIR/tmux/tmux.conf|always"
     "$HOME/Library/Application Support/Cursor/User/settings.json|$CONFIG_DIR/cursor/settings.json|cursor"
     "$HOME/Library/Application Support/Cursor/User/keybindings.json|$CONFIG_DIR/cursor/keybindings.json|cursor"

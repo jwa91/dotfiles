@@ -27,8 +27,8 @@ if [[ -r "$HOME/.config/broot/launcher/bash/br" ]]; then
     source "$HOME/.config/broot/launcher/bash/br"
 fi
 
-# Activate mise — runtimes are project-pinned only (node/pnpm/bun via
-# mise.toml), so outside a project these commands intentionally don't exist.
+# Activate mise. Global Go/Rust baselines live in config/mise/config.toml;
+# Node/pnpm/Bun stay project-scoped unless a project declares them.
 if command -v mise >/dev/null 2>&1; then
     eval "$(mise activate zsh)"
 fi

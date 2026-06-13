@@ -58,6 +58,28 @@ install_brew_bundle() {
     run_cmd env HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$BREWFILE"
 }
 
+install_mise_toolchains() {
+    log_section "Mise Toolchains"
+
+    if $SKIP_BREW; then
+        log_skip "mise toolchain step (--no-brew)"
+        return
+    fi
+
+    if ! command -v mise >/dev/null 2>&1; then
+        log_error "mise is missing; run the brew target first"
+        exit 1
+    fi
+
+    if [[ ! -f "$HOME/.config/mise/config.toml" ]]; then
+        log_error "$HOME/.config/mise/config.toml missing; run the links target first"
+        exit 1
+    fi
+
+    log_action "Install mise-managed Go/Rust baseline"
+    run_cmd mise install go rust
+}
+
 install_standalone_tool() {
     local name="$1"
     local url="$2"

@@ -9,11 +9,11 @@
 | Containers | OrbStack | Target replacement for Docker Desktop on macOS. |
 | Python projects | uv | Owns Python versions, virtualenvs, dependencies, and locks. |
 | TypeScript projects | mise + pnpm/Bun | mise activates Node/tooling per project; pnpm is default, Bun is intentional. |
-| Go projects | Go toolchain | Use official Go, modules, and `toolchain` in `go.mod`/`go.work`. |
-| Rust projects | rustup | Homebrew does not own Rust toolchains. |
+| Go projects | mise | mise owns Go versions; projects can still use Go modules/toolchain directives. |
+| Rust projects | mise | mise owns Rust version selection; rustup is the backend implementation. |
 | Shell | zsh now, portable env later | Keep shared environment separate from interactive zsh behavior. |
 | Tasks | just | Human interface for bootstrap, checks, and maintenance. |
-| Secrets/SSH | 1Password | Proton Pass stays installed as an experiment, not a dependency. |
+| Secrets/SSH | 1Password | Proton apps may be installed, but 1Password owns secrets and SSH. |
 | Code signing | GPG | SSH is for transport and machine access. |
 
 ## Homebrew Policy
@@ -33,7 +33,7 @@ Do:
 
 Do not:
 
-- Add `node`, `python`, `rust`, or `go` to Homebrew.
+- Add `node`, `python`, `rust`, `rustup`, or `go` to Homebrew.
 - Use `brew upgrade --greedy` as a general maintenance habit.
 - Let Homebrew cleanup remove GUI apps automatically.
 
@@ -49,8 +49,10 @@ Current direct-app set:
 - Cursor
 - Raycast
 - 1Password
-- Proton Pass, installed but out of scope for the current secrets plan
+- Proton Drive, Mail, Pass, and VPN; Bridge is intentionally excluded
+- Proton Authenticator via the App Store/iOS wrapper, not Homebrew
 - OrbStack
+- Tailscale via manual `.pkg` install; the cask needs the same sudo path
 
 Possible trials:
 
@@ -110,18 +112,29 @@ TypeScript:
 - `mise` activates Node and package-manager versions per project.
 - `pnpm` is the default package manager.
 - `bun` is used when the project intentionally uses Bun runtime/tooling.
+- Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.
 
 Go:
 
-- Install the official Go toolchain archive under `~/.local/share/go`.
-- Use `/usr/local/go` only for an admin-managed system install.
-- Pin project expectations with `go.mod` or `go.work`.
+- `mise` owns Go versions.
+- The global baseline is declared in `config/mise/config.toml`.
+- Project expectations can be pinned with project `mise.toml`, `.go-version`,
+  `go.mod`, or `go.work`.
 - Use Go modules for dependencies.
+- Do not use versioned `go install <module>@<version>` for global CLIs; use
+  the mise `go:` backend or add the tool to the Brewfile.
+- Do not use `go env -w`; persistent Go environment belongs in mise config,
+  shell env, or project config.
 
 Rust:
 
-- Install through `rustup`.
-- Keep `cargo` and `rustc` out of Homebrew.
+- `mise` owns Rust version selection.
+- `rustup` remains the backend implementation and may use `~/.rustup` and
+  `~/.cargo`.
+- The global baseline is declared in `config/mise/config.toml`.
+- Toolchain components and targets belong in mise tool options.
+- Do not use `cargo install` for global CLIs; use the mise `cargo:` backend or
+  add the tool to the Brewfile.
 
 ## Bootstrap Contract
 

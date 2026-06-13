@@ -20,14 +20,15 @@ See [docs/system.md](docs/system.md) for the full system model.
 | Task runner | just |
 | Python | uv |
 | TypeScript | Node via mise/project pins; pnpm by default, Bun when useful |
-| Go | Official Go toolchain and Go modules/toolchain directive |
-| Rust | rustup |
-| Secrets/SSH | 1Password today; Proton remains an installed experiment, not the plan |
+| Go | mise-managed Go toolchain |
+| Rust | mise-managed Rust; rustup is the backend implementation |
+| Secrets/SSH | 1Password today; Proton apps are installed but do not own secrets/SSH |
 | Signing | GPG for code signing, SSH for Git/VPS access |
 
-Project runtimes do not land in Homebrew. Outside a project, bare `python`,
-`pip`, `node`, `npm`, `pnpm`, and `bun` should not become accidental global
-state.
+Project runtimes do not land in Homebrew. Homebrew owns only the managers:
+`mise` for Go/Rust/Node/Bun and `uv` for Python. Outside a project, bare
+`python`, `pip`, `node`, `npm`, `pnpm`, and `bun` should not become accidental
+global state.
 
 ## New Machine
 
@@ -44,5 +45,6 @@ state.
 - `just` — list available dotfile tasks.
 - `just bootstrap` — converge a new or existing machine.
 - `just doctor` — check links, package presence, runtime leaks, and app state.
+- `just toolchains` — install the mise-managed Go/Rust baseline.
 - `just brew-sync` — install missing Brewfile entries without upgrading apps.
 - `brewsync` — shell alias for the same Homebrew presence check.

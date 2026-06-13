@@ -42,7 +42,7 @@ Options:
   --no-link              Skip config linking
   --reset                Remove managed symlinks before linking
   --update               Update zsh plugins with git pull --ff-only
-  --only <target>        Run one target: all, brew, standalone, zsh, manual, local-config, links, doctor
+  --only <target>        Run one target: all, brew, standalone, toolchains, zsh, manual, local-config, links, doctor
   --check                Alias for --only doctor
   --allow-empty-local-config
                          Create empty local config files when a seed example is missing
@@ -105,8 +105,9 @@ run_target() {
             install_brew_bundle
             install_standalone_tools
             setup_zsh_environment
-            print_manual_install_checklist
             link_configs
+            install_mise_toolchains
+            print_manual_install_checklist
             ;;
         brew)
             preflight
@@ -116,6 +117,11 @@ run_target() {
         standalone)
             preflight
             install_standalone_tools
+            ;;
+        toolchains)
+            preflight
+            link_configs
+            install_mise_toolchains
             ;;
         zsh)
             preflight
