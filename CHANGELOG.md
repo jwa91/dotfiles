@@ -6,6 +6,61 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [3.0.1] - 2026-06-13
+### Breaking Changes
+- Reworked bootstrap around one-owner runtime management: Homebrew is the base
+  package layer, while `uv` owns Python and `mise` owns Go, Rust, Node, pnpm,
+  and Bun.
+- Changed the canonical local layout to `~/dotfiles`, `~/developer`,
+  `~/.local/bin`, `~/.zsh_plugins`, and `~/.config/dotfiles-local`; the
+  previous `~/Developer` fallback is gone.
+- Removed Homebrew ownership of project runtimes and global developer tools
+  that now belong to project config, `mise`, `uv`, or standalone installers.
+- Removed managed VS Code, GitHub CLI, tmux bookmark, `ccbot`, Next.js route,
+  and repo-local agent-skill surfaces from the default configuration.
+
+### Added
+- Targetable bootstrap flow with modular setup libraries, `setup/doctor.sh`,
+  and `just` tasks for bootstrap, checks, links, toolchains, help, zsh setup,
+  and manual setup.
+- Managed symlink and machine-local config seeding, including Cursor-aware
+  link conditions and migration of already-managed directories into symlinks.
+- Baseline `mise` config plus zsh owner guards for Python, JavaScript, Go, and
+  Rust mutation commands.
+- Portable helpers in `bin/` for markdown clipping, command help, skill
+  scaffolding, Proton Pass agent access, filename case conversion, and
+  Starship runtime metadata.
+- Broot skins and verbs, eza theme overrides, dotfiles cheat sheets, Proton
+  Pass shell helpers, and Codex/Cursor/OrbStack-oriented local config.
+
+### Changed
+- Homebrew convergence is now presence-only with
+  `HOMEBREW_BUNDLE_NO_UPGRADE=1`, and cleanup remains a report instead of a
+  deletion step.
+- Fast-moving agent CLIs are installed outside Homebrew.
+- zsh startup now sources shared POSIX environment, socket-gates Proton
+  Pass/1Password SSH agents, reasserts PATH after `brew shellenv`, and
+  activates `mise` from `.zshrc`.
+- Cursor, Claude Code, Git, Atuin, Ghostty, Broot, Starship, and cheat
+  configuration were trimmed around durable defaults and the new ownership
+  model.
+
+### Fixed
+- Bootstrap now fails early when required repository paths or local config
+  seeds are missing.
+- Doctor checks now detect unmanaged links, missing local config, missing mise
+  baselines, direct runtime installs, global npm/Go/Cargo residue, and Docker
+  Desktop leftovers.
+- Pre-push main guard now lives under `hooks/` and continues to require a
+  `v*` tag on `HEAD` plus a matching changelog entry.
+
+### Removed
+- Repo-local agent skills and Claude skill symlink mirrors.
+- Old Git setup helpers, SSH allowed signers, stale tmux and cheat surfaces,
+  and zsh function files that are no longer part of the managed shell surface.
+- Brewfile entries that violated the runtime ownership model or are no longer
+  part of the base stack.
+
 ## [2.18.1] - 2026-05-29
 ### Added
 - Proton Pass CLI via Homebrew for password-manager workflows.
