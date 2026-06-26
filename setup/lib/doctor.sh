@@ -54,10 +54,10 @@ check_brew_bundle() {
 
     # Presence-only: self-updating casks run ahead of brew's recorded
     # versions by design, so version drift is not drift.
-    if HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
+    if HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --file="$BREWFILE" >/dev/null 2>&1; then
         log_skip "Brewfile satisfied"
     else
-        log_warn "Brewfile drift; inspect with: HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --verbose --file=$BREWFILE"
+        log_warn "Brewfile drift; inspect with: HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --verbose --file=$BREWFILE"
     fi
 }
 
@@ -234,10 +234,64 @@ check_container_stack() {
     fi
 }
 
+mise_config_dirs() {
+    local developer_dir="${DEV_DIR:-$HOME/developer}"
+
+    printf '%s\n' "$DOTFILES_DIR"
+
+    if [[ -d "$developer_dir" ]]; then
+        find "$developer_dir" \
+            \( -name .git -o -name node_modules -o -name .build \) -prune -o \
+            -type f \( \
+                -name mise.toml -o \
+                -name .mise.toml -o \
+                -name .tool-versions -o \
+                -name .go-version -o \
+                -name .node-version -o \
+                -name .rust-version \
+            \) -exec dirname {} \; | sort -u
+    fi
+}
+
+mise_installed_tools() {
+    mise ls --json 2>/dev/null | jq -r '
+        to_entries[]
+        | .key as $tool
+        | .value[]?
+        | select(.installed == true)
+        | "\($tool)@\(.version)"
+    ' | sort -u
+}
+
+mise_declared_installed_tools() {
+    local mise_dir
+
+    while IFS= read -r mise_dir; do
+        mise -C "$mise_dir" ls --json 2>/dev/null | jq -r '
+            to_entries[]
+            | .key as $tool
+            | .value[]?
+            | select(.installed == true and (.source.path? != null))
+            | "\($tool)@\(.version)"
+        '
+    done < <(mise_config_dirs) | sort -u
+}
+
+is_harness_owned_tool_path() {
+    case "$1" in
+        "$HOME/.cache/codex-runtimes/"*)
+            return 0
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+}
+
 check_toolchain_stack() {
     log_section "Mise Toolchains"
 
-    local failed=0 command_name command_path current version_output undeclared_mise_tools undeclared_tool
+    local failed=0 command_name command_path current version_output installed_mise_tools declared_mise_tools undeclared_mise_tools undeclared_tool
 
     if [[ -f "$HOME/.config/mise/config.toml" ]]; then
         log_skip "$HOME/.config/mise/config.toml"
@@ -281,29 +335,44 @@ check_toolchain_stack() {
         failed=1
     fi
 
-    for command_name in node pnpm bun; do
+    # bun is a declared global (config/mise/config.toml) so MCP servers and
+    # other host tooling can reach bunx; node and pnpm stay project-scoped.
+    if current="$(mise current bun 2>/dev/null)" && [[ -n "$current" ]]; then
+        log_skip "mise bun: $current"
+    else
+        log_error "mise bun baseline missing; expected config/mise/config.toml to define it"
+        failed=1
+    fi
+
+    if version_output="$(mise exec -- bun --version 2>/dev/null)"; then
+        log_skip "bun $version_output"
+    else
+        log_error "bun is not available through mise; run: mise install bun"
+        failed=1
+    fi
+
+    for command_name in node pnpm; do
         if command_path="$(command -v "$command_name" 2>/dev/null)"; then
-            log_warn "$command_name resolves outside a project: $command_path"
+            if is_harness_owned_tool_path "$command_path"; then
+                log_skip "$command_name harness-owned: $command_path"
+            else
+                log_warn "$command_name resolves outside a project: $command_path"
+            fi
         else
             log_skip "$command_name project-scoped via mise"
         fi
     done
 
     if command -v jq >/dev/null 2>&1; then
-        if undeclared_mise_tools="$(mise ls --json 2>/dev/null | jq -r '
-            to_entries[]
-            | .key as $tool
-            | .value[]?
-            | select(.installed == true and (.source? | not))
-            | "\($tool)@\(.version)"
-        ')"; then
+        if installed_mise_tools="$(mise_installed_tools)" && declared_mise_tools="$(mise_declared_installed_tools)"; then
+            undeclared_mise_tools="$(comm -23 <(printf '%s\n' "$installed_mise_tools") <(printf '%s\n' "$declared_mise_tools"))"
             if [[ -n "$undeclared_mise_tools" ]]; then
                 while IFS= read -r undeclared_tool; do
-                    log_error "mise tool installed without repo/project config source: $undeclared_tool"
+                    log_error "mise tool installed without repo/project config owner: $undeclared_tool"
                     failed=1
                 done <<< "$undeclared_mise_tools"
             else
-                log_skip "no undeclared mise-installed tools"
+                log_skip "all installed mise tools have repo/project owners"
             fi
         else
             log_warn "Could not inspect undeclared mise-installed tools"

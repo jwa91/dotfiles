@@ -17,5 +17,5 @@ tldr --update              # Refresh tldr examples only
 
 # Ownership model
 just brew-sync             # Install missing Brewfile entries, do not upgrade
-just toolchains            # Install mise-managed Go/Rust baselines
+just toolchains            # Install repo-declared mise toolchains
 brewsync                   # Shell alias for the same Homebrew presence check

@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+### Changed
+- `just toolchains` installs every tool declared in the repo mise config.
+- Doctor treats project-declared mise installs under `~/developer` as owned.
+- Doctor treats Codex-bundled runtime commands as harness-owned.
+- Doctor's Brewfile check skips Homebrew auto-update noise.
+
+### Removed
+- Tracked Codex runtime config; Codex config stays machine-local.
 
 ## [3.0.1] - 2026-06-13
 ### Breaking Changes

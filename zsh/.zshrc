@@ -27,8 +27,7 @@ if [[ -r "$HOME/.config/broot/launcher/bash/br" ]]; then
     source "$HOME/.config/broot/launcher/bash/br"
 fi
 
-# Activate mise. Global Go/Rust baselines live in config/mise/config.toml;
-# Node/pnpm/Bun stay project-scoped unless a project declares them.
+# Activate mise. Global toolchain baselines live in config/mise/config.toml.
 if command -v mise >/dev/null 2>&1; then
     eval "$(mise activate zsh)"
 fi

@@ -33,6 +33,7 @@ misc/.netrc
 *.local
 settings.local.json
 # Local runtime configs (can contain machine-specific tokens/secrets)
+.codex/
 config/cursor/mcp.json
 config/gh/hosts.yml
 # Allow example files to be committed

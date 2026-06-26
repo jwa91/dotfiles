@@ -85,8 +85,8 @@ install_mise_toolchains() {
     log_action "Trust mise config"
     run_cmd mise trust "$HOME/.config/mise/config.toml"
 
-    log_action "Install mise-managed Go/Rust baseline"
-    run_cmd mise install go rust
+    log_action "Install repo-declared mise toolchains"
+    run_cmd mise install
 }
 
 install_standalone_tool() {

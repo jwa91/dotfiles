@@ -8,7 +8,7 @@
 | GUI apps | App updater or Homebrew, per cask | Brew may bootstrap both; ownership is listed below. |
 | Containers | OrbStack | Target replacement for Docker Desktop on macOS. |
 | Python projects | uv | Owns Python versions, virtualenvs, dependencies, and locks. |
-| TypeScript projects | mise + pnpm/Bun | mise activates Node/tooling per project; pnpm is default, Bun is intentional. |
+| TypeScript projects | mise + pnpm/Bun | mise activates project tooling; global Bun supports host `bunx`. |
 | Go projects | mise | mise owns Go versions; projects can still use Go modules/toolchain directives. |
 | Rust projects | mise | mise owns Rust version selection; rustup is the backend implementation. |
 | Shell | zsh now, portable env later | Keep shared environment separate from interactive zsh behavior. |
@@ -134,7 +134,8 @@ TypeScript:
 
 - `mise` activates Node and package-manager versions per project.
 - `pnpm` is the default package manager.
-- `bun` is used when the project intentionally uses Bun runtime/tooling.
+- `bun` has a repo-declared global baseline for host `bunx`, and projects can
+  pin their own Bun runtime/tooling when needed.
 - Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.
 - Do not use global `npm`, `pnpm`, or `bun` package installs. Use project
   dependencies, mise's `npm:` backend for reusable JS CLIs, or the Brewfile.
