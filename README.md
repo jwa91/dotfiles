@@ -13,17 +13,17 @@ See [docs/system.md](docs/system.md) for the full system model.
 | Layer | Owner |
 |---|---|
 | Base packages | [Brewfile](Brewfile) |
-| GUI apps | App updater or Homebrew, per cask metadata; see `docs/system.md` |
+| GUI apps | App updater or Homebrew, per Brewfile comments |
 | Containers | OrbStack |
-| Shell | zsh, with shared environment kept separable for future bash/fish |
+| Shell | zsh, with shared environment kept separate from interactive behavior |
 | Prompt/terminal | starship + Ghostty |
 | Listings/help | eza + cheat/tldr/man |
 | Task runner | just |
 | Python | uv |
-| TypeScript | Node via mise/project pins; pnpm by default, Bun when useful |
+| TypeScript | Node via project pins; pnpm by default; Bun global for host `bunx` |
 | Go | mise-managed Go toolchain |
 | Rust | mise-managed Rust; rustup is the backend implementation |
-| Secrets/SSH | 1Password today; Proton apps are installed but do not own secrets/SSH |
+| Secrets/SSH | 1Password; Proton apps are installed but do not own secrets/SSH |
 | Signing | GPG for code signing, SSH for Git/VPS access |
 
 Project runtimes do not land in Homebrew. Homebrew owns only the managers:

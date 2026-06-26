@@ -11,8 +11,8 @@ Interactive installs (App Store, passwords, biometrics, admin):
                   admin install and macOS network-extension approval. The
                   Homebrew cask has the same sudo requirement.
 - 1password       https://1password.com/downloads — interactive installer
-                  app; keeps biometrics + browser pairing intact. Current
-                  SSH-agent and secrets truth.
+                  app; keeps biometrics + browser pairing intact. SSH-agent
+                  and secrets truth.
 - google drive    https://www.google.com/drive/download/ — ships as a .pkg
                   needing an admin install.
 - proton auth     Install Proton Authenticator from the App Store. It is an
@@ -22,4 +22,3 @@ Post-bootstrap checks:
 
 - orbstack        Open once after bootstrap if it has not completed first-run
                   setup. Docker Desktop should stay absent after migration.
-- zed             Optional trial: https://zed.dev/download

@@ -6,6 +6,7 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 ### Changed
+- Trimmed system docs to current ownership rules.
 - `just toolchains` installs every tool declared in the repo mise config.
 - Doctor treats project-declared mise installs under `~/developer` as owned.
 - Doctor treats Codex-bundled runtime commands as harness-owned.
