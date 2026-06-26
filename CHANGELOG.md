@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+
+## [3.0.4] - 2026-06-26
 ### Changed
 - Project runtime audit now includes `janwillemaltink-website`.
 
