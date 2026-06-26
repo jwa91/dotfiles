@@ -1,3 +1,0 @@
-# Paths are relative to ~/developer.
-# Active WIP repos stay out of the standalone audit until they are ready to align.
-vps/services/epi/janwillemaltink-website
