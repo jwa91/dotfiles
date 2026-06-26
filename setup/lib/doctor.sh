@@ -85,8 +85,10 @@ check_runtime_leaks() {
         log_skip "no global npm tree"
     fi
 
-    if [[ -d "$HOME/.bun" ]]; then
-        log_warn "$HOME/.bun exists — bun should be mise/project-managed"
+    if [[ -n "${BUN_INSTALL:-}" || -e "$HOME/.bun/bin/bun" ]]; then
+        log_warn "official Bun installer state found; Bun runtime should be mise-owned"
+    elif [[ -d "$HOME/.bun/install/cache" ]]; then
+        log_skip "bun cache only"
     fi
 
     if [[ -d "$HOME/.local/share/go" ]]; then

@@ -10,6 +10,7 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 - `just toolchains` installs every tool declared in the repo mise config.
 - Doctor treats project-declared mise installs under `~/developer` as owned.
 - Doctor treats Codex-bundled runtime commands as harness-owned.
+- Doctor allows Bun's package cache while warning on official installer state.
 - Doctor's Brewfile check skips Homebrew auto-update noise.
 
 ### Removed
