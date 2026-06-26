@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+
+## [3.0.2] - 2026-06-26
 ### Changed
 - Trimmed system docs to current ownership rules.
 - `just toolchains` installs every tool declared in the repo mise config.
