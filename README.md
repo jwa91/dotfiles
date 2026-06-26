@@ -29,10 +29,11 @@ See [docs/system.md](docs/system.md) for the full system model.
 Project runtimes do not land in Homebrew. Homebrew owns only the managers:
 `mise` for Go/Rust/Node/Bun and `uv` for Python. Outside a project, bare
 `python`, `pip`, `node`, `npm`, and `pnpm` should not become accidental global
-state. Bun is the one deliberate exception: it is a declared global in
+state. The JS commands are dotfiles shims that require project-owned Node.
+Bun is the one deliberate exception: it is a declared global in
 `config/mise/config.toml` so host tooling (Claude Code MCP servers) can reach
 `bunx` — owned and version-pinned by mise, never installed via Homebrew or the
-official `~/.bun` installer.
+official Bun installer.
 
 ## New Machine
 

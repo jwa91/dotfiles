@@ -9,7 +9,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 - Trimmed system docs to current ownership rules.
 - `just toolchains` installs every tool declared in the repo mise config.
 - Doctor treats project-declared mise installs under `~/developer` as owned.
-- Doctor treats Codex-bundled runtime commands as harness-owned.
+- Dotfiles shims route `node`, `npm`, `npx`, and `pnpm` through project-owned Node.
+- JS global install guards moved from zsh functions into the dotfiles shims.
+- Doctor requires ambient JS commands to resolve to dotfiles shims.
 - Doctor allows Bun's package cache while warning on official installer state.
 - Doctor's Brewfile check skips Homebrew auto-update noise.
 

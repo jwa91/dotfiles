@@ -23,6 +23,8 @@ Homebrew installs missing host packages and casks. It does not own project
 runtime versions, and it does not decide when casks with their own updater are
 fresh.
 
+Do:
+
 - Put stable CLI tools in `Brewfile`.
 - Put casks in `Brewfile` when that makes new-machine setup faster or when
   Homebrew is the app's update owner.
@@ -31,9 +33,12 @@ fresh.
   `HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1` so apps with their own updater
   stay app-owned.
 
+Do not:
+
 - Add `node`, `python`, `rust`, `rustup`, or `go` to Homebrew.
 - Use `brew upgrade --greedy` as a general maintenance habit.
 - Let Homebrew cleanup remove GUI apps automatically.
+
 Manual and non-Brew installs live in `setup/manual-installs.txt`.
 
 ## Containers
@@ -83,8 +88,11 @@ Python:
 
 TypeScript:
 
-- `mise` activates Node and package-manager versions per project.
-- `pnpm` is the default package manager.
+- `mise` owns Node versions per project.
+- `package.json#packageManager` owns the package-manager version.
+- Dotfiles shims route `node`, `npm`, `npx`, and `pnpm` through the active
+  project Node. `pnpm` runs through Corepack so packageManager stays the
+  package-manager authority.
 - `bun` has a repo-declared global baseline for host `bunx`, and projects can
   pin their own Bun runtime/tooling when needed.
 - Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.

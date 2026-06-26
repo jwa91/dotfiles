@@ -290,6 +290,15 @@ is_harness_owned_tool_path() {
     esac
 }
 
+is_dotfiles_shim_path() {
+    local command_name="$1"
+    local command_path="$2"
+    local expected_path="$HOME/.local/bin/$command_name"
+    local source_path="$DOTFILES_DIR/bin/$command_name"
+
+    [[ "$command_path" == "$expected_path" && -e "$source_path" && "$command_path" -ef "$source_path" ]]
+}
+
 check_toolchain_stack() {
     log_section "Mise Toolchains"
 
@@ -353,15 +362,20 @@ check_toolchain_stack() {
         failed=1
     fi
 
-    for command_name in node pnpm; do
+    for command_name in node npm npx pnpm; do
         if command_path="$(command -v "$command_name" 2>/dev/null)"; then
-            if is_harness_owned_tool_path "$command_path"; then
-                log_skip "$command_name harness-owned: $command_path"
+            if is_dotfiles_shim_path "$command_name" "$command_path"; then
+                log_skip "$command_name shim: $command_path"
+            elif is_harness_owned_tool_path "$command_path"; then
+                log_error "$command_name resolves to harness-owned runtime before dotfiles shim: $command_path"
+                failed=1
             else
-                log_warn "$command_name resolves outside a project: $command_path"
+                log_error "$command_name resolves outside the dotfiles shim: $command_path"
+                failed=1
             fi
         else
-            log_skip "$command_name project-scoped via mise"
+            log_error "$command_name shim missing; run: ./setup/bootstrap.sh --only links"
+            failed=1
         fi
     done
 

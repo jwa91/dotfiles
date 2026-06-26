@@ -103,24 +103,6 @@ bun() {
   esac
 }
 
-npm() {
-  if [[ "${1:-}" == "install" || "${1:-}" == "i" ]] && _toolchain_has_global_flag "$@"; then
-    _toolchain_nudge "npm $1 -g" \
-      "  Use project dependencies, or install CLIs through mise: mise use npm:<package>@<version>."
-  else
-    _run_external_tool npm "$@"
-  fi
-}
-
-pnpm() {
-  if [[ "${1:-}" == "add" || "${1:-}" == "install" ]] && _toolchain_has_global_flag "$@"; then
-    _toolchain_nudge "pnpm $1 -g" \
-      "  Use project dependencies, or install CLIs through mise: mise use npm:<package>@<version>."
-  else
-    _run_external_tool pnpm "$@"
-  fi
-}
-
 yarn() {
   if [[ "${1:-}" == "global" ]]; then
     _toolchain_nudge "yarn global" \
