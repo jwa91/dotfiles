@@ -93,6 +93,8 @@ TypeScript:
 - Dotfiles shims route `node`, `npm`, `npx`, and `pnpm` through the active
   project Node. `pnpm` runs through Corepack so packageManager stays the
   package-manager authority.
+- `just project-audit` reports packageManager projects without a tracked exact
+  `mise.toml` Node pin.
 - `bun` has a repo-declared global baseline for host `bunx`, and projects can
   pin their own Bun runtime/tooling when needed.
 - Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.

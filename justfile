@@ -16,6 +16,10 @@ dry-run:
 doctor:
     ./setup/doctor.sh
 
+# Audit project runtime ownership under ~/developer.
+project-audit:
+    ./setup/project-audit.sh
+
 # Alias for doctor.
 check:
     ./setup/doctor.sh

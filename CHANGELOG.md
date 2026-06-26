@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog and this project follows Semantic Versioning.
 
 ## [Unreleased]
+### Added
+- `just project-audit` reports project runtime ownership drift under `~/developer`.
 
 ## [3.0.2] - 2026-06-26
 ### Changed

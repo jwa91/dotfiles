@@ -50,6 +50,7 @@ official Bun installer.
 - `just` — list available dotfile tasks.
 - `just bootstrap` — converge a new or existing machine.
 - `just doctor` — check links, package presence, runtime leaks, and app state.
+- `just project-audit` — report project runtime ownership drift under `~/developer`.
 - `just toolchains` — install repo-declared mise toolchains.
 - `just brew-sync` — install missing Brewfile entries without upgrading apps.
 - `brewsync` — shell alias for the same Homebrew presence check.
