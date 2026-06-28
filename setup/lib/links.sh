@@ -24,17 +24,32 @@ MANAGED_LINKS=(
     "$HOME/.cursor/mcp.json|$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json|cursor"
 )
 
+managed_executable_sources() {
+    local source
+
+    if [[ -d "$DOTFILES_DIR/bin" ]]; then
+        for source in "$DOTFILES_DIR/bin"/*; do
+            [[ -f "$source" && -x "$source" ]] || continue
+            printf '%s\n' "$source"
+        done
+    fi
+
+    if [[ -d "$DOTFILES_DIR/bin/shims" ]]; then
+        for source in "$DOTFILES_DIR/bin/shims"/*; do
+            [[ -f "$source" && -x "$source" ]] || continue
+            printf '%s\n' "$source"
+        done
+    fi
+}
+
 managed_link_specs() {
     local source
 
     printf '%s\n' "${MANAGED_LINKS[@]}"
 
-    if [[ -d "$DOTFILES_DIR/bin" ]]; then
-        for source in "$DOTFILES_DIR/bin"/*; do
-            [[ -f "$source" && -x "$source" ]] || continue
-            printf '%s|%s|always\n' "$HOME/.local/bin/$(basename "$source")" "$source"
-        done
-    fi
+    while IFS= read -r source; do
+        printf '%s|%s|always\n' "$HOME/.local/bin/$(basename "$source")" "$source"
+    done < <(managed_executable_sources)
 }
 
 LOCAL_CONFIG_FILES=(

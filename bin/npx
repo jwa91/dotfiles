@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-if ! node_path="$(mise which node 2>/dev/null)" || ! npx_path="$(mise which npx 2>/dev/null)"; then
-  echo "npx requires a project-owned Node runtime in mise config" >&2
-  exit 127
-fi
-
-exec env PATH="$(dirname "$node_path"):$PATH" "$npx_path" "$@"

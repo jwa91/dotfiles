@@ -27,13 +27,22 @@ See [docs/system.md](docs/system.md) for the full system model.
 | Signing | GPG for code signing, SSH for Git/VPS access |
 
 Project runtimes do not land in Homebrew. Homebrew owns only the managers:
-`mise` for Go/Rust/Node/Bun and `uv` for Python. Outside a project, bare
-`python`, `pip`, `node`, `npm`, and `pnpm` should not become accidental global
-state. The JS commands are dotfiles shims that require project-owned Node.
+`mise` for Go/Rust/Node/Bun and `uv` for Python. Python work should be
+expressed through `uv run`, `uv add`, `uv sync`, or `uvx`; bare `python` and
+`pip` are guard shims, not resolvers. `UV_MANAGED_PYTHON=1` makes uv use
+uv-owned interpreters instead of silently selecting system/framework Python.
+Runtime policy shims live in `bin/shims/`. See
+[ADR 0001](docs/adr/0001-python-runtime-ownership.md) for the Python runtime
+policy and [ADR 0002](docs/adr/0002-command-shim-authority.md) for shim
+authority.
+
+Outside a project, `node`, `npm`, and `pnpm` should not become accidental global
+state. The JS commands are dotfiles shims that require project-owned Node, and
+interactive zsh keeps those shims ahead of mise's activated tool directories.
 Bun is the one deliberate exception: it is a declared global in
-`config/mise/config.toml` so host tooling (Claude Code MCP servers) can reach
-`bunx` — owned and version-pinned by mise, never installed via Homebrew or the
-official Bun installer.
+`config/mise/config.toml` so known host tooling can use `bunx` escape hatches,
+owned and version-pinned by mise rather than Homebrew or the official Bun
+installer.
 
 ## New Machine
 

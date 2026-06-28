@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# shellcheck source=shell/shim-info.sh
+source "${DOTFILES_DIR:-$HOME/dotfiles}/shell/shim-info.sh"
+
+if ! node_path="$(mise which node 2>/dev/null)" || ! npx_path="$(mise which npx 2>/dev/null)"; then
+  echo "npx requires a project-owned Node runtime in mise config" >&2
+  exit 127
+fi
+
+dotfiles_infomsg NPX "npx uses project-owned Node tooling; global Node tooling is intentionally unavailable. resolved via mise: $npx_path; node: $node_path. Hide this notice with DISABLE_DOTFILES_INFOMSG_NPX=1."
+
+exec env PATH="$(dirname "$node_path"):$PATH" "$npx_path" "$@"

@@ -66,8 +66,13 @@ zsh behavior:
 
 Shell functions are only for behavior that must mutate or intercept the parent
 interactive shell, such as `cd`, `export`, or toolchain command wrappers.
-Standalone helpers live in `bin/` and bootstrap links every executable there
-into `~/.local/bin`.
+Standalone helpers live in `bin/`. Command-shadowing policy wrappers live in
+`bin/shims/`. Bootstrap links executables from both locations into
+`~/.local/bin`.
+
+Interactive zsh re-prepends `~/.local/bin` after `mise activate zsh`, so
+dotfiles shims remain the command authority while mise remains the runtime
+selector. See [ADR 0002](adr/0002-command-shim-authority.md).
 
 ## Command Help
 
@@ -83,20 +88,32 @@ then `tldr`, then `man`. Bootstrap and `just help` clone/update the community
 Python:
 
 - `uv` owns Python projects.
-- Bare `python` and `pip` are nudged away in interactive zsh.
+- `UV_MANAGED_PYTHON=1` requires uv-managed interpreters, so `uv run` does not
+  silently select system/framework Python.
+- Use `uv run script.py` for scripts, `uv run python` for REPL/`-c`/`-m`,
+  `uv add` for project dependencies, and `uv sync` for environments.
+- Use `uvx` (`uv tool run`) for one-off Python CLIs and `uv tool install` for
+  durable personal Python CLIs.
+- Bare `python`, `python3`, `pip`, and `pip3` are guard shim commands, not
+  resolvers. They do not choose a global interpreter or install into ambient
+  state.
+- Use `uv pip ...` only for explicit legacy/manual virtualenv workflows.
 - Project dependencies live in the project lockfile.
+- See [ADR 0001](adr/0001-python-runtime-ownership.md) for the full policy.
 
 TypeScript:
 
 - `mise` owns Node versions per project.
 - `package.json#packageManager` owns the package-manager version.
-- Dotfiles shims route `node`, `npm`, `npx`, and `pnpm` through the active
-  project Node. `pnpm` runs through Corepack so packageManager stays the
-  package-manager authority.
+- Dotfiles shim commands route `node`, `npm`, `npx`, and `pnpm` through the
+  active project Node. `pnpm` runs through Corepack so packageManager stays
+  the package-manager authority. These shims intentionally stay ahead of mise's
+  activated project bin directory in interactive zsh.
 - `just project-audit` reports packageManager projects without a tracked exact
   `mise.toml` Node pin.
-- `bun` has a repo-declared global baseline for host `bunx`, and projects can
-  pin their own Bun runtime/tooling when needed.
+- `bun` has a repo-declared global baseline for host `bunx` escape hatches.
+  Project commands still go through project dependencies, package-manager
+  scripts, or pinned project tooling.
 - Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.
 - Do not use global `npm`, `pnpm`, or `bun` package installs. Use project
   dependencies, mise's `npm:` backend for reusable JS CLIs, or the Brewfile.

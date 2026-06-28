@@ -29,16 +29,18 @@ _python_nudge() {
 
   case "$command_name" in
     pip|pip3)
-      echo "x uv owns Python dependencies on this machine; skip bare pip." >&2
-      echo "  Use: uv add <pkg>          # project dependency" >&2
-      echo "  Use: uv pip install <pkg>  # one-off, into the current venv" >&2
-      echo "  Escape hatch: command $command_name $*" >&2
+      echo "x bare $command_name is not the Python package command surface on this machine." >&2
+      echo "  Use: uv add <pkg>                   # add a project dependency" >&2
+      echo "  Use: uv sync                        # create/update the project environment" >&2
+      echo "  Use: uv run --with <pkg> script.py  # one-off script dependency" >&2
+      echo "  Use uv pip ... only for explicit legacy/manual virtualenv work." >&2
       ;;
     python|python3)
-      echo "x uv owns Python execution on this machine; skip bare python." >&2
-      echo "  Use: uv run <script.py>    # run a script" >&2
-      echo "  Use: uv run python         # REPL, or add -m <module>" >&2
-      echo "  Escape hatch: command $command_name $*" >&2
+      echo "x bare $command_name is not the Python command surface on this machine." >&2
+      echo "  Use: uv run script.py               # run a Python script" >&2
+      echo "  Use: uv run --with <pkg> script.py  # run a one-off script with deps" >&2
+      echo "  Use: uv run python                  # REPL, or add -c/-m as needed" >&2
+      echo "  Use an explicit interpreter path only when intentionally bypassing uv." >&2
       ;;
   esac
 

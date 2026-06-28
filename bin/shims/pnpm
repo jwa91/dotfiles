@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# shellcheck source=shell/shim-info.sh
+source "${DOTFILES_DIR:-$HOME/dotfiles}/shell/shim-info.sh"
+
 if ! node_path="$(mise which node 2>/dev/null)" || ! corepack_path="$(mise which corepack 2>/dev/null)"; then
   echo "pnpm requires a project-owned Node runtime in mise config" >&2
   exit 127
@@ -31,5 +34,7 @@ if [[ "${1:-}" == "add" || "${1:-}" == "install" ]] && has_global_flag "$@"; the
   echo "  Use project dependencies, mise's npm: backend, or the Brewfile." >&2
   exit 127
 fi
+
+dotfiles_infomsg PNPM "pnpm uses project-owned Node plus Corepack; global pnpm installs are intentionally unavailable. resolved via mise: $corepack_path; node: $node_path. Hide this notice with DISABLE_DOTFILES_INFOMSG_PNPM=1."
 
 exec env PATH="$(dirname "$node_path"):$PATH" "$corepack_path" pnpm "$@"

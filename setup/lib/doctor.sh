@@ -9,7 +9,9 @@ doctor() {
     check_required_commands || failed=1
     check_optional_commands
     check_container_stack
+    check_python_policy || failed=1
     check_toolchain_stack || failed=1
+    check_zsh_shim_authority || failed=1
     check_directories || failed=1
     check_zsh_plugins || failed=1
     check_local_config_seeds || failed=1
@@ -28,6 +30,41 @@ doctor() {
     fi
 
     log_skip "Doctor checks passed"
+}
+
+check_python_policy() {
+    log_section "Python Policy"
+
+    local failed=0 command_name command_path
+
+    if [[ "${UV_MANAGED_PYTHON:-}" == "1" ]]; then
+        log_skip "UV_MANAGED_PYTHON=1"
+    else
+        log_error "UV_MANAGED_PYTHON must be 1 so uv cannot silently use system/framework Python"
+        failed=1
+    fi
+
+    for command_name in python python3 pip pip3; do
+        if command_path="$(command -v "$command_name" 2>/dev/null)"; then
+            if is_dotfiles_shim_path "$command_name" "$command_path"; then
+                log_skip "$command_name shim: $command_path"
+            else
+                log_error "$command_name resolves outside the dotfiles shim: $command_path"
+                failed=1
+            fi
+        else
+            log_error "$command_name shim missing; run: ./setup/bootstrap.sh --only links"
+            failed=1
+        fi
+    done
+
+    if [[ "${UV_PYTHON_DOWNLOADS:-}" == "never" ]]; then
+        log_skip "UV_PYTHON_DOWNLOADS=never"
+    else
+        log_skip "uv may download managed Python runtimes on demand"
+    fi
+
+    return "$failed"
 }
 
 check_ssh_agent() {
@@ -294,7 +331,7 @@ is_dotfiles_shim_path() {
     local command_name="$1"
     local command_path="$2"
     local expected_path="$HOME/.local/bin/$command_name"
-    local source_path="$DOTFILES_DIR/bin/$command_name"
+    local source_path="$DOTFILES_DIR/bin/shims/$command_name"
 
     [[ "$command_path" == "$expected_path" && -e "$source_path" && "$command_path" -ef "$source_path" ]]
 }
@@ -396,6 +433,54 @@ check_toolchain_stack() {
     else
         log_warn "jq missing; cannot inspect undeclared mise-installed tools"
     fi
+
+    return "$failed"
+}
+
+check_zsh_shim_authority() {
+    log_section "Zsh Shim Authority"
+
+    local failed=0 node_version tmpdir output command_name command_path
+
+    if ! command -v zsh >/dev/null 2>&1; then
+        log_error "zsh missing; cannot verify interactive shim authority"
+        return 1
+    fi
+
+    if ! node_version="$(mise ls --installed node --json 2>/dev/null | jq -r '.[0].version // empty' 2>/dev/null)" || [[ -z "$node_version" ]]; then
+        log_skip "no installed mise Node; interactive precedence check skipped"
+        return 0
+    fi
+
+    tmpdir="$(mktemp -d)"
+    mkdir -p "$tmpdir/project"
+    printf '%s\n' "$node_version" > "$tmpdir/project/.node-version"
+
+    if ! output="$(
+        cd "$tmpdir" && DOTFILES_SHIM_AUTHORITY_TEST_DIR="$tmpdir/project" TERM=xterm-256color zsh -ic '
+            cd "$DOTFILES_SHIM_AUTHORITY_TEST_DIR" || exit 1
+            for command_name in node npm npx pnpm; do
+                printf "%s\t%s\n" "$command_name" "$(command -v "$command_name" 2>/dev/null || true)"
+            done
+        ' 2>/dev/null
+    )"; then
+        rm -rf "$tmpdir"
+        log_error "interactive zsh failed while checking shim authority"
+        return 1
+    fi
+
+    rm -rf "$tmpdir"
+
+    while IFS=$'\t' read -r command_name command_path; do
+        [[ -n "$command_name" ]] || continue
+
+        if is_dotfiles_shim_path "$command_name" "$command_path"; then
+            log_skip "interactive zsh $command_name shim: $command_path"
+        else
+            log_error "interactive zsh $command_name bypasses dotfiles shim: ${command_path:-missing}"
+            failed=1
+        fi
+    done <<< "$output"
 
     return "$failed"
 }

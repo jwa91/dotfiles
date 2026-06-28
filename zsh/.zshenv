@@ -24,3 +24,6 @@ fi
 # PATH
 # ----------------------------------------
 source "$ZSH_DIR/path.zsh"
+if [[ ! -o login ]]; then
+    dotfiles_harden_path
+fi

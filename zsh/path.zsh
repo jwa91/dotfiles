@@ -15,4 +15,12 @@ dotfiles_prepend_path() {
     )
 }
 
+# In zsh, lowercase `path` is tied to PATH. Guard noninteractive probes from
+# accidentally clobbering command lookup with snippets like `for path in ...`.
+dotfiles_harden_path() {
+    if [[ ! -o interactive && "${DOTFILES_HARDEN_ZSH_PATH:-1}" == "1" ]]; then
+        typeset -gr path
+    fi
+}
+
 dotfiles_prepend_path

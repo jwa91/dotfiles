@@ -30,4 +30,17 @@ fi
 # Activate mise. Global toolchain baselines live in config/mise/config.toml.
 if command -v mise >/dev/null 2>&1; then
     eval "$(mise activate zsh)"
+
+    _dotfiles_after_mise_hook() {
+        # Keep dotfiles policy shims ahead of mise's activated tool bins. The
+        # shims still resolve project runtimes through mise; they just enforce
+        # ownership.
+        dotfiles_prepend_path
+    }
+
+    add-zsh-hook -d precmd _dotfiles_after_mise_hook 2>/dev/null
+    add-zsh-hook -d chpwd _dotfiles_after_mise_hook 2>/dev/null
+    add-zsh-hook precmd _dotfiles_after_mise_hook
+    add-zsh-hook chpwd _dotfiles_after_mise_hook
+    _dotfiles_after_mise_hook
 fi

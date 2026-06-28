@@ -21,6 +21,10 @@ export EZA_CONFIG_DIR="${EZA_CONFIG_DIR:-$XDG_CONFIG_HOME/eza}"
 export EZA_ICON_SPACING="${EZA_ICON_SPACING:-2}"
 export EZA_ICONS_AUTO="${EZA_ICONS_AUTO:-1}"
 
+# uv owns Python runtimes and environments. Require uv-managed interpreters so
+# `uv run` does not silently fall back to system or framework Python.
+export UV_MANAGED_PYTHON="${UV_MANAGED_PYTHON:-1}"
+
 # Brew casks are bootstrap installers here; apps with their own updater should
 # not be chased by routine `brew upgrade`.
 export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS="${HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS:-1}"

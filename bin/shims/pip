@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+command_name="$(basename "$0")"
+
+echo "x bare $command_name is not the Python package command surface on this machine." >&2
+echo "  Use: uv add <pkg>                      # add a project dependency" >&2
+echo "  Use: uv sync                           # create/update the project environment" >&2
+echo "  Use: uv run --with <pkg> script.py     # one-off script dependency" >&2
+echo "  Use: uv pip ... only for explicit legacy/manual virtualenv work." >&2
+exit 127
