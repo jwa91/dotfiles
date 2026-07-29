@@ -16,6 +16,7 @@ MANAGED_LINKS=(
     "$HOME/.config/broot/conf.hjson|$CONFIG_DIR/broot/conf.hjson|always"
     "$HOME/.config/broot/verbs.hjson|$CONFIG_DIR/broot/verbs.hjson|always"
     "$HOME/.config/broot/skins|$CONFIG_DIR/broot/skins|always"
+    "$HOME/.config/hunk/config.toml|$CONFIG_DIR/hunk/config.toml|always"
     "$HOME/.config/atuin/config.toml|$CONFIG_DIR/atuin/config.toml|always"
     "$HOME/.config/mise/config.toml|$CONFIG_DIR/mise/config.toml|always"
     "$HOME/.config/ty/ty.toml|$CONFIG_DIR/ty/ty.toml|always"

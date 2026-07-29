@@ -26,6 +26,8 @@
 [alias]
     st = status -sb
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    hdiff = -c core.pager="hunk pager" diff
+    hshow = -c core.pager="hunk pager" show
 
 [pull]
     rebase = true

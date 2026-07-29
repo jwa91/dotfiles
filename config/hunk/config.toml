@@ -1,0 +1,11 @@
+theme = "auto"
+mode = "auto"
+watch = true
+exclude_untracked = false
+line_numbers = true
+tab_width = 4
+wrap_lines = false
+menu_bar = true
+agent_notes = true
+prompt_save_view_preferences = false
+transparent_background = true

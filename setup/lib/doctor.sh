@@ -223,7 +223,7 @@ check_required_commands() {
     local failed=0
     local command_name
     local commands=(
-        brew git starship fzf tmux micro zoxide atuin duti
+        brew git starship fzf tmux micro zoxide atuin duti hunk
         eza just prek gitleaks op pass-cli jq rg uv mise cheat tldr tofu tflint
     )
 
