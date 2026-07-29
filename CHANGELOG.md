@@ -6,6 +6,8 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-07-30
+
 ### Added
 - Managed Hunk installation, agent-oriented review preferences, opt-in Git
   aliases, and Broot review integration.
