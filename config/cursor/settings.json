@@ -64,7 +64,8 @@
   // ============================================================================
   "security.workspace.trust.untrustedFiles": "open",
   "explorer.confirmDragAndDrop": true,
-  "update.releaseTrack": "prerelease",
+  "update.releaseTrack": "dev",
   "workbench.colorTheme": "Default Dark Modern",
-  "window.autoDetectColorScheme": false
+  "window.autoDetectColorScheme": false,
+  "security.promptForLocalFileProtocolHandling": false
 }

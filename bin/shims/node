@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# shellcheck source=shell/shim-info.sh
-source "${DOTFILES_DIR:-$HOME/dotfiles}/shell/shim-info.sh"
-
 if ! node_path="$(mise which node 2>/dev/null)"; then
-  echo "node requires a project-owned Node runtime in mise config" >&2
+  echo "node requires the mise-owned Node baseline; run: just toolchains" >&2
   exit 127
 fi
-
-dotfiles_infomsg NODE "node uses a project-owned runtime; global Node is intentionally unavailable. resolved via mise: $node_path. Hide this notice with DISABLE_DOTFILES_INFOMSG_NODE=1."
 
 exec "$node_path" "$@"

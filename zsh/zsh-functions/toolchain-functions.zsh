@@ -9,7 +9,7 @@ _toolchain_nudge() {
   local line
 
   echo "x $command_name is not the owner for this mutation." >&2
-  echo "  Homebrew owns mise; mise owns Go, Rust, Node, pnpm, and Bun versions." >&2
+  echo "  Homebrew owns CLIs; mise owns runtimes; project manifests own dependencies." >&2
   for line in "$@"; do
     echo "$line" >&2
   done
@@ -93,7 +93,7 @@ bun() {
     add|install)
       if _toolchain_has_global_flag "$@"; then
         _toolchain_nudge "bun $1 -g" \
-          "  Use project dependencies, or install JS CLIs through mise's npm: backend or the Brewfile." \
+          "  Use project dependencies, a one-off runner, or the Brewfile." \
           "  Use mise use bun@<version> only for the Bun runtime itself."
       else
         _run_external_tool bun "$@"
@@ -108,7 +108,7 @@ bun() {
 yarn() {
   if [[ "${1:-}" == "global" ]]; then
     _toolchain_nudge "yarn global" \
-      "  Use project dependencies, or install CLIs through mise."
+      "  Use project dependencies, a one-off runner, or the Brewfile."
   else
     _run_external_tool yarn "$@"
   fi
@@ -121,7 +121,7 @@ go() {
   elif [[ "${1:-}" == "install" ]]; then
     _toolchain_nudge "go install" \
       "  Use go build or go run for project-local binaries." \
-      "  Use mise for Go CLIs: mise use go:<module>@<version>, or add the tool to the Brewfile."
+      "  Add reusable machine CLIs to the Brewfile."
   else
     _run_external_tool go "$@"
   fi
@@ -130,7 +130,7 @@ go() {
 cargo() {
   if [[ "${1:-}" == "install" ]]; then
     _toolchain_nudge "cargo install" \
-      "  Use mise for Rust CLIs: mise use cargo:<crate>@<version>." \
+      "  Add reusable machine CLIs to the Brewfile." \
       "  Escape hatch: command cargo install --path ."
   else
     _run_external_tool cargo "$@"

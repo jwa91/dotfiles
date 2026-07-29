@@ -32,6 +32,18 @@ brew-sync:
 brew-check:
     HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle check --verbose --file=Brewfile
 
+# Check declared formulae for known vulnerabilities (Homebrew 6+).
+brew-vulns:
+    brew vulns --brewfile=Brewfile
+
+# Show updates owned by Homebrew, excluding self-updating GUI apps.
+brew-outdated:
+    HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 brew outdated
+
+# Upgrade formulae and Homebrew-owned casks, excluding self-updating GUI apps.
+brew-upgrade:
+    HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 brew upgrade
+
 # Show Homebrew entries not declared in Brewfile. Does not remove anything.
 brew-cleanup:
     -brew bundle cleanup --file=Brewfile
@@ -39,6 +51,10 @@ brew-cleanup:
 # Run only the link step.
 links:
     ./setup/bootstrap.sh --only links
+
+# Apply managed macOS default file associations.
+default-apps:
+    ./setup/bootstrap.sh --only default-apps
 
 # Seed machine-local config files from repo examples.
 local-config:

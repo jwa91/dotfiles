@@ -18,8 +18,10 @@ doctor() {
     check_local_config_files
     check_managed_sources || failed=1
     check_managed_links || failed=1
+    check_default_apps || failed=1
     check_command_help
     check_ssh_agent
+    check_homebrew_policy || failed=1
     check_brew_bundle
     check_runtime_leaks || failed=1
     check_starship_config
@@ -98,11 +100,44 @@ check_brew_bundle() {
     fi
 }
 
+check_homebrew_policy() {
+    log_section "Homebrew Policy"
+
+    local brew_major brew_version failed=0
+    brew_version="$(brew --version 2>/dev/null | awk 'NR == 1 { print $2 }')"
+    brew_major="${brew_version%%.*}"
+    if [[ "$brew_major" =~ ^[0-9]+$ ]] && ((brew_major >= 6)); then
+        log_skip "Homebrew $brew_version"
+    else
+        log_error "Homebrew 6+ required; found ${brew_version:-unknown}"
+        failed=1
+    fi
+    if brew developer state 2>&1 | grep -q "Developer mode is enabled"; then
+        log_error "Homebrew tracks main; run: brew developer off"
+        failed=1
+    else
+        log_skip "Homebrew stable release channel"
+    fi
+    if [[ "${HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS:-}" == "1" ]]; then
+        log_skip "self-updating casks excluded from routine brew upgrades"
+    else
+        log_error "HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS must be 1"
+        failed=1
+    fi
+    if [[ -n "${HOMEBREW_UPGRADE_GREEDY+x}${HOMEBREW_UPGRADE_AUTO_UPDATES_CASKS+x}" ]]; then
+        log_error "Homebrew greedy upgrade variables must remain unset"
+        failed=1
+    else
+        log_skip "Homebrew greedy upgrade variables unset"
+    fi
+    return "$failed"
+}
+
 check_runtime_leaks() {
     log_section "Runtime Leaks"
 
-    # The invariant: Homebrew owns managers only. uv owns Python projects;
-    # mise owns Go, Rust, Node, pnpm, and Bun versions.
+    # Homebrew owns machine CLIs; uv owns Python, mise owns runtime versions,
+    # and packageManager + Corepack own pnpm versions.
     local failed=0 leak tool tool_path expected cargo_entry cargo_drift
     local brew_prefix="${HOMEBREW_PREFIX:-/opt/homebrew}"
 
@@ -187,8 +222,8 @@ check_required_commands() {
     local failed=0
     local command_name
     local commands=(
-        brew git starship fzf tmux micro zoxide atuin
-        eza just prek gitleaks op pass-cli jq rg uv mise cheat tldr
+        brew git starship fzf tmux micro zoxide atuin duti
+        eza just prek gitleaks op pass-cli jq rg uv mise cheat tldr tofu tflint
     )
 
     for command_name in "${commands[@]}"; do
@@ -383,19 +418,38 @@ check_toolchain_stack() {
         failed=1
     fi
 
-    # bun is a declared global (config/mise/config.toml) so MCP servers and
-    # other host tooling can reach bunx; node and pnpm stay project-scoped.
-    if current="$(mise current bun 2>/dev/null)" && [[ -n "$current" ]]; then
-        log_skip "mise bun: $current"
+    if current="$(mise current node 2>/dev/null)" && [[ -n "$current" ]]; then
+        log_skip "mise Node: $current"
     else
-        log_error "mise bun baseline missing; expected config/mise/config.toml to define it"
+        log_error "mise Node baseline missing; expected config/mise/config.toml to define it"
+        failed=1
+    fi
+
+    if version_output="$(mise exec -- node --version 2>/dev/null)"; then
+        log_skip "Node $version_output"
+    else
+        log_error "Node is not available through mise; run: mise install node"
+        failed=1
+    fi
+
+    if version_output="$(mise exec -- corepack --version 2>/dev/null)"; then
+        log_skip "Corepack $version_output"
+    else
+        log_error "Corepack is not available through mise-owned Node"
+        failed=1
+    fi
+
+    if current="$(mise current bun 2>/dev/null)" && [[ -n "$current" ]]; then
+        log_skip "mise Bun: $current"
+    else
+        log_error "mise Bun baseline missing; expected config/mise/config.toml to define it"
         failed=1
     fi
 
     if version_output="$(mise exec -- bun --version 2>/dev/null)"; then
-        log_skip "bun $version_output"
+        log_skip "Bun $version_output"
     else
-        log_error "bun is not available through mise; run: mise install bun"
+        log_error "Bun is not available through mise; run: mise install bun"
         failed=1
     fi
 
@@ -440,36 +494,23 @@ check_toolchain_stack() {
 check_zsh_shim_authority() {
     log_section "Zsh Shim Authority"
 
-    local failed=0 node_version tmpdir output command_name command_path
+    local failed=0 output command_name command_path
 
     if ! command -v zsh >/dev/null 2>&1; then
         log_error "zsh missing; cannot verify interactive shim authority"
         return 1
     fi
 
-    if ! node_version="$(mise ls --installed node --json 2>/dev/null | jq -r '.[0].version // empty' 2>/dev/null)" || [[ -z "$node_version" ]]; then
-        log_skip "no installed mise Node; interactive precedence check skipped"
-        return 0
-    fi
-
-    tmpdir="$(mktemp -d)"
-    mkdir -p "$tmpdir/project"
-    printf '%s\n' "$node_version" > "$tmpdir/project/.node-version"
-
     if ! output="$(
-        cd "$tmpdir" && DOTFILES_SHIM_AUTHORITY_TEST_DIR="$tmpdir/project" TERM=xterm-256color zsh -ic '
-            cd "$DOTFILES_SHIM_AUTHORITY_TEST_DIR" || exit 1
+        TERM=xterm-256color zsh -ic '
             for command_name in node npm npx pnpm; do
                 printf "%s\t%s\n" "$command_name" "$(command -v "$command_name" 2>/dev/null || true)"
             done
         ' 2>/dev/null
     )"; then
-        rm -rf "$tmpdir"
         log_error "interactive zsh failed while checking shim authority"
         return 1
     fi
-
-    rm -rf "$tmpdir"
 
     while IFS=$'\t' read -r command_name command_path; do
         [[ -n "$command_name" ]] || continue
@@ -623,6 +664,35 @@ check_managed_links() {
             failed=1
         fi
     done < <(managed_link_specs)
+
+    return "$failed"
+}
+
+check_default_apps() {
+    log_section "Default Applications"
+
+    local failed=0 extension handler
+    local representative_extensions=(go json md rs sh toml tsx txt)
+
+    if ! is_zed_installed; then
+        log_warn "Zed is not installed; default application checks skipped"
+        return 0
+    fi
+
+    if ! command -v duti >/dev/null 2>&1; then
+        log_error "duti not found; run: just brew-sync"
+        return 1
+    fi
+
+    for extension in "${representative_extensions[@]}"; do
+        handler="$(duti -x "$extension" 2>/dev/null | tail -n 1)"
+        if [[ "$handler" == "dev.zed.Zed" ]]; then
+            log_skip ".$extension -> Zed"
+        else
+            log_error ".$extension handler is ${handler:-unknown}; run: just default-apps"
+            failed=1
+        fi
+    done
 
     return "$failed"
 }

@@ -77,6 +77,8 @@ alias -s mov='open'
 # app-owned via HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1. Cleanup is dry-run:
 # it lists strays but never removes — an automatic cleanup could delete GUI apps.
 alias brewsync='HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$DOTFILES_DIR/Brewfile" && { brew bundle cleanup --file="$DOTFILES_DIR/Brewfile" || true; }'
+alias brewoutdated='HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 brew outdated'
+alias brewup='HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 brew upgrade'
 
 # Python
 alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'

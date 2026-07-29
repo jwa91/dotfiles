@@ -1,0 +1,9 @@
+# Strict user-level fallback. Project ty.toml or [tool.ty] settings are merged
+# on top of this file and can relax individual rules where justified.
+
+[rules]
+all = "error"
+
+[analysis]
+# Prefer soundness over aggressive equality-based literal narrowing.
+strict-equality-semantics = true

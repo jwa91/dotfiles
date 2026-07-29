@@ -23,6 +23,8 @@ source "$LIB_DIR/paths.sh"
 source "$LIB_DIR/local_config.sh"
 # shellcheck source=setup/lib/links.sh
 source "$LIB_DIR/links.sh"
+# shellcheck source=setup/lib/default_apps.sh
+source "$LIB_DIR/default_apps.sh"
 # shellcheck source=setup/lib/brew.sh
 source "$LIB_DIR/brew.sh"
 # shellcheck source=setup/lib/zsh.sh
@@ -44,7 +46,7 @@ Options:
   --no-link              Skip config linking
   --reset                Remove managed symlinks before linking
   --update               Update zsh plugins with git pull --ff-only
-  --only <target>        Run one target: all, brew, standalone, toolchains, zsh, help, manual, local-config, links, doctor
+  --only <target>        Run one target: all, brew, standalone, toolchains, zsh, help, manual, local-config, links, default-apps, doctor
   --check                Alias for --only doctor
   --allow-empty-local-config
                          Create empty local config files when a seed example is missing
@@ -108,6 +110,7 @@ run_target() {
             install_standalone_tools
             setup_zsh_environment
             link_configs
+            apply_default_apps
             install_mise_toolchains
             setup_command_help
             print_manual_install_checklist
@@ -144,6 +147,10 @@ run_target() {
         links)
             preflight
             link_configs
+            ;;
+        default-apps)
+            preflight
+            apply_default_apps
             ;;
         doctor)
             doctor

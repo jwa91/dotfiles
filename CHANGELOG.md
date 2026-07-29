@@ -6,6 +6,18 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+### Added
+- Managed Zed settings and reproducible macOS text/code file associations via
+  `duti` and `just default-apps`.
+- Added Herdr's first-party POSIX installer to the enumerated standalone-tool
+  allowlist.
+- Aligned bootstrap, durable CLI inventory, and doctor with Homebrew 6's stable
+  channel, tap trust, vulnerability checks, and app-owned self-updating casks.
+- Added a mise-owned global Node baseline with project overrides, quiet runtime
+  shims, Corepack-owned pnpm versions, and guarded global installs.
+- Strict user-level ty and Ruff fallbacks, Zed's ty + Ruff Python integration,
+  and a documented uv-based project workflow.
+
 ## [3.0.4] - 2026-06-26
 ### Changed
 - Project runtime audit now includes `janwillemaltink-website`.

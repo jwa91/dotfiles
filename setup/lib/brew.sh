@@ -47,6 +47,24 @@ install_brew_bundle() {
         return
     fi
 
+    local brew_major brew_version
+    brew_version="$(brew --version | awk 'NR == 1 { print $2 }')"
+    brew_major="${brew_version%%.*}"
+    if [[ "$brew_major" =~ ^[0-9]+$ ]] && ((brew_major < 6)); then
+        log_action "Update Homebrew to 6+"
+        run_cmd brew update
+    else
+        log_skip "Homebrew $brew_version"
+    fi
+
+    if brew developer state 2>&1 | grep -q "Developer mode is enabled"; then
+        log_action "Return Homebrew to the stable release channel"
+        run_cmd brew developer off
+        run_cmd brew update
+    else
+        log_skip "Homebrew stable release channel"
+    fi
+
     log_action "Run brew bundle with HOMEBREW_BUNDLE_NO_UPGRADE=1 --file=$BREWFILE"
     run_cmd env HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$BREWFILE"
 }
@@ -92,6 +110,7 @@ install_mise_toolchains() {
 install_standalone_tool() {
     local name="$1"
     local url="$2"
+    local interpreter="${3:-bash}"
 
     if command -v "$name" >/dev/null 2>&1; then
         log_skip "$name (already installed)"
@@ -101,7 +120,7 @@ install_standalone_tool() {
     log_action "Install $name via $url"
     if ! $DRY_RUN; then
         if curl -fsSL --head "$url" >/dev/null 2>&1; then
-            curl -fsSL "$url" | bash
+            curl -fsSL "$url" | "$interpreter"
         else
             log_warn "$name install script unreachable at $url; install manually"
         fi
@@ -121,4 +140,6 @@ install_standalone_tools() {
     install_standalone_tool claude "https://claude.ai/install.sh"
     install_standalone_tool codex "https://chatgpt.com/codex/install.sh"
     install_standalone_tool amp "https://ampcode.com/install.sh"
+    # Herdr publishes a POSIX installer and manages its own ~/.local/bin binary.
+    install_standalone_tool herdr "https://herdr.dev/install.sh" sh
 }

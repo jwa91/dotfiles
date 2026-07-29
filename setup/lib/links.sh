@@ -18,7 +18,11 @@ MANAGED_LINKS=(
     "$HOME/.config/broot/skins|$CONFIG_DIR/broot/skins|always"
     "$HOME/.config/atuin/config.toml|$CONFIG_DIR/atuin/config.toml|always"
     "$HOME/.config/mise/config.toml|$CONFIG_DIR/mise/config.toml|always"
+    "$HOME/.config/ty/ty.toml|$CONFIG_DIR/ty/ty.toml|always"
+    "$HOME/.config/ruff/pyproject.toml|$CONFIG_DIR/ruff/pyproject.toml|always"
+    "$HOME/.config/duti/defaults.duti|$CONFIG_DIR/duti/defaults.duti|always"
     "$HOME/.tmux.conf|$CONFIG_DIR/tmux/tmux.conf|always"
+    "$HOME/.config/zed/settings.json|$CONFIG_DIR/zed/settings.json|zed"
     "$HOME/Library/Application Support/Cursor/User/settings.json|$CONFIG_DIR/cursor/settings.json|cursor"
     "$HOME/Library/Application Support/Cursor/User/keybindings.json|$CONFIG_DIR/cursor/keybindings.json|cursor"
     "$HOME/.cursor/mcp.json|$DOTFILES_LOCAL_CONFIG_DIR/cursor/mcp.json|cursor"
@@ -65,6 +69,14 @@ is_cursor_installed() {
     [[ -d "/Applications/Cursor.app" || -d "$HOME/Applications/Cursor.app" ]]
 }
 
+is_zed_installed() {
+    if command -v zed >/dev/null 2>&1; then
+        return 0
+    fi
+
+    [[ -d "/Applications/Zed.app" || -d "$HOME/Applications/Zed.app" ]]
+}
+
 should_manage_condition() {
     local condition="$1"
 
@@ -74,6 +86,9 @@ should_manage_condition() {
             ;;
         cursor)
             is_cursor_installed
+            ;;
+        zed)
+            is_zed_installed
             ;;
         *)
             log_error "Unknown managed-link condition: $condition"

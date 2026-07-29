@@ -1,0 +1,37 @@
+# macOS default handlers for text, source, configuration, and markup files.
+#
+# Prefer stable UTIs over filename extensions. Some developer extensions (for
+# example .go, .rs, .toml, and .tsx) are only registered as dynamic UTIs on
+# macOS. The bootstrap makes Zed's app declaration authoritative for those by
+# removing Cursor's competing Launch Services registration first.
+
+dev.zed.Zed public.text all
+dev.zed.Zed public.plain-text all
+dev.zed.Zed public.utf8-plain-text all
+dev.zed.Zed public.source-code all
+dev.zed.Zed public.script all
+dev.zed.Zed public.shell-script all
+
+dev.zed.Zed public.bash-script all
+dev.zed.Zed public.zsh-script all
+dev.zed.Zed public.c-source all
+dev.zed.Zed public.c-header all
+dev.zed.Zed public.c-plus-plus-source all
+dev.zed.Zed public.c-plus-plus-header all
+dev.zed.Zed public.css all
+dev.zed.Zed public.patch-file all
+dev.zed.Zed com.netscape.javascript-source all
+dev.zed.Zed public.json all
+dev.zed.Zed com.apple.log all
+dev.zed.Zed net.daringfireball.markdown all
+dev.zed.Zed public.php-script all
+dev.zed.Zed public.python-script all
+dev.zed.Zed public.ruby-script all
+dev.zed.Zed public.svg-image all
+dev.zed.Zed public.swift-source all
+dev.zed.Zed public.xml all
+dev.zed.Zed public.yaml all
+
+# Zed declares TypeScript directly, but macOS classifies .ts as a media UTI.
+# This machine is development-first, so prefer the editor for that extension.
+dev.zed.Zed .ts all

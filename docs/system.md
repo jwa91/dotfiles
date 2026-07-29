@@ -8,7 +8,7 @@
 | GUI apps | App updater or Homebrew, per cask | Brew may bootstrap both; ownership is listed below. |
 | Containers | OrbStack | Target replacement for Docker Desktop on macOS. |
 | Python projects | uv | Owns Python versions, virtualenvs, dependencies, and locks. |
-| TypeScript projects | mise + pnpm/Bun | mise activates project tooling; global Bun supports host `bunx`. |
+| TypeScript projects | mise + pnpm | Global Node baseline, exact project overrides, pnpm via Corepack. |
 | Go projects | mise | mise owns Go versions; projects can still use Go modules/toolchain directives. |
 | Rust projects | mise | mise owns Rust version selection; rustup is the backend implementation. |
 | Shell | zsh | Keep shared environment separate from interactive shell behavior. |
@@ -25,18 +25,25 @@ fresh.
 
 Do:
 
-- Put stable CLI tools in `Brewfile`.
+- Prefer `homebrew/core`; declare and explicitly trust every third-party tap.
+- Put durable CLI tools in `Brewfile`.
 - Put casks in `Brewfile` when that makes new-machine setup faster or when
   Homebrew is the app's update owner.
 - Run `just brew-sync` to install missing entries without upgrading casks.
-- Run `brew upgrade` deliberately for the CLI layer. Interactive shells export
+- Run `just brew-vulns` for Homebrew 6's OSV-backed formula check.
+- Run `brewup` (or `just brew-upgrade`) for routine upgrades. Interactive
+  shells export
   `HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1` so apps with their own updater
   stay app-owned.
 
 Do not:
 
 - Add `node`, `python`, `rust`, `rustup`, or `go` to Homebrew.
-- Use `brew upgrade --greedy` as a general maintenance habit.
+- Treat `brew x` as disposable: it leaves a normal formula installation behind,
+  which must be promoted to the Brewfile or removed.
+- Use `brew upgrade --greedy`, `--greedy-auto-updates`, or explicitly named
+  self-updating casks as a general maintenance habit; those are deliberate
+  escape hatches for repair.
 - Let Homebrew cleanup remove GUI apps automatically.
 
 Manual and non-Brew installs live in `setup/manual-installs.txt`.
@@ -88,6 +95,9 @@ then `tldr`, then `man`. Bootstrap and `just help` clone/update the community
 Python:
 
 - `uv` owns Python projects.
+- `ty` owns type checking and Python language intelligence; Ruff owns linting,
+  import sorting, and formatting. Strict user-level fallbacks are managed under
+  `~/.config/{ty,ruff}`, while project configuration remains authoritative.
 - `UV_MANAGED_PYTHON=1` requires uv-managed interpreters, so `uv run` does not
   silently select system/framework Python.
 - Use `uv run script.py` for scripts, `uv run python` for REPL/`-c`/`-m`,
@@ -99,26 +109,24 @@ Python:
   state.
 - Use `uv pip ...` only for explicit legacy/manual virtualenv workflows.
 - Project dependencies live in the project lockfile.
+- See [the Python workflow](python.md) for Zed and portable project settings.
 - See [ADR 0001](adr/0001-python-runtime-ownership.md) for the full policy.
 
 TypeScript:
 
-- `mise` owns Node versions per project.
-- `package.json#packageManager` owns the package-manager version.
+- `mise` owns one exact global Node baseline and exact project overrides.
+- `package.json#packageManager` owns pnpm versions through Corepack.
 - Dotfiles shim commands route `node`, `npm`, `npx`, and `pnpm` through the
-  active project Node. `pnpm` runs through Corepack so packageManager stays
-  the package-manager authority. These shims intentionally stay ahead of mise's
-  activated project bin directory in interactive zsh.
+  active mise Node. They stay ahead of mise's activated project bin directory
+  so global npm/pnpm installs remain unavailable without making normal runtime
+  use project-only.
+- Use `npx` or `pnpm dlx` for intentional cache-backed one-off execution.
 - `just project-audit` reports packageManager projects without a tracked exact
   `mise.toml` Node pin.
-- `bun` has a repo-declared global baseline for host `bunx` escape hatches.
-  Project commands still go through project dependencies, package-manager
-  scripts, or pinned project tooling.
-- Do not use `bun upgrade`; use `mise upgrade bun` or change mise config.
-- Do not use global `npm`, `pnpm`, or `bun` package installs. Use project
-  dependencies, mise's `npm:` backend for reusable JS CLIs, or the Brewfile.
-  mise's `bun@<version>` backend owns the Bun runtime; there is no `bun:`
-  package backend.
+- Bun remains a separately pinned mise-owned host runtime; `bun upgrade` and
+  global Bun package installs remain guarded.
+- Do not use global npm/pnpm installs. Use project dependencies, a one-off
+  runner, or the Brewfile for durable CLIs.
 
 Go:
 
@@ -129,8 +137,7 @@ Go:
   Go itself after mise selects the baseline Go binary.
 - Use Go modules for dependencies.
 - Do not use `go install` for durable CLI installs; use `go build` or `go run`
-  for project-local binaries, and use the mise `go:` backend or the Brewfile
-  for reusable CLIs.
+  for project-local binaries, and use the Brewfile for reusable machine CLIs.
 - Do not use `go env -w`; persistent Go environment belongs in mise config,
   shell env, or project config.
 
@@ -141,9 +148,9 @@ Rust:
   `~/.cargo`.
 - The global baseline is declared in `config/mise/config.toml`.
 - Toolchain components and targets belong in mise tool options.
-- Do not use `cargo install` for global CLIs; use the mise `cargo:` backend or
-  add the tool to the Brewfile. For an intentional one-off local install, type
-  the explicit shell escape hatch: `command cargo install --path .`.
+- Do not use `cargo install` for global CLIs; add reusable machine CLIs to the
+  Brewfile. For an intentional one-off local install, type the explicit shell
+  escape hatch: `command cargo install --path .`.
 
 ## Bootstrap Contract
 

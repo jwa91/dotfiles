@@ -17,5 +17,10 @@ tldr --update              # Refresh tldr examples only
 
 # Ownership model
 just brew-sync             # Install missing Brewfile entries, do not upgrade
+just brew-vulns            # Check Brewfile formulae for known vulnerabilities
+just brew-outdated         # Show Homebrew-owned updates; hide self-updating apps
+just brew-upgrade          # Upgrade Homebrew-owned tools/casks only
 just toolchains            # Install repo-declared mise toolchains
 brewsync                   # Shell alias for the same Homebrew presence check
+brewoutdated               # Safe update report from any directory
+brewup                     # Safe upgrade from any directory
