@@ -7,6 +7,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 ## [Unreleased]
 
 ### Added
+- Managed Herdr preferences and zsh completion generation.
+- Managed GPG agent pinentry configuration.
+- Doctor detection for Podman competing with OrbStack's container ownership.
 - Managed Zed settings and reproducible macOS text/code file associations via
   `duti` and `just default-apps`.
 - Added Herdr's first-party POSIX installer to the enumerated standalone-tool

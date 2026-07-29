@@ -50,8 +50,9 @@ Manual and non-Brew installs live in `setup/manual-installs.txt`.
 
 ## Containers
 
-OrbStack is the container runtime on macOS. Docker Desktop should be absent;
-`just doctor` warns if the app, support data, or privileged helpers reappear.
+OrbStack is the container runtime on macOS. Docker Desktop and Podman Desktop
+should be absent; `just doctor` warns if either app, its support data, or
+privileged helpers reappear.
 
 On macOS, Docker-compatible containers run inside a Linux VM. The Docker socket
 is still a powerful control surface, so treat access to it as privileged even

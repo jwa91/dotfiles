@@ -21,6 +21,8 @@ MANAGED_LINKS=(
     "$HOME/.config/ty/ty.toml|$CONFIG_DIR/ty/ty.toml|always"
     "$HOME/.config/ruff/pyproject.toml|$CONFIG_DIR/ruff/pyproject.toml|always"
     "$HOME/.config/duti/defaults.duti|$CONFIG_DIR/duti/defaults.duti|always"
+    "$HOME/.config/herdr/config.toml|$CONFIG_DIR/herdr/config.toml|always"
+    "$HOME/.gnupg/gpg-agent.conf|$CONFIG_DIR/gnupg/gpg-agent.conf|always"
     "$HOME/.tmux.conf|$CONFIG_DIR/tmux/tmux.conf|always"
     "$HOME/.config/zed/settings.json|$CONFIG_DIR/zed/settings.json|zed"
     "$HOME/Library/Application Support/Cursor/User/settings.json|$CONFIG_DIR/cursor/settings.json|cursor"

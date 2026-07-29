@@ -14,6 +14,7 @@ doctor() {
     check_zsh_shim_authority || failed=1
     check_directories || failed=1
     check_zsh_plugins || failed=1
+    check_herdr_config || failed=1
     check_local_config_seeds || failed=1
     check_local_config_files
     check_managed_sources || failed=1
@@ -257,6 +258,7 @@ check_container_stack() {
     log_section "Containers"
 
     local docker_path docker_target leftover orbstack_xbin
+    local podman_found=0
     orbstack_xbin="/Applications/OrbStack.app/Contents/MacOS/xbin"
 
     if command -v orb >/dev/null 2>&1 || [[ -d "/Applications/OrbStack.app" ]]; then
@@ -306,6 +308,62 @@ check_container_stack() {
     if [[ ! -e "/Applications/Docker.app" ]]; then
         log_skip "Docker Desktop app absent"
     fi
+
+    local podman_leftovers=(
+        "/Applications/Podman Desktop.app"
+        "/Applications/Podman.app"
+        "/opt/podman"
+        "$HOME/.config/containers"
+        "$HOME/.local/share/containers/podman"
+        "$HOME/.local/share/containers/podman-desktop"
+        "$HOME/Library/Application Support/containers"
+        "$HOME/Library/Application Support/Podman Desktop"
+    )
+
+    for leftover in "${podman_leftovers[@]}"; do
+        if [[ -e "$leftover" ]]; then
+            log_warn "Podman competing state: $leftover"
+            podman_found=1
+        fi
+    done
+
+    if [[ -x "/opt/podman/bin/podman" ]] \
+        && command -v jq >/dev/null 2>&1 \
+        && /opt/podman/bin/podman machine list --format json 2>/dev/null \
+            | jq -e 'any(.[]; .Running == true)' >/dev/null; then
+        log_warn "Podman machine is running while OrbStack owns containers"
+        podman_found=1
+    fi
+
+    if [[ "$podman_found" -eq 0 ]]; then
+        log_skip "Podman absent"
+    fi
+}
+
+check_herdr_config() {
+    log_section "Herdr"
+
+    local failed=0
+
+    if ! command -v herdr >/dev/null 2>&1; then
+        log_warn "herdr not found; standalone bootstrap can install it"
+        return 0
+    fi
+
+    if herdr config check >/dev/null 2>&1; then
+        log_skip "Herdr config valid"
+    else
+        log_error "Herdr config invalid; run: herdr config check"
+        failed=1
+    fi
+
+    if [[ -f "$HOME/.zfunc/_herdr" ]]; then
+        log_skip "Herdr zsh completion"
+    else
+        log_warn "Herdr zsh completion missing; run: just zsh"
+    fi
+
+    return "$failed"
 }
 
 mise_config_dirs() {

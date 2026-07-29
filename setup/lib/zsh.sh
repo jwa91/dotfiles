@@ -42,4 +42,15 @@ setup_zsh_environment() {
     else
         log_warn "pass-cli not found; skipping Proton Pass completion"
     fi
+
+    if command -v herdr >/dev/null 2>&1; then
+        log_action "Generate Herdr zsh completion"
+        if $DRY_RUN; then
+            echo -e "${YELLOW}WOULD:${NC} herdr completion zsh > $HOME/.zfunc/_herdr"
+        else
+            herdr completion zsh > "$HOME/.zfunc/_herdr"
+        fi
+    else
+        log_warn "herdr not found; skipping Herdr completion"
+    fi
 }
