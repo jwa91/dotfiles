@@ -7,13 +7,24 @@ if [[ -d "$HOME/.zfunc" ]]; then
     fpath=("$HOME/.zfunc" $fpath)
 fi
 
-# Initialize completion system (rebuild dump once per day, use cache otherwise)
+# Initialize completion system: trust the dump if it was written in the last
+# 24h, otherwise rebuild it (which also covers the missing-dump case).
+#
+# The glob qualifier has to run in an array assignment. Inside [[ ]] zsh does
+# no filename generation, so the previous `[[ -f ~/.zcompdump(#qN.mh+24) ]]`
+# was testing a literal filename, was always false, and left `compinit -C` as
+# the only branch ever taken.
+[[ -d "$ZSH_CACHE_DIR" ]] || mkdir -p "$ZSH_CACHE_DIR"
+_zcompdump="$ZSH_CACHE_DIR/zcompdump"
+
 autoload -Uz compinit
-if [[ -f ~/.zcompdump(#qN.mh+24) ]]; then
-    compinit
+_zcompdump_fresh=($_zcompdump(Nmh-24))
+if (( $#_zcompdump_fresh )); then
+    compinit -C -d "$_zcompdump"
 else
-    compinit -C
+    compinit -d "$_zcompdump"
 fi
+unset _zcompdump _zcompdump_fresh
 
 # ----------------------------------------
 # Custom Completions

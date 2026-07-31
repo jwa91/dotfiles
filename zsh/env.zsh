@@ -4,9 +4,17 @@ export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 export CONFIG_DIR="${CONFIG_DIR:-$DOTFILES_DIR/config}"
 export GITCONFIG_DIR="${GITCONFIG_DIR:-$DOTFILES_DIR/git}"
 export ZSH_DIR="${ZSH_DIR:-$DOTFILES_DIR/zsh}"
-export ZSH_PLUGINS_DIR="${ZSH_PLUGINS_DIR:-$HOME/.zsh_plugins}"
 
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:-$HOME/.local/state}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$HOME/.cache}"
+
+# Zsh state, split by XDG category: plugins are replaceable data, history is
+# state worth keeping, the completion dump is a rebuildable cache.
+export ZSH_PLUGINS_DIR="${ZSH_PLUGINS_DIR:-$XDG_DATA_HOME/zsh/plugins}"
+export ZSH_STATE_DIR="${ZSH_STATE_DIR:-$XDG_STATE_HOME/zsh}"
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-$XDG_CACHE_HOME/zsh}"
 
 export DEV_DIR="${DEV_DIR:-$HOME/developer}"
 export VAULT_PATH="${VAULT_PATH:-$HOME/Library/Mobile Documents/com~apple~CloudDocs/notes}"

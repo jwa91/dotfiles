@@ -20,8 +20,11 @@ unsetopt LIST_BEEP
 # Treat # as a comment marker in interactive shells, matching bash behavior.
 setopt INTERACTIVE_COMMENTS
 
-# History
-HISTFILE="${ZDOTDIR:-$HOME}/.zsh_history"
+# History. Lives under XDG state; setup/init/zsh.sh migrates the old
+# ~/.zsh_history in place, but create the directory here too so a shell opened
+# before setup runs does not silently drop its history.
+[[ -d "$ZSH_STATE_DIR" ]] || mkdir -p "$ZSH_STATE_DIR"
+HISTFILE="$ZSH_STATE_DIR/history"
 HISTSIZE=50000
 SAVEHIST=50000
 setopt EXTENDED_HISTORY

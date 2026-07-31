@@ -1,10 +1,47 @@
 #!/usr/bin/env bash
 # Initialize Zsh plugins, directories, and generated completions.
 
+# Move pre-XDG zsh state to its new home. Idempotent: each entry moves only
+# when the old path still exists and the new one does not, so a half-migrated
+# machine converges and an already-migrated one is a no-op. Never removes
+# anything — if both paths exist, the old one is left alone and reported.
+migrate_zsh_state() {
+    local spec old new
+    local migrations=(
+        "$HOME/.zsh_plugins|$ZSH_PLUGINS_DIR"
+        "$HOME/.zsh_history|$ZSH_STATE_DIR/history"
+        "$HOME/.zcompdump|$ZSH_CACHE_DIR/zcompdump"
+    )
+
+    for spec in "${migrations[@]}"; do
+        old="${spec%%|*}"
+        new="${spec#*|}"
+
+        # A shell started before this change still exports the old locations,
+        # and those overrides are honoured. Nothing to migrate in that case.
+        [[ "$old" == "$new" ]] && continue
+        [[ -e "$old" ]] || continue
+
+        if [[ -e "$new" ]]; then
+            log_warn "Both $old and $new exist; leaving $old in place"
+            continue
+        fi
+
+        log_action "Migrate $old -> $new"
+        run_cmd mkdir -p "$(dirname "$new")"
+        run_cmd mv "$old" "$new"
+    done
+}
+
 setup_zsh_environment() {
     log_section "Zsh Environment"
 
-    ensure_dir "$HOME/.zsh_plugins"
+    migrate_zsh_state
+
+    ensure_dir "$ZSH_PLUGINS_DIR"
+    ensure_dir "$ZSH_STATE_DIR"
+    ensure_dir "$ZSH_CACHE_DIR"
+    # Not relocated: rustup and uv write completions here themselves.
     ensure_dir "$HOME/.zfunc"
     ensure_dir "$HOME/developer"
     ensure_dir "$HOME/.local/bin"
@@ -18,7 +55,7 @@ setup_zsh_environment() {
     for plugin in "${plugins[@]}"; do
         name="${plugin%%:*}"
         url="${plugin#*:}"
-        path="$HOME/.zsh_plugins/$name"
+        path="$ZSH_PLUGINS_DIR/$name"
 
         if [[ -d "$path" ]]; then
             if $UPDATE_PLUGINS; then

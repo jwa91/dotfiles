@@ -50,7 +50,7 @@ check_zsh_plugins() {
 
     local failed=0
     local plugin plugin_path
-    local plugin_root="${ZSH_PLUGINS_DIR:-$HOME/.zsh_plugins}"
+    local plugin_root="$ZSH_PLUGINS_DIR"
     local plugins=(zsh-autosuggestions zsh-syntax-highlighting)
 
     for plugin in "${plugins[@]}"; do

@@ -59,7 +59,8 @@ check_directories() {
         "$GIT_DIR"
         "$ZSH_DIR"
         "$HOME/developer"
-        "$HOME/.zsh_plugins"
+        "$ZSH_PLUGINS_DIR"
+        "$ZSH_STATE_DIR"
         "$HOME/.zfunc"
         "$HOME/.local/bin"
     )
