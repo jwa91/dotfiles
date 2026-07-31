@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# pyclean — remove __pycache__ directories under the current tree.
+#
+# -prune stops find from descending into a directory it is about to delete,
+# which is what produced the stray "No such file or directory" warnings from
+# the previous alias.
+
+set -euo pipefail
+
+find . -type d -name "__pycache__" -prune -exec rm -rf {} +

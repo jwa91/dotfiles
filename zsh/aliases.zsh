@@ -37,8 +37,7 @@ alias .....='cd ../../../..'
 alias tmain='tmux new-session -A -s main'
 alias tls='tmux list-sessions'
 
-# Make (mk + thing)
-alias mkpass="openssl rand -hex 32 | pbcopy && echo '✅ Password copied to clipboard'"
+# mkpass and pyclean are scripts in bin/, linked into ~/.local/bin.
 
 # Suffix: edit (type filename to open in $EDITOR)
 alias -s md='_eopen'
@@ -72,13 +71,16 @@ alias -s csv='open'
 alias -s webp='open'
 alias -s mov='open'
 
-# Brew. brewsync converges presence only: installs what's missing, never
-# upgrades. `brew upgrade` covers the CLI layer; self-updating casks stay
-# app-owned via HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1. Cleanup is dry-run:
-# it lists strays but never removes — an automatic cleanup could delete GUI apps.
-alias brewsync='HOMEBREW_BUNDLE_NO_UPGRADE=1 brew bundle --file="$DOTFILES_DIR/Brewfile" && { brew bundle cleanup --file="$DOTFILES_DIR/Brewfile" || true; }'
-alias brewoutdated='HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 brew outdated'
-alias brewup='HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1 brew upgrade'
-
-# Python
-alias pyclean='find . -name "__pycache__" -type d -exec rm -rf {} +'
+# Brew. The policy lives in the justfile so humans and automation run the same
+# recipe; these wrappers only make it reachable from outside the repo.
+# brewsync converges presence only: installs what's missing, never upgrades.
+# `brewup` covers the CLI layer; self-updating casks stay app-owned via
+# HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1. Cleanup lists strays but never
+# removes — an automatic cleanup could delete GUI apps.
+_dotfiles_just() {
+  command just --justfile "$DOTFILES_DIR/justfile" \
+               --working-directory "$DOTFILES_DIR" "$@"
+}
+brewsync()     { _dotfiles_just brew-converge; }
+brewoutdated() { _dotfiles_just brew-outdated; }
+brewup()       { _dotfiles_just brew-upgrade; }

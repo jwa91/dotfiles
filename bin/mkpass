@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# mkpass — generate a 32-byte hex secret and copy it to the clipboard.
+#
+# Nothing is printed to stdout: the secret goes to the pasteboard only, so it
+# does not end up in scrollback or shell history.
+
+set -euo pipefail
+
+openssl rand -hex 32 | pbcopy
+echo "✅ Password copied to clipboard"

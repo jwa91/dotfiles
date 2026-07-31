@@ -56,6 +56,10 @@ brew-upgrade:
 brew-cleanup:
     -brew bundle cleanup --file=Brewfile
 
+# Install what's missing, then list strays. Presence only: never upgrades,
+# never removes. Backs the `brewsync` shell wrapper.
+brew-converge: brew-sync brew-cleanup
+
 # Run only the link step.
 links:
     ./setup/set.sh links
