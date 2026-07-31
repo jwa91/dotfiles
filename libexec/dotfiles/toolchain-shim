@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+command_name="${1:-}"
+if [[ -z "$command_name" ]]; then
+  printf 'toolchain-shim: missing command name\n' >&2
+  exit 64
+fi
+shift
+
+dotfiles_dir="${DOTFILES_DIR:-$HOME/dotfiles}"
+# shellcheck source=lib/dotfiles/shim-policy.bash
+source "$dotfiles_dir/lib/dotfiles/shim-policy.bash"
+
+case "$command_name" in
+  python|python3|pip|pip3)
+    dotfiles_python_nudge "$command_name"
+    ;;
+  node)
+    dotfiles_exec_mise_tool node Node "$@"
+    ;;
+  npm)
+    if [[ "${1:-}" == "install" || "${1:-}" == "i" ]] \
+      && dotfiles_has_global_flag "$@"; then
+      dotfiles_nudge "npm ${1:-install} -g" \
+        "  Use a project dependency, npx for one-off execution, or the Brewfile."
+    fi
+    dotfiles_exec_node_tool npm "$@"
+    ;;
+  npx)
+    dotfiles_exec_node_tool npx "$@"
+    ;;
+  pnpm)
+    if [[ "${1:-}" == "add" || "${1:-}" == "install" ]] \
+      && dotfiles_has_global_flag "$@"; then
+      dotfiles_nudge "pnpm ${1:-install} -g" \
+        "  Use a project dependency, pnpm dlx for one-off execution, or the Brewfile."
+    fi
+    dotfiles_exec_corepack_tool pnpm "$@"
+    ;;
+  yarn)
+    if [[ "${1:-}" == "global" ]]; then
+      dotfiles_nudge "yarn global" \
+        "  Use project dependencies, a one-off runner, or the Brewfile."
+    fi
+    dotfiles_exec_corepack_tool yarn "$@"
+    ;;
+  bun)
+    case "${1:-}" in
+      upgrade)
+        dotfiles_nudge "bun upgrade" \
+          "  Use: mise upgrade bun" \
+          "  Or update the project/global mise.toml intentionally."
+        ;;
+      add|install)
+        if dotfiles_has_global_flag "$@"; then
+          dotfiles_nudge "bun $1 -g" \
+            "  Use project dependencies, a one-off runner, or the Brewfile." \
+            "  Use mise use bun@<version> only for the Bun runtime itself."
+        fi
+        ;;
+    esac
+    dotfiles_exec_mise_tool bun Bun "$@"
+    ;;
+  go)
+    if [[ "${1:-}" == "env" ]] && dotfiles_has_arg -w "$@"; then
+      dotfiles_nudge "go env -w" \
+        "  Put persistent Go environment in mise.toml, zsh/env.zsh, or project config."
+    elif [[ "${1:-}" == "install" ]]; then
+      dotfiles_nudge "go install" \
+        "  Use go build or go run for project-local binaries." \
+        "  Add reusable machine CLIs to the Brewfile."
+    fi
+    dotfiles_exec_mise_tool go Go "$@"
+    ;;
+  cargo)
+    if [[ "${1:-}" == "install" ]]; then
+      dotfiles_nudge "cargo install" \
+        "  Add reusable machine CLIs to the Brewfile." \
+        "  Explicit bypass: mise exec -- cargo install <args>."
+    fi
+    dotfiles_exec_mise_tool cargo Rust "$@"
+    ;;
+  rustup)
+    case "${1:-}" in
+      update|default|override)
+        dotfiles_nudge "rustup $1" \
+          "  Use mise for Rust versions: mise use rust@stable or project mise.toml."
+        ;;
+      toolchain)
+        if [[ "${2:-}" == "install" || "${2:-}" == "uninstall" || "${2:-}" == "link" ]]; then
+          dotfiles_nudge "rustup toolchain $2" \
+            "  Use mise for Rust toolchains: mise use rust@<version>."
+        fi
+        ;;
+      target|component)
+        if [[ "${2:-}" == "add" || "${2:-}" == "remove" ]]; then
+          dotfiles_nudge "rustup $1 $2" \
+            "  Put Rust $1 requirements in mise.toml tool options."
+        fi
+        ;;
+      self)
+        if [[ "${2:-}" == "update" || "${2:-}" == "uninstall" ]]; then
+          dotfiles_nudge "rustup self $2" \
+            "  Let mise/rustup manage implementation state; update through mise intentionally."
+        fi
+        ;;
+    esac
+    dotfiles_exec_mise_tool rustup Rust "$@"
+    ;;
+  *)
+    printf 'toolchain-shim: unsupported command: %s\n' "$command_name" >&2
+    exit 64
+    ;;
+esac

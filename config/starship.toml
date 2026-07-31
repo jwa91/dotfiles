@@ -179,7 +179,7 @@ while [ -n "$dir" ] && [ "$dir" != "/" ]; do
 done
 exit 1
 '''
-command = "starship-js-package-manager"
+command = '''"$DOTFILES_DIR/libexec/dotfiles/starship-js-package-manager"'''
 shell = ["/bin/sh"]
 
 # Python version via uv. The helper first searches upward for uv project
@@ -198,7 +198,7 @@ while [ -n "$dir" ] && [ "$dir" != "/" ]; do
 done
 exit 1
 '''
-command = "starship-uv-python"
+command = '''"$DOTFILES_DIR/libexec/dotfiles/starship-uv-python"'''
 shell = ["/bin/sh"]
 
 [docker_context]

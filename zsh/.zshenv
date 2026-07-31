@@ -2,7 +2,7 @@
 # Shared Environment
 # ----------------------------------------
 _dotfiles_dir="${DOTFILES_DIR:-$HOME/dotfiles}"
-source "$_dotfiles_dir/shell/env.sh"
+source "$_dotfiles_dir/zsh/env.zsh"
 unset _dotfiles_dir
 
 # ----------------------------------------

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# starship-js-package-manager — print the active JS package manager clue.
+# Internal Starship helper: print the active JS package manager clue.
 
 set -euo pipefail
 

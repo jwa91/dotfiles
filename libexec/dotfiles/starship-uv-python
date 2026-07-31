@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# starship-uv-python — print uv project Python version for Starship.
+# Internal Starship helper: print uv project Python version.
 
 set -euo pipefail
 

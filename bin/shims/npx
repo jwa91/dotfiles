@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! node_path="$(mise which node 2>/dev/null)" || ! npx_path="$(mise which npx 2>/dev/null)"; then
-  echo "npx requires the mise-owned Node baseline; run: just toolchains" >&2
-  exit 127
-fi
-
-exec env PATH="$(dirname "$node_path"):$PATH" "$npx_path" "$@"
+exec "${DOTFILES_DIR:-$HOME/dotfiles}/libexec/dotfiles/toolchain-shim" \
+  "$(basename "$0")" "$@"

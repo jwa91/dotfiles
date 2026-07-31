@@ -5,6 +5,5 @@
 
 FUNCTIONS_DIR="$ZSH_DIR/zsh-functions"
 
-# Parent-shell functions: cd/export and interactive command wrappers.
+# Parent-shell functions: cd and export helpers only.
 source "$FUNCTIONS_DIR/general-functions.zsh"
-source "$FUNCTIONS_DIR/toolchain-functions.zsh"

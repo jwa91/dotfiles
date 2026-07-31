@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# shellcheck source=shell/shim-policy.sh
-source "${DOTFILES_DIR:-$HOME/dotfiles}/shell/shim-policy.sh"
-
-if ! node_path="$(mise which node 2>/dev/null)" || ! corepack_path="$(mise which corepack 2>/dev/null)"; then
-  echo "pnpm requires mise-owned Node with Corepack; run: just toolchains" >&2
-  exit 127
-fi
-
-if [[ "${1:-}" == "add" || "${1:-}" == "install" ]] && dotfiles_has_global_flag "$@"; then
-  echo "x pnpm $1 -g is not the owner for this mutation." >&2
-  echo "  Use a project dependency, pnpm dlx for one-off execution, or the Brewfile." >&2
-  exit 127
-fi
-
-exec env PATH="$(dirname "$node_path"):$PATH" "$corepack_path" pnpm "$@"
+exec "${DOTFILES_DIR:-$HOME/dotfiles}/libexec/dotfiles/toolchain-shim" \
+  "$(basename "$0")" "$@"

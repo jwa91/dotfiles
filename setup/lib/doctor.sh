@@ -511,7 +511,7 @@ check_toolchain_stack() {
         failed=1
     fi
 
-    for command_name in node npm npx pnpm; do
+    for command_name in node npm npx pnpm yarn bun go cargo rustup; do
         if command_path="$(command -v "$command_name" 2>/dev/null)"; then
             if is_dotfiles_shim_path "$command_name" "$command_path"; then
                 log_skip "$command_name shim: $command_path"
@@ -561,7 +561,7 @@ check_zsh_shim_authority() {
 
     if ! output="$(
         TERM=xterm-256color zsh -ic '
-            for command_name in node npm npx pnpm; do
+            for command_name in node npm npx pnpm yarn bun go cargo rustup; do
                 printf "%s\t%s\n" "$command_name" "$(command -v "$command_name" 2>/dev/null || true)"
             done
         ' 2>/dev/null

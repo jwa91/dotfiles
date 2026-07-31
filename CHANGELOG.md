@@ -6,6 +6,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+### Changed
+- Separated public commands, command-policy shims, shared Bash libraries, and internal prompt helpers; toolchain mutation policy now applies consistently outside interactive zsh.
+
 ## [3.2.0] - 2026-07-30
 
 ### Added

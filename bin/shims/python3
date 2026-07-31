@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-command_name="$(basename "$0")"
-
-echo "x bare $command_name is not the Python command surface on this machine." >&2
-echo "  Use: uv run script.py                  # run a Python script" >&2
-echo "  Use: uv run --with <pkg> script.py     # run a one-off script with deps" >&2
-echo "  Use: uv run python                     # REPL, or add -c/-m as needed" >&2
-echo "  Use an explicit interpreter path only when intentionally bypassing uv." >&2
-exit 127
+exec "${DOTFILES_DIR:-$HOME/dotfiles}/libexec/dotfiles/toolchain-shim" \
+  "$(basename "$0")" "$@"

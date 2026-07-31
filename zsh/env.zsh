@@ -1,8 +1,4 @@
-# shellcheck shell=sh
-# Shared login environment for shells.
-#
-# Keep this file POSIX-sh compatible. Shell-specific behavior belongs in
-# zsh/, bash/, or fish/ so switching shells does not change system ownership.
+# Shared Zsh environment.
 
 export DOTFILES_DIR="${DOTFILES_DIR:-$HOME/dotfiles}"
 export CONFIG_DIR="${CONFIG_DIR:-$DOTFILES_DIR/config}"

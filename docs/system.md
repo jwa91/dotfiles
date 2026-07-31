@@ -72,11 +72,18 @@ zsh behavior:
 - No shell framework is used.
 - Plugins are explicit and deliberately installed.
 
-Shell functions are only for behavior that must mutate or intercept the parent
-interactive shell, such as `cd`, `export`, or toolchain command wrappers.
-Standalone helpers live in `bin/`. Command-shadowing policy wrappers live in
-`bin/shims/`. Bootstrap links executables from both locations into
-`~/.local/bin`.
+Shell functions are only for behavior that must mutate the parent interactive shell, such as `cd` or `export`. Public standalone commands live in `bin/`.
+
+Command-shadowing policy wrappers live in `bin/shims/`. Bootstrap links executables from both locations into `~/.local/bin`.
+
+Private shared Bash code lives in `lib/dotfiles/`; internal executables live in `libexec/dotfiles/` and are invoked by public commands or managed configuration, not linked onto PATH.
+
+Command placement follows these rules:
+
+- An alias is a shorter spelling for one command.
+- A zsh function is used only when behavior must change the current shell.
+- A `bin/` command is a stable standalone interface intentionally exposed on `PATH` for direct use by people or automation; configuration-specific adapters and implementation helpers do not belong there.
+- A `just` recipe is a named workstation maintenance task.
 
 Interactive zsh re-prepends `~/.local/bin` after `mise activate zsh`, so
 dotfiles shims remain the command authority while mise remains the runtime
@@ -137,10 +144,8 @@ Go:
   `.go-version`; `go.mod` and `go.work` toolchain directives are honored by
   Go itself after mise selects the baseline Go binary.
 - Use Go modules for dependencies.
-- Do not use `go install` for durable CLI installs; use `go build` or `go run`
-  for project-local binaries, and use the Brewfile for reusable machine CLIs.
-- Do not use `go env -w`; persistent Go environment belongs in mise config,
-  shell env, or project config.
+- Do not use `go install` for durable CLI installs; use `go build` or `go run` for project-local binaries, and use the Brewfile for reusable machine CLIs.
+- Do not use `go env -w`; persistent Go environment belongs in mise config, `zsh/env.zsh`, or project config.
 
 Rust:
 
@@ -149,9 +154,7 @@ Rust:
   `~/.cargo`.
 - The global baseline is declared in `config/mise/config.toml`.
 - Toolchain components and targets belong in mise tool options.
-- Do not use `cargo install` for global CLIs; add reusable machine CLIs to the
-  Brewfile. For an intentional one-off local install, type the explicit shell
-  escape hatch: `command cargo install --path .`.
+- Do not use `cargo install` for global CLIs; add reusable machine CLIs to the Brewfile. For an intentional bypass, invoke the mise-owned command explicitly with `mise exec -- cargo install <args>`.
 
 ## Bootstrap Contract
 
