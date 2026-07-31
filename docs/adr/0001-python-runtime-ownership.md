@@ -2,7 +2,11 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR 0003](0003-uv-owned-global-python-fallback.md).
+
+The ownership decision below still holds. What changed is the bare-command
+surface: `python` and `python3` now resolve to a uv-managed interpreter instead
+of refusing. `pip` and `pip3` still refuse, as described here.
 
 ## Context
 

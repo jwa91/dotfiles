@@ -14,7 +14,10 @@ dotfiles_dir="${DOTFILES_DIR:-$HOME/dotfiles}"
 source "$dotfiles_dir/lib/dotfiles/shim-policy.bash"
 
 case "$command_name" in
-  python|python3|pip|pip3)
+  python|python3)
+    dotfiles_exec_uv_python "$command_name" "$@"
+    ;;
+  pip|pip3)
     dotfiles_python_nudge "$command_name"
     ;;
   node)

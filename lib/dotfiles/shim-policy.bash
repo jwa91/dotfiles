@@ -43,29 +43,69 @@ dotfiles_nudge() {
   return 127
 }
 
+# Only pip/pip3 nudge now. Bare python/python3 resolve to a uv-managed
+# interpreter instead — see dotfiles_exec_uv_python and ADR 0003. Installing
+# packages is a mutation and stays owned; running code is not.
 dotfiles_python_nudge() {
   local command_name="$1"
 
-  case "$command_name" in
-    pip|pip3)
-      printf 'x bare %s is not the Python package command surface on this machine.\n' "$command_name" >&2
-      printf '%s\n' \
-        "  Use: uv add <pkg>                      # add a project dependency" \
-        "  Use: uv sync                           # create/update the project environment" \
-        "  Use: uv run --with <pkg> script.py     # one-off script dependency" \
-        "  Use uv pip ... only for explicit legacy/manual virtualenv work." >&2
-      ;;
-    python|python3)
-      printf 'x bare %s is not the Python command surface on this machine.\n' "$command_name" >&2
-      printf '%s\n' \
-        "  Use: uv run script.py                  # run a Python script" \
-        "  Use: uv run --with <pkg> script.py     # run a one-off script with deps" \
-        "  Use: uv run python                     # REPL, or add -c/-m as needed" \
-        "  Use an explicit interpreter path only when intentionally bypassing uv." >&2
-      ;;
-  esac
+  printf 'x bare %s is not the Python package command surface on this machine.\n' "$command_name" >&2
+  printf '%s\n' \
+    "  Use: uv add <pkg>                      # add a project dependency" \
+    "  Use: uv sync                           # create/update the project environment" \
+    "  Use: uv run --with <pkg> script.py     # one-off script dependency" \
+    "  Use uv pip ... only for explicit legacy/manual virtualenv work." >&2
 
   return 127
+}
+
+# Resolve the interpreter backing bare python/python3.
+#
+# --managed-python is passed explicitly rather than trusting the exported
+# UV_MANAGED_PYTHON, because these shims also run from contexts that never
+# sourced zsh/env.zsh (bash scripts, GUI apps, cron). Without the flag uv will
+# happily return /usr/local/bin/python3.11 or macOS's system Python 3.9.
+#
+# No version is pinned here: uv picks its default, so the machine follows uv's
+# notion of current rather than a number frozen in this repo.
+dotfiles_uv_managed_python() {
+  local command_name="$1"
+  local interpreter=""
+
+  if ! command -v uv >/dev/null 2>&1; then
+    printf 'x %s needs uv, which is not installed.\n' "$command_name" >&2
+    printf '%s\n' "  Run: just brew-sync" >&2
+    return 127
+  fi
+
+  interpreter="$(uv python find --managed-python 2>/dev/null)" || interpreter=""
+
+  if [[ -z "$interpreter" ]]; then
+    printf '%s: no uv-managed Python installed; fetching one\n' "$command_name" >&2
+    if ! uv python install >&2; then
+      printf 'x %s could not install a uv-managed Python.\n' "$command_name" >&2
+      printf '%s\n' "  Run: uv python install" >&2
+      return 127
+    fi
+    interpreter="$(uv python find --managed-python 2>/dev/null)" || interpreter=""
+  fi
+
+  if [[ -z "$interpreter" ]]; then
+    printf 'x %s found no uv-managed Python.\n' "$command_name" >&2
+    printf '%s\n' "  Run: uv python install" >&2
+    return 127
+  fi
+
+  printf '%s\n' "$interpreter"
+}
+
+dotfiles_exec_uv_python() {
+  local command_name="$1"
+  shift
+  local interpreter
+
+  interpreter="$(dotfiles_uv_managed_python "$command_name")" || return
+  exec "$interpreter" "$@"
 }
 
 dotfiles_mise_tool_path() {

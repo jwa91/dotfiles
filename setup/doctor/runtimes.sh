@@ -36,6 +36,28 @@ check_python_policy() {
         fi
     done
 
+    # The shims resolve bare python/python3 to a uv-managed interpreter, so
+    # assert that is actually where they land. Without this, a regression in
+    # the shim would quietly fall through to macOS system Python 3.9 or a
+    # stray /usr/local build and nothing else here would notice.
+    local uv_python_dir interpreter
+    if uv_python_dir="$(uv python dir 2>/dev/null)" && [[ -n "$uv_python_dir" ]]; then
+        if interpreter="$(python3 -c 'import sys; print(sys.executable)' 2>/dev/null)" \
+            && [[ -n "$interpreter" ]]; then
+            if [[ "$interpreter" == "$uv_python_dir"/* ]]; then
+                log_skip "bare python3 -> $interpreter"
+            else
+                log_error "bare python3 resolves outside uv-managed runtimes: $interpreter"
+                failed=1
+            fi
+        else
+            log_error "bare python3 did not report an interpreter"
+            failed=1
+        fi
+    else
+        log_warn "uv unavailable; cannot verify managed Python resolution"
+    fi
+
     if [[ "${UV_PYTHON_DOWNLOADS:-}" == "never" ]]; then
         log_skip "UV_PYTHON_DOWNLOADS=never"
     else
