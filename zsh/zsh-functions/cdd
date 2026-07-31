@@ -1,0 +1,21 @@
+# Navigate to DEV_DIR, or to a subdirectory of it.
+# Usage: cdd [subdirectory_name]
+# Completion: _cdd, defined in completions.zsh.
+
+if [[ -z "$DEV_DIR" ]]; then
+    echo "cdd: Error - DEV_DIR env variable not set." >&2
+    return 1
+fi
+if [[ ! -d "$DEV_DIR" ]]; then
+    echo "cdd: Error - Developer directory does not exist: $DEV_DIR" >&2
+    return 1
+fi
+
+local target_dir
+if [[ -n "$1" ]]; then
+    target_dir="$DEV_DIR/$1"
+else
+    target_dir="$DEV_DIR"
+fi
+
+builtin cd "$target_dir"

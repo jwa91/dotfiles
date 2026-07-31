@@ -1,0 +1,17 @@
+# Load API keys from 1Password into the calling shell. 1Password is the current
+# secrets truth; `pkey` is the Proton Pass experiment, kept separate so the
+# default workflow stays unambiguous.
+#
+# Keys in 1Password should match the env var name (e.g. OPENAI_API_KEY).
+# Usage: key OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
+
+local key secret
+
+for key in "$@"; do
+    if ! secret=$(op read "op://Personal/$key/credential"); then
+        echo "✗ $key (op read failed)" >&2
+        return 1
+    fi
+    export "$key=$secret"
+    echo "✓ $key"
+done

@@ -1,0 +1,33 @@
+# Load API keys from Proton Pass into the calling shell.
+#
+# Items should match the env var name (e.g. OPENAI_API_KEY). The field defaults
+# to "credential"; override with PROTON_PASS_KEY_FIELD.
+# Usage: pkey OPENAI_API_KEY [ANTHROPIC_API_KEY ...]
+
+local key secret vault field ref
+vault="${PROTON_PASS_VAULT:-Personal}"
+field="${PROTON_PASS_KEY_FIELD:-credential}"
+
+for key in "$@"; do
+    ref="pass://$vault/$key/$field"
+    if ! secret=$(pass-cli item view "$ref" 2>/dev/null); then
+        if [[ "$field" != "password" ]]; then
+            ref="pass://$vault/$key/password"
+            secret=$(pass-cli item view "$ref" 2>/dev/null) || {
+                echo "✗ $key (pass-cli item view failed for credential/password)" >&2
+                return 1
+            }
+        else
+            echo "✗ $key (pass-cli item view failed)" >&2
+            return 1
+        fi
+    fi
+
+    if [[ -z "$secret" ]]; then
+        echo "✗ $key (empty Proton Pass field)" >&2
+        return 1
+    fi
+
+    export "$key=$secret"
+    echo "✓ $key"
+done

@@ -1,9 +1,14 @@
 # ----------------------------------------
 # File: functions.zsh
-# Description: Sources function files for zsh
+# Description: fpath and autoload declarations for parent-shell helpers.
+#
+# These have to be functions rather than scripts in bin/: they cd or export
+# into the calling shell. One file per function under zsh-functions/, loaded on
+# first use.
+#
+# Sourced before completions.zsh so compinit sees the final fpath.
 # ----------------------------------------
 
-FUNCTIONS_DIR="$ZSH_DIR/zsh-functions"
+fpath=("$ZSH_DIR/zsh-functions" $fpath)
 
-# Parent-shell functions: cd and export helpers only.
-source "$FUNCTIONS_DIR/general-functions.zsh"
+autoload -Uz cdd key pkey
