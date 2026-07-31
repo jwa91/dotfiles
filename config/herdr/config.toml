@@ -9,3 +9,17 @@ agent_panel_sort = "spaces"
 [theme]
 name = "gruvbox"
 auto_switch = false
+
+# --- Keys ---
+# Prefix: ctrl+space, matching ~/.tmux.conf. Avoids ctrl+b's same-hand stretch
+# and its vim page-up / readline backward-char conflicts.
+#
+# herdr has no send-prefix action (unlike tmux's `bind C-Space send-prefix`),
+# so a literal ctrl+space (NUL) cannot be sent through to a pane.
+#
+# Before adding bindings here: a binding that collides with a built-in default
+# has caused herdr to discard the whole [keys] block, prefix included, showing
+# only a yellow warning row at load (ogulcancelik/herdr#747, filed on 0.7.0,
+# closed). Check for warnings on reload after any change.
+[keys]
+prefix = "ctrl+space"

@@ -1,4 +1,4 @@
-theme = "auto"
+theme = "gruvbox-dark-hard"
 mode = "auto"
 watch = true
 exclude_untracked = false
