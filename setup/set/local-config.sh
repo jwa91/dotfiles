@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
-
-ensure_dir() {
-    local path="$1"
-
-    if [[ -d "$path" ]]; then
-        log_skip "$path"
-        return
-    fi
-
-    log_action "Create directory $path"
-    run_cmd mkdir -p "$path"
-}
+# Converge machine-local configuration seeds.
 
 ensure_local_config_file() {
     local local_config_file="$1"

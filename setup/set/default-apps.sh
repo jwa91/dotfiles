@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Converge managed macOS default applications.
 
 apply_default_apps() {
     local defaults_file="$CONFIG_DIR/duti/defaults.duti"
@@ -13,8 +14,8 @@ apply_default_apps() {
     fi
 
     if ! command -v duti >/dev/null 2>&1; then
-        log_warn "duti is not installed; run: just brew-sync"
-        return
+        log_error "duti is not installed; run: ./setup/init.sh homebrew"
+        return 1
     fi
 
     if [[ ! -f "$defaults_file" ]]; then

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Print the remaining manual initialization steps.
 
 print_manual_install_checklist() {
     log_section "Manual Install Checklist"

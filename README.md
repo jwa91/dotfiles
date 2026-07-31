@@ -47,7 +47,7 @@ available, but is not the Node or package-dependency owner.
 
 1. `xcode-select --install` — interactive GUI prompt; git needs the CLT.
 2. `git clone https://github.com/jwa91/dotfiles ~/dotfiles` — HTTPS, no keys yet.
-3. `cd ~/dotfiles && ./setup/bootstrap.sh` — Homebrew, base packages, links, zsh.
+3. `cd ~/dotfiles && ./setup/bootstrap.sh` — dependency-free entrypoint for initialization and managed configuration.
 4. Work through [setup/manual-installs.txt](setup/manual-installs.txt).
 5. Sign in to 1Password and enable its SSH agent.
 6. Switch the git remote to SSH.
@@ -57,6 +57,8 @@ available, but is not the Node or package-dependency owner.
 
 - `just` — list available dotfile tasks.
 - `just bootstrap` — converge a new or existing machine.
+- `just init` — install or initialize managed machine capabilities.
+- `just set` — converge repository-controlled configuration.
 - `just doctor` — check links, package presence, runtime leaks, and app state.
 - `just default-apps` — make Zed the default for managed text/code file types.
 - `just project-audit` — report project runtime ownership drift under `~/developer`.

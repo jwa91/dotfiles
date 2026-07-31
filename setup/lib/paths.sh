@@ -4,15 +4,20 @@ ZSH_DIR="$DOTFILES_DIR/zsh"
 CONFIG_DIR="$DOTFILES_DIR/config"
 GIT_DIR="$DOTFILES_DIR/git"
 BREWFILE="$DOTFILES_DIR/Brewfile"
-# shellcheck disable=SC2034 # Consumed by setup/lib/manual.sh after bootstrap sources modules.
+# shellcheck disable=SC2034 # Consumed by setup/init/manual.sh after init sources modules.
 MANUAL_INSTALLS_FILE="$DOTFILES_DIR/setup/manual-installs.txt"
 DOTFILES_LOCAL_CONFIG_DIR="${DOTFILES_LOCAL_CONFIG_DIR:-$HOME/.config/dotfiles-local}"
+
+setup_path() {
+    PATH="$HOME/.local/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:$PATH"
+    export PATH
+}
 
 preflight() {
     log_section "Preflight"
 
     if [[ "$(uname -s)" != "Darwin" ]]; then
-        log_error "This bootstrap currently supports macOS only."
+        log_error "This setup currently supports macOS only."
         exit 1
     fi
 

@@ -12,17 +12,25 @@ bootstrap:
 dry-run:
     ./setup/bootstrap.sh --dry-run
 
+# Initialize every managed machine capability.
+init:
+    ./setup/init.sh all
+
+# Converge all repository-controlled configuration.
+set:
+    ./setup/set.sh all
+
 # Run all doctor checks.
 doctor:
-    ./setup/doctor.sh
+    ./setup/doctor.sh all
 
 # Audit project runtime ownership under ~/developer.
 project-audit:
-    ./setup/project-audit.sh
+    ./setup/doctor.sh projects
 
 # Alias for doctor.
 check:
-    ./setup/doctor.sh
+    ./setup/doctor.sh all
 
 # Install missing Homebrew entries without upgrading existing apps.
 brew-sync:
@@ -50,35 +58,35 @@ brew-cleanup:
 
 # Run only the link step.
 links:
-    ./setup/bootstrap.sh --only links
+    ./setup/set.sh links
 
 # Apply managed macOS default file associations.
 default-apps:
-    ./setup/bootstrap.sh --only default-apps
+    ./setup/set.sh default-apps
 
 # Seed machine-local config files from repo examples.
 local-config:
-    ./setup/bootstrap.sh --only local-config
+    ./setup/set.sh local-config
 
 # Install mise-managed language toolchains declared by the dotfiles.
 toolchains:
-    ./setup/bootstrap.sh --only toolchains
+    ./setup/init.sh toolchains
 
 # Recreate managed symlinks.
 reset-links:
-    ./setup/bootstrap.sh --only links --reset
+    ./setup/set.sh links --reset-links
 
 # Update local command-help caches.
 help:
-    ./setup/bootstrap.sh --only help
+    ./setup/init.sh command-help
 
 # Install or update explicit zsh plugins.
 zsh:
-    ./setup/bootstrap.sh --only zsh --update
+    ./setup/init.sh zsh --update-plugins
 
 # Print manual setup steps.
 manual:
-    ./setup/bootstrap.sh --only manual
+    ./setup/init.sh manual
 
 # Open OrbStack to finish interactive setup after install.
 orbstack:

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Initialize local command-help data.
 
 setup_command_help() {
     log_section "Command Help"

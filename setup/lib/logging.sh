@@ -17,11 +17,3 @@ log_action() {
 }
 log_warn() { echo -e "${YELLOW}WARN:${NC} $1"; }
 log_error() { echo -e "${RED}ERROR:${NC} $1"; }
-
-run_cmd() {
-    if $DRY_RUN; then
-        echo -e "${YELLOW}WOULD:${NC} $*"
-    else
-        "$@"
-    fi
-}

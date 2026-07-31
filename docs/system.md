@@ -158,6 +158,16 @@ Rust:
 
 ## Bootstrap Contract
 
+Setup is lifecycle-first:
+
+- `setup/init.sh` installs or initializes machine capabilities and is additive and idempotent.
+- `setup/set.sh` converges repository-controlled configuration and does not install capabilities.
+- `setup/doctor.sh` inspects state by domain and never repairs it.
+- `setup/lib/` contains only shared primitives and declarations used across lifecycle stages.
+- `setup/init/`, `setup/set/`, and `setup/doctor/` contain private modules owned by their matching entrypoint.
+- `just` is the preferred interface after installation, but every recipe delegates to the shell entrypoints and those scripts never require `just`.
+- `setup/bootstrap.sh` is the dependency-free new-machine entrypoint and runs `init`, then `set`, then prints the manual checklist.
+
 A new machine should need:
 
 1. Apple Command Line Tools.

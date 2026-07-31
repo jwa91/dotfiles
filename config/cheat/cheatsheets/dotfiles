@@ -4,6 +4,8 @@ tags: [ dotfiles, bootstrap, help, personal ]
 ---
 # Bootstrap
 just bootstrap             # Full new-machine convergence
+just init                  # Initialize managed machine capabilities
+just set                   # Converge repository-controlled configuration
 just doctor                # Check managed links, tools, runtime ownership
 just links                 # Recreate managed symlinks
 just dry-run               # Preview bootstrap actions

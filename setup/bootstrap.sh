@@ -1,56 +1,25 @@
 #!/usr/bin/env bash
-# Canonical dotfiles bootstrap entrypoint.
+# Dependency-free new-machine entrypoint: initialize capabilities, then set managed configuration.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-LIB_DIR="$SCRIPT_DIR/lib"
 
 DRY_RUN=false
-SKIP_BREW=false
-SKIP_LINK=false
 RESET_LINKS=false
 UPDATE_PLUGINS=false
 ALLOW_EMPTY_LOCAL_CONFIG=false
-ONLY_TARGET="all"
-
-# shellcheck source=setup/lib/logging.sh
-source "$LIB_DIR/logging.sh"
-# shellcheck source=setup/lib/paths.sh
-source "$LIB_DIR/paths.sh"
-# shellcheck source=setup/lib/local_config.sh
-source "$LIB_DIR/local_config.sh"
-# shellcheck source=setup/lib/links.sh
-source "$LIB_DIR/links.sh"
-# shellcheck source=setup/lib/default_apps.sh
-source "$LIB_DIR/default_apps.sh"
-# shellcheck source=setup/lib/brew.sh
-source "$LIB_DIR/brew.sh"
-# shellcheck source=setup/lib/zsh.sh
-source "$LIB_DIR/zsh.sh"
-# shellcheck source=setup/lib/help.sh
-source "$LIB_DIR/help.sh"
-# shellcheck source=setup/lib/manual.sh
-source "$LIB_DIR/manual.sh"
-# shellcheck source=setup/lib/doctor.sh
-source "$LIB_DIR/doctor.sh"
 
 usage() {
     cat <<'EOF'
 Usage: ./setup/bootstrap.sh [options]
 
 Options:
-  --dry-run              Print actions without changing files
-  --no-brew              Skip Homebrew and non-Homebrew installs
-  --no-link              Skip config linking
-  --reset                Remove managed symlinks before linking
-  --update               Update zsh plugins with git pull --ff-only
-  --only <target>        Run one target: all, brew, standalone, toolchains, zsh, help, manual, local-config, links, default-apps, doctor
-  --check                Alias for --only doctor
-  --allow-empty-local-config
-                         Create empty local config files when a seed example is missing
-  -h, --help             Show this help
+  --dry-run                       Print actions without changing files
+  --reset-links                   Remove managed links before recreating them
+  --update-plugins                Update existing Zsh plugin checkouts
+  --allow-empty-local-config      Allow an empty local config when no seed exists
+  -h, --help                      Show this help
 EOF
 }
 
@@ -60,29 +29,11 @@ parse_args() {
             --dry-run)
                 DRY_RUN=true
                 ;;
-            --no-brew)
-                SKIP_BREW=true
-                ;;
-            --no-link)
-                SKIP_LINK=true
-                ;;
-            --reset)
+            --reset-links)
                 RESET_LINKS=true
                 ;;
-            --update)
+            --update-plugins)
                 UPDATE_PLUGINS=true
-                ;;
-            --only)
-                if [[ $# -lt 2 ]]; then
-                    log_error "--only requires a target"
-                    usage
-                    exit 1
-                fi
-                ONLY_TARGET="$2"
-                shift
-                ;;
-            --check)
-                ONLY_TARGET="doctor"
                 ;;
             --allow-empty-local-config)
                 ALLOW_EMPTY_LOCAL_CONFIG=true
@@ -92,7 +43,7 @@ parse_args() {
                 exit 0
                 ;;
             *)
-                log_error "Unknown option '$1'"
+                printf "bootstrap: unknown option '%s'\n" "$1" >&2
                 usage
                 exit 1
                 ;;
@@ -101,80 +52,34 @@ parse_args() {
     done
 }
 
-run_target() {
-    case "$ONLY_TARGET" in
-        all)
-            preflight
-            ensure_tooling_prerequisites
-            install_brew_bundle
-            install_standalone_tools
-            setup_zsh_environment
-            link_configs
-            apply_default_apps
-            install_mise_toolchains
-            setup_command_help
-            print_manual_install_checklist
-            ;;
-        brew)
-            preflight
-            ensure_tooling_prerequisites
-            install_brew_bundle
-            ;;
-        standalone)
-            preflight
-            install_standalone_tools
-            ;;
-        toolchains)
-            preflight
-            link_configs
-            install_mise_toolchains
-            ;;
-        zsh)
-            preflight
-            setup_zsh_environment
-            ;;
-        help)
-            preflight
-            setup_command_help
-            ;;
-        manual)
-            print_manual_install_checklist
-            ;;
-        local-config)
-            preflight
-            ensure_local_config_files
-            ;;
-        links)
-            preflight
-            link_configs
-            ;;
-        default-apps)
-            preflight
-            apply_default_apps
-            ;;
-        doctor)
-            doctor
-            ;;
-        *)
-            log_error "Unknown --only target '$ONLY_TARGET'"
-            usage
-            exit 1
-            ;;
-    esac
-}
-
 main() {
     parse_args "$@"
 
+    local init_args=(all)
+    local set_args=(all)
+
     if $DRY_RUN; then
-        log_section "Dry Run Mode"
-        log_skip "No changes will be made"
+        init_args+=(--dry-run)
+        set_args+=(--dry-run)
     fi
 
-    run_target
+    if $UPDATE_PLUGINS; then
+        init_args+=(--update-plugins)
+    fi
 
-    log_section "Complete"
-    log_skip "Bootstrap target '$ONLY_TARGET' finished"
+    if $RESET_LINKS; then
+        set_args+=(--reset-links)
+    fi
+
+    if $ALLOW_EMPTY_LOCAL_CONFIG; then
+        set_args+=(--allow-empty-local-config)
+    fi
+
+    DOTFILES_SETUP_NESTED=1 "$SCRIPT_DIR/init.sh" "${init_args[@]}"
+    DOTFILES_SETUP_NESTED=1 "$SCRIPT_DIR/set.sh" "${set_args[@]}"
+    DOTFILES_SETUP_NESTED=1 "$SCRIPT_DIR/init.sh" manual
+
+    printf '\nBootstrap complete.\n'
 }
 
 main "$@"

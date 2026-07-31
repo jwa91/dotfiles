@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Initialize Zsh plugins, directories, and generated completions.
 
 setup_zsh_environment() {
     log_section "Zsh Environment"

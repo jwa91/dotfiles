@@ -8,6 +8,7 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ### Changed
 - Separated public commands, command-policy shims, shared Bash libraries, and internal prompt helpers; toolchain mutation policy now applies consistently outside interactive zsh.
+- Split workstation setup into dependency-free `init`, convergent `set`, and read-only domain-based `doctor` lifecycles, with `just` delegating to their shell entrypoints.
 
 ## [3.2.0] - 2026-07-30
 

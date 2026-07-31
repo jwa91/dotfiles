@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+doctor_projects() {
+    project_audit
+}
+
 project_audit_package_json_files() {
     local developer_dir="$1"
 
@@ -146,13 +150,13 @@ project_audit() {
 
     if [[ ! -d "$developer_dir" ]]; then
         log_error "$developer_dir missing"
-        exit 1
+        return 1
     fi
 
     for command_name in jq git mise; do
         if ! command -v "$command_name" >/dev/null 2>&1; then
             log_error "$command_name not found"
-            exit 1
+            return 1
         fi
     done
 
@@ -169,6 +173,7 @@ project_audit() {
         log_skip "Checked $checked packageManager projects"
     else
         log_error "Project runtime ownership drift found"
-        exit 1
     fi
+
+    return "$failed"
 }
