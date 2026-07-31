@@ -21,6 +21,7 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ### Fixed
 - The completion dump staleness check never ran. `[[ -f ~/.zcompdump(#qN.mh+24) ]]` does no globbing inside `[[ ]]`, so it was always false and `compinit -C` was the only branch ever taken.
+- `ZSH_PLUGINS_DIR`, `ZSH_STATE_DIR`, and `ZSH_CACHE_DIR` are derived from the XDG base directories rather than honouring an inherited value. A long-running app that captured the environment before the XDG move kept passing its stale `ZSH_PLUGINS_DIR` to every new terminal, which then reported missing plugins. Relocate these by setting `XDG_DATA_HOME`/`XDG_STATE_HOME`/`XDG_CACHE_HOME`.
 - `dotfiles_harden_path` no longer makes `path` read-only by default. It rejected the canonical `path=(...)` idiom in every noninteractive zsh; opt in with `DOTFILES_HARDEN_ZSH_PATH=1`.
 
 ## [3.2.0] - 2026-07-30
