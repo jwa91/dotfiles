@@ -1,12 +1,11 @@
 # ----------------------------------------
 # File: plugins.zsh
-# Description: ZSH plugin loading
-# ----------------------------------------
-
-# ----------------------------------------
-# Usage:
-# This file loads all ZSH plugins.
-# These plugins are loaded by .zshrc.
+# Description: ZLE plugins and shell integrations that bind widgets.
+#
+# Sourced last by .zshrc. Within this file the order is: widget-defining
+# integrations first, then autosuggestions, then syntax highlighting.
+# zsh-syntax-highlighting must stay last — below zsh 5.9 it wraps the widgets
+# that exist when it is sourced, so anything bound after it is unhighlighted.
 # ----------------------------------------
 
 # ZLE plugins need an interactive shell attached to a real terminal.
@@ -26,17 +25,7 @@ _source_if_readable() {
     fi
 }
 
-# Load autosuggestions
-_source_if_readable "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
-
-# Keep interactive comments readable in themes where black is the background.
-typeset -gA ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
-
-# Load syntax highlighting
-_source_if_readable "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
-
-# Load fzf integration
+# Load fzf integration (binds ^T, ^R, alt-c)
 if command -v fzf &> /dev/null; then
     source <(fzf --zsh)
 fi
@@ -46,12 +35,23 @@ if command -v zoxide &> /dev/null; then
     eval "$(zoxide init zsh)"
 fi
 
-# Load atuin (shell history search and sync)
+# Load atuin (shell history search and sync).
+# Must stay after fzf: both bind ^R, and atuin is meant to win it.
 if command -v atuin &> /dev/null; then
     eval "$(atuin init zsh)"
 fi
 
 # Load 1Password shell plugins (op plugin init <cli> populates this file)
 _source_if_readable "$HOME/.config/op/plugins.sh" "1Password shell plugins" quiet
+
+# Load autosuggestions
+_source_if_readable "$ZSH_PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh" "zsh-autosuggestions"
+
+# Keep interactive comments readable in themes where black is the background.
+typeset -gA ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[comment]='fg=245'
+
+# Load syntax highlighting — keep last, see header.
+_source_if_readable "$ZSH_PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" "zsh-syntax-highlighting"
 
 unfunction _source_if_readable

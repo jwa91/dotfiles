@@ -1,25 +1,26 @@
 # ----------------------------------------
 # File: .zshrc
-# Description: Main ZSH configuration file
+# Description: Interactive shell configuration.
+#
+# Load order is deliberate:
+#   options      shell behaviour, before anything reads it
+#   functions    fpath and autoload declarations, before compinit
+#   completions  compinit, needs the final fpath
+#   aliases
+#   broot, mise  integrations that do not need ZLE
+#   prompt       starship
+#   plugins      ZLE plugins; syntax highlighting stays last
+#
+# On zsh 5.9 zsh-syntax-highlighting uses the zle-line-pre-redraw hook and
+# wraps no widgets, so this order is not load-bearing here. It matters below
+# zsh 5.9, where the plugin falls back to wrapping widgets that exist at
+# source time.
 # ----------------------------------------
 
-# Load ZSH completions
-source "$ZSH_DIR/completions.zsh"
-
-# Load ZSH options
 source "$ZSH_DIR/options.zsh"
-
-# Load aliases
-source "$ZSH_DIR/aliases.zsh"
-
-# Load functions
 source "$ZSH_DIR/functions.zsh"
-
-# Load plugins
-source "$ZSH_DIR/plugins.zsh"
-
-# Load prompt configuration
-source "$ZSH_DIR/prompt.zsh"
+source "$ZSH_DIR/completions.zsh"
+source "$ZSH_DIR/aliases.zsh"
 
 export GPG_TTY="$(tty)"
 
@@ -28,6 +29,8 @@ if [[ -r "$HOME/.config/broot/launcher/bash/br" ]]; then
 fi
 
 # Activate mise. Global toolchain baselines live in config/mise/config.toml.
+# Deliberately not tty-gated: `just doctor` verifies shim precedence through
+# `zsh -ic`, which has no tty, and that check depends on the precmd hook below.
 if command -v mise >/dev/null 2>&1; then
     eval "$(mise activate zsh)"
 
@@ -44,3 +47,6 @@ if command -v mise >/dev/null 2>&1; then
     add-zsh-hook chpwd _dotfiles_after_mise_hook
     _dotfiles_after_mise_hook
 fi
+
+source "$ZSH_DIR/prompt.zsh"
+source "$ZSH_DIR/plugins.zsh"
