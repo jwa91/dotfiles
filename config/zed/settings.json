@@ -7,8 +7,40 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "agent": {
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "always_allow": [
+            {
+              "pattern": "^find\\s+\\.scratch(\\s|$)"
+            }
+          ]
+        }
+      }
+    },
+    "default_model": {
+      "provider": "openai-subscribed",
+      "model": "gpt-5.6-sol",
+      "enable_thinking": true,
+      "effort": "low"
+    },
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "agent_servers": {
+    "amp-acp": {
+      "type": "registry"
+    },
+    "claude-acp": {
+      "type": "registry"
+    },
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
   "cli_default_open_behavior": "existing_window",
-  "disable_ai": true,
+  "disable_ai": false,
   "buffer_font_weight": 200.0,
   "icon_theme": "Material Icon Theme",
   "auto_install_extensions": {

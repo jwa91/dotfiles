@@ -76,6 +76,10 @@ file2md
 # --- XDG Auto-generated (if XDG_CONFIG_HOME ever points here) ---
 # These are created by apps respecting XDG spec, not intentional config
 config/configstore/
+config/openlogi/config.toml.backup.*
+config/openlogi/*.lock
+config/openlogi/*.sock
+config/openlogi/overlay.claim
 config/pnpm/
 
 # --- Personal Notes ---

@@ -1,0 +1,136 @@
+# OpenLogi adds device settings after it detects connected hardware.
+schema_version = 6
+
+[app_settings]
+launch_at_login = true
+check_for_updates = true
+auto_install_updates = false
+show_in_menu_bar = true
+capture_mouse_events = true
+smooth_scroll = false
+vertical_scroll_sensitivity = 14
+auto_download_assets = true
+asset_source = "automatic"
+thumbwheel_sensitivity = 14
+appearance = "system"
+ui_scale = "normal"
+device_view_mode = "list"
+app_icon = "openlogi"
+update_prompt_seen = true
+theme_light = "Gruvbox Light"
+theme_dark = "OpenLogi Dark"
+
+[devices]
+
+[devices."serial:2341lz50u7f8"]
+dpi = 1200
+dpi_presets = [
+    800,
+    1200,
+    1600,
+]
+thumbwheel_sensitivity = 10
+
+[devices."serial:2341lz50u7f8".identity]
+display_name = "MX Master 3S"
+codename = "MX Master 3S"
+kind = "mouse"
+
+[devices."serial:2341lz50u7f8".identity.model_info]
+entity_count = 3
+unit_id = [
+    0,
+    0,
+    0,
+    0,
+]
+model_ids = [
+    45108,
+    0,
+    0,
+]
+extended_model_id = 0
+
+[keyboard]
+
+[devices."serial:2341lz50u7f8".identity.model_info.transports]
+usb = false
+equad = false
+btle = true
+bluetooth = false
+
+[devices."serial:2341lz50u7f8".identity.capabilities]
+buttons = true
+pointer = true
+lighting = false
+scroll_inversion = true
+hires_wheel = true
+thumbwheel = true
+haptic_feedback = false
+haptic_panel = false
+
+[devices."serial:2341lz50u7f8".disabled_gestures.Back]
+Up = "MissionControl"
+Down = "ShowDesktop"
+Left = "PrevTab"
+Right = "NextTab"
+Click = "VolumeDown"
+
+[devices."serial:2341lz50u7f8".disabled_gestures.GestureButton]
+Up = "MissionControl"
+Down = "ShowDesktop"
+Left = "PrevTab"
+Right = "NextTab"
+Click = "AppExpose"
+
+[devices."serial:2341lz50u7f8".disabled_gestures.Forward]
+Up = "MissionControl"
+Down = "ShowDesktop"
+Left = "PrevTab"
+Right = "NextTab"
+Click = "VolumeUp"
+
+[devices."serial:2341lz50u7f8".bindings]
+Back = "VolumeDown"
+Forward = "VolumeUp"
+GestureButton = "AppExpose"
+
+[devices."serial:2341lz50u7f8".action_ring]
+enabled = true
+haptics = true
+
+[devices."serial:2341lz50u7f8".smartshift]
+mode = "free"
+auto_disengage = 10
+tunable_torque = 0
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.TopRight]
+action = "Copy"
+
+[devices."serial:2341lz50u7f8".links."direct:046d:b034".capabilities]
+buttons = true
+pointer = true
+lighting = false
+scroll_inversion = true
+hires_wheel = true
+thumbwheel = true
+haptic_feedback = false
+haptic_panel = false
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.Right]
+action = "Paste"
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.BottomRight]
+action = "BrowserForward"
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.Bottom]
+action = "PlayPause"
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.BottomLeft]
+action = "BrowserBack"
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.Left]
+action = "Undo"
+
+[devices."serial:2341lz50u7f8".action_ring.default.slots.TopLeft]
+action = "Redo"

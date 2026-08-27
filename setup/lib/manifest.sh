@@ -8,6 +8,7 @@ MANAGED_LINKS=(
     "$HOME/.zshenv|$ZSH_DIR/.zshenv|always"
     "$HOME/.zprofile|$ZSH_DIR/.zprofile|always"
     "$HOME/.config/ghostty|$CONFIG_DIR/ghostty|always"
+    "$HOME/.config/openlogi|$CONFIG_DIR/openlogi|always"
     "$HOME/.config/starship.toml|$CONFIG_DIR/starship.toml|always"
     "$HOME/.claude/settings.json|$CONFIG_DIR/claude-code/settings.json|always"
     "$HOME/.config/cheat/conf.yml|$CONFIG_DIR/cheat/conf.yml|always"
