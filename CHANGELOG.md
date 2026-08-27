@@ -6,10 +6,14 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [3.3.0] - 2026-08-27
+
 ### Added
 - Bare `python`/`python3` now resolve to a uv-managed interpreter instead of refusing, so third-party `#!/usr/bin/env python3` scripts work without reaching system Python. `pip`/`pip3` still refuse. See ADR 0003, superseding ADR 0001.
 - `just doctor` asserts bare `python3` lands inside uv's managed Python directory.
 - `just brew-converge` composes `brew-sync` and `brew-cleanup`; the `brewsync` shell wrapper delegates to it.
+- Managed OpenLogi configuration and a tracked Vorssaint settings backup.
+- Brewfile entries for Bash, OpenLogi, and Vorssaint.
 
 ### Changed
 - Zsh state moved under XDG directories: plugins to `XDG_DATA_HOME/zsh/plugins`, history to `XDG_STATE_HOME/zsh/history`, completion dump to `XDG_CACHE_HOME/zsh/zcompdump`. `./setup/init.sh zsh` migrates existing files in place.
@@ -18,6 +22,9 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 - Zsh startup load order made explicit: options, autoload declarations, compinit, aliases, integrations, prompt, then ZLE plugins.
 - Separated public commands, command-policy shims, shared Bash libraries, and internal prompt helpers; toolchain mutation policy now applies consistently outside interactive zsh.
 - Split workstation setup into dependency-free `init`, convergent `set`, and read-only domain-based `doctor` lifecycles, with `just` delegating to their shell entrypoints.
+- Enabled Zed AI with a default OpenAI model and ACP server registry entries.
+- Herdr now shows agent labels on pane borders.
+- Replaced Stats with Vorssaint in the managed application set.
 
 ### Fixed
 - The completion dump staleness check never ran. `[[ -f ~/.zcompdump(#qN.mh+24) ]]` does no globbing inside `[[ ]]`, so it was always false and `compinit -C` was the only branch ever taken.
