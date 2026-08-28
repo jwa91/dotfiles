@@ -6,6 +6,17 @@ The format is based on Keep a Changelog and this project follows Semantic Versio
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-08-28
+
+### Breaking Changes
+- Replaced `setup/bootstrap.sh --only <target>` with the target interfaces in `setup/init.sh`, `setup/set.sh`, and `setup/doctor.sh`.
+- Removed the `--no-brew`, `--no-link`, and `--check` bootstrap options. Run the applicable target interface instead.
+- Renamed the bootstrap options `--reset` to `--reset-links` and `--update` to `--update-plugins`.
+- Removed `setup/project-audit.sh`. Use `just project-audit` or `./setup/doctor.sh projects`.
+
+### Changed
+- Corrected the release line after `v3.3.0` shipped these incompatible setup command changes as a minor release.
+
 ## [3.3.0] - 2026-08-27
 
 ### Added
